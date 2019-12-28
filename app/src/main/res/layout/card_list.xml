@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/mCardImageList"
+            android:layout_width="411dp"
+            android:layout_height="230dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/mCardName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="helloworld"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/mCardDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mCardImageList" />
+
+        <TextView
+            android:id="@+id/mCardDescription"
+            android:layout_width="149dp"
+            android:layout_height="32dp"
+            android:layout_below="@id/mCardName"
+            android:text="helloworld"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mCardName" />
+
+        <TextView
+            android:id="@+id/mCardLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mCardDescription"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mCardDescription" />
+
+        <TextView
+            android:id="@+id/mDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mCardLocation"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mCardLocation" />
+
+        <EditText
+            android:id="@+id/mCardNote"
+            android:layout_width="312dp"
+            android:layout_height="55dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:ems="10"
+            android:hint="Note"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mDate" />
+
+
+        <ImageButton
+            android:id="@+id/mCardSendButton"
+            android:layout_width="97dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="116dp"
+            android:layout_toEndOf="@+id/mCardNote"
+            android:layout_toRightOf="@+id/mCardNote"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/mCardNote"
+            app:layout_constraintTop_toBottomOf="@+id/mCardImageList"
+            app:srcCompat="@android:drawable/ic_menu_send" />
+
+
+        <ImageButton
+            android:id="@+id/mShareHillfort"
+            android:layout_width="60dp"
+            android:layout_height="55dp"
+            android:background="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mCardNote"
+            app:srcCompat="?attr/actionModeShareDrawable" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
