@@ -1,29 +1,42 @@
 package com.example.internetcookbook.fragmentview
 
 import android.Manifest
-import android.content.Context
+import android.app.ProgressDialog
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Size
-import androidx.fragment.app.Fragment
+import android.view.*
 import android.widget.Toast
+import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
+import com.example.internetcookbook.adapter.ReceiptListAdapter
+import com.example.internetcookbook.models.FoodModel
+import com.example.internetcookbook.models.UserModel
+import com.example.internetcookbook.network.Common
+import com.example.internetcookbook.network.HttpDataHandler
+import com.example.internetcookbook.network.InformationStore
+import com.example.internetcookbook.network.OnInformationListener
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.text.FirebaseVisionText
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.fragment_camera.view.*
+import kotlinx.android.synthetic.main.listitems.*
+import kotlinx.android.synthetic.main.listitems.view.*
 import org.jetbrains.anko.AnkoLogger
-import java.util.concurrent.Executors
-import android.graphics.Matrix
-import android.media.Image
-import android.util.Log
-import android.view.*
-import android.widget.ImageButton
-import androidx.camera.core.*
-import java.io.File
-import java.lang.Exception
+import java.lang.reflect.Type
 import java.nio.ByteBuffer
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
@@ -33,6 +46,8 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
     // This is an array of all the permission specified in the manifest.
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     lateinit var homeView: View
+    var storedFood = ArrayList<FoodModel>()
+    var captureCheck = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +56,16 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_camera, container, false)
         homeView = view
+        // Inflate the layout for this fragment
+        val layoutManager = LinearLayoutManager(context)
+
+        view.mFoodListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        view.mFloatingButton.setOnClickListener {
+            storedFood.clear()
+            view.mListItems.visibility = View.GONE
+            captureCheck = false
+            clearImageBitmap()
+        }
 
         return view
     }
@@ -90,63 +115,18 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
             updateTransform()
         }
 
-        // Create configuration object for the image capture use case
-        val imageCaptureConfig = ImageCaptureConfig.Builder()
-            .apply {
-                // We don't set a resolution for image capture; instead, we
-                // select a capture mode which will infer the appropriate
-                // resolution based on aspect ration and requested mode
-                setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
-            }.build()
-
-
-
-        // Build the image capture use case and attach button click listener
-        val imageCapture = ImageCapture(imageCaptureConfig)
-        homeView.findViewById<ImageButton>(R.id.capture_button).setOnClickListener {
-
-
-//            imageCapture.takePicture(
-//                object : ImageCapture.OnImageSavedListener {
-//                    override fun onError(error: ImageCapture.ImageCaptureError,
-//                                         message: String, exc: Throwable?) {
-//                        // insert your code here.
-//                    }
-//                    override fun onImageSaved(file: File) {
-//                        // insert your code here.
-//                    }
-//                })
-
-//            imageCapture.takePicture(executor,
-//                object : ImageCapture.OnImageSavedListener {
-//                    override fun onError(
-//                        imageCaptureError: ImageCapture.ImageCaptureError,
-//                        message: String,
-//                        exc: Throwable?
-//                    ) {
-//                        val msg = "Photo capture failed: $message"
-//                        Log.e("CameraXApp", msg, exc)
-//                        viewFinder.post {
-//                            Toast.makeText(homeView.context, msg, Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//
-//                    override fun onImageSaved(file: File) {
-//                        val msg = "Photo capture succeeded: ${file.absolutePath}"
-//                        Log.d("CameraXApp", msg)
-//                        viewFinder.post {
-//                            Toast.makeText(homeView.context, msg, Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//                })
+        homeView.capture_button.setOnClickListener {
+            if(!captureCheck) {
+                captureCheck = true
+                setImageBitmap()
+            }else{
+                captureCheck = false
+                clearImageBitmap()
+            }
         }
 
-        fun Image.toBitmap(): Bitmap {
-            val buffer = planes[0].buffer
-            buffer.rewind()
-            val bytes = ByteArray(buffer.capacity())
-            buffer.get(bytes)
-            return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        homeView.mFindText.setOnClickListener {
+            mChangeImageToText(viewFinder.bitmap)
         }
 
         // Setup image analysis pipeline that computes average pixel luminance
@@ -162,12 +142,64 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
             setAnalyzer(executor, LuminosityAnalyzer())
         }
         try {
-            CameraX.bindToLifecycle(this, preview,imageCapture, analyzerUseCase)
+            CameraX.bindToLifecycle(this, preview,analyzerUseCase)
         }
         catch (e: Exception) {
             // handler
         }
 
+    }
+
+    private fun clearImageBitmap() {
+        homeView.view_finder.visibility = View.VISIBLE
+        homeView.mCapturedImage.setImageBitmap(null)
+    }
+
+
+
+    fun mChangeImageToText(bitmap: Bitmap) {
+            val image = FirebaseVisionImage.fromBitmap(bitmap)
+            val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
+
+            detector.processImage(image)
+                .addOnSuccessListener { firebaseVisionText ->
+                    processResultText(firebaseVisionText)
+                }
+                .addOnFailureListener {
+                }
+    }
+
+
+    private fun processResultText(resultText: FirebaseVisionText) {
+        if (resultText.textBlocks.size == 0) {
+            Toast.makeText(homeView.context,"No Text Found",Toast.LENGTH_SHORT).show()
+            return
+        }
+        for (block in resultText.textBlocks) {
+            for (line in block.lines){
+                for (element in line.elements){
+                    val foodModel = FoodModel()
+                    foodModel.foodName = element.text
+                    storedFood.add(foodModel)
+                    val common = Common()
+                    InformationStore.GetData().execute(common.getAddressApiName())
+                    val informationStore = InformationStore()
+                    informationStore.getUserData()
+                }
+            }
+        }
+
+        mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood)
+        mFoodListRecyclerView.adapter?.notifyDataSetChanged()
+        homeView.mCapturedImage.visibility = View.INVISIBLE
+        homeView.mFoodListRecyclerView.visibility = View.VISIBLE
+        homeView.mListItems.visibility = View.VISIBLE
+    }
+
+    private fun setImageBitmap() {
+        homeView.view_finder.visibility = View.INVISIBLE
+        homeView.mCapturedImage.setImageBitmap(viewFinder.bitmap)
+        homeView.mCapturedImage.visibility = View.VISIBLE
     }
 
     private fun updateTransform() {
