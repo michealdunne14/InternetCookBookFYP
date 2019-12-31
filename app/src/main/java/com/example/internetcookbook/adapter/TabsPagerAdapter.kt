@@ -1,4 +1,4 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

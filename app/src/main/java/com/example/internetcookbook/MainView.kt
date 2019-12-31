@@ -1,18 +1,12 @@
 package com.example.internetcookbook
 
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.TextureView
-import android.widget.Toast
-import androidx.camera.core.Preview
-import androidx.camera.core.PreviewConfig
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager.widget.ViewPager
+import com.example.internetcookbook.adapter.TabsPagerAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_layout.*
-import java.util.concurrent.Executors
 
 class MainView : AppCompatActivity(), LifecycleOwner {
 
@@ -23,7 +17,9 @@ class MainView : AppCompatActivity(), LifecycleOwner {
         setContentView(R.layout.activity_main)
 
         navigationView.selectedItemId = R.id.mNavHome
-        pagerAdapter = TabsPagerAdapter(supportFragmentManager)
+        pagerAdapter = TabsPagerAdapter(
+            supportFragmentManager
+        )
         view_pager.adapter = pagerAdapter
         view_pager.currentItem = 1
 
