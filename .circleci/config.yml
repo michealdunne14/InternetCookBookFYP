@@ -30,7 +30,7 @@ jobs:
           command: sdkmanager --list --verbose | grep system-images
       - run:
           name: Setup Emulator
-          command: sdkmanager "system-images;android-26;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-26;default;armeabi-v7a"
+          command: sdkmanager "system-images;android-22;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-22;default;armeabi-v7a"
       - run:
           name: Launch Emulator
           command: |
