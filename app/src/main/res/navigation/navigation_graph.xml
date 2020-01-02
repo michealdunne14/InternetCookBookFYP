@@ -3,13 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/startFragment">
+
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.internetcookbook.fragmentview.HomeFragmentView"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
-
-
+        android:id="@+id/pagerFragment"
+        android:name="com.example.internetcookbook.PagerFragment"
+        android:label="fragment_pager"
+        tools:layout="@layout/fragment_pager" >
+        <action
+            android:id="@+id/action_pagerFragment_to_postFragment2"
+            app:destination="@id/postFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.example.internetcookbook.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/transitionToPager"
+            app:destination="@id/pagerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postFragment2"
+        android:name="com.example.internetcookbook.fragmentview.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" />
 </navigation>
