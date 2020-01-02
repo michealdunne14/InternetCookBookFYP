@@ -5,11 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.archaeologicalfieldwork.adapter.CardAdapter
 import com.example.archaeologicalfieldwork.adapter.PostListener
+import com.example.internetcookbook.PagerFragment
+import com.example.internetcookbook.PagerFragmentDirections
 import com.example.internetcookbook.R
+import com.example.internetcookbook.StartFragmentDirections
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -17,6 +22,30 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.listitems.view.*
 
 class HomeFragmentView : Fragment(), PostListener {
+
+    companion object {
+
+        private const val CALLBACK_FUNC = "callback"
+
+        fun newInstance(
+            callback: PagerFragment.ViewCreatedListener
+        ): HomeFragmentView {
+            return HomeFragmentView().apply {
+                arguments = bundleOf(
+                    CALLBACK_FUNC to callback
+                )
+            }
+        }
+    }
+
+    private lateinit var callback: PagerFragment.ViewCreatedListener
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.getSerializable(CALLBACK_FUNC)?.let {
+            callback = it as PagerFragment.ViewCreatedListener
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,18 +58,29 @@ class HomeFragmentView : Fragment(), PostListener {
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)
 
+        callback.invoke()
+
         view.mListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
+        view.floatingActionButton.setOnClickListener {
+            val action = PagerFragmentDirections.actionPagerFragmentToPostFragment2()
+            view.findNavController().navigate(action)
+        }
+
+
         val user = UserModel()
+        val postModel = PostModel()
         postModel.name = "Test"
         postModel.description = "Tiushfkjsdhjlkfs"
+        postModelList.add(postModel)
+        postModel.name = "New Value"
+        postModel.description = "Description"
         postModelList.add(postModel)
         view.mListRecyclerView.adapter = CardAdapter(postModelList, this, user)
         view.mListRecyclerView.adapter?.notifyDataSetChanged()
 //        showPosts()C
         return view
     }
-    val postModel = PostModel()
 
 
 //    //  Show Hillforts
