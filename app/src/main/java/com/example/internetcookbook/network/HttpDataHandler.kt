@@ -46,15 +46,14 @@ class HttpDataHandler {
             urlConnection.requestMethod = "POST"
             urlConnection.doOutput = true
             val json = users.toString()
-            val byteName =
-                json.toByteArray(StandardCharsets.UTF_8)
+            val byteName = json.toByteArray(StandardCharsets.UTF_8)
             val length = byteName.size
             //Error here
             urlConnection.setRequestProperty("Content-Type", "application/json; charset-UTF-8")
             urlConnection.setFixedLengthStreamingMode(length)
             urlConnection.connect()
             urlConnection.outputStream.use { os -> os.write(byteName) }
-            val response = urlConnection.inputStream
+            urlConnection.disconnect()
         } catch (e: ProtocolException) {
             e.printStackTrace()
         } catch (e: MalformedURLException) {

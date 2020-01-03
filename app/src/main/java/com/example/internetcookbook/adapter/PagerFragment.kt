@@ -1,4 +1,4 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.adapter
 
 import android.os.Bundle
 import android.transition.TransitionInflater
@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.ViewPager
-import com.example.internetcookbook.adapter.TabsPagerAdapter
+import com.example.internetcookbook.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_pager.*
 import kotlinx.android.synthetic.main.fragment_pager.view.*
@@ -45,13 +45,18 @@ class PagerFragment : Fragment() {
 
     private fun initAdapter() {
         fragmentManager?.let { fragmentManager ->
-            val callback = object : ViewCreatedListener {
+            val callback = object :
+                ViewCreatedListener {
                 override fun invoke() {
                     startPostponedEnterTransition()
                 }
             }
 
-            SampleFragmentPagerAdapter(context, fragmentManager, callback).also {
+            SampleFragmentPagerAdapter(
+                context,
+                fragmentManager,
+                callback
+            ).also {
                 view_pager.adapter = it
                 view_pager.currentItem = 1
             }
@@ -60,7 +65,8 @@ class PagerFragment : Fragment() {
     lateinit var pagerAdapter: TabsPagerAdapter
 
     private fun initTabLayout(view: View) {
-        view.navigationView.selectedItemId = R.id.mNavHome
+        view.navigationView.selectedItemId =
+            R.id.mNavHome
         pagerAdapter = TabsPagerAdapter(activity!!.supportFragmentManager)
         val viewPager = view.view_pager
         viewPager.adapter = pagerAdapter
@@ -78,16 +84,20 @@ class PagerFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 when (position) {
                     0 -> {
-                        navigationView.selectedItemId = R.id.mNavCamera
+                        navigationView.selectedItemId =
+                            R.id.mNavCamera
                     }
                     1 -> {
 
-                        navigationView.selectedItemId = R.id.mNavHome
+                        navigationView.selectedItemId =
+                            R.id.mNavHome
                     }
                     2 -> {
-                        navigationView.selectedItemId = R.id.mNavFavourites
+                        navigationView.selectedItemId =
+                            R.id.mNavFavourites
                     }
-                    else -> navigationView.selectedItemId = R.id.mNavHome
+                    else -> navigationView.selectedItemId =
+                        R.id.mNavHome
                 }
             }
         })

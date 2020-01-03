@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/pagerFragment"
-        android:name="com.example.internetcookbook.PagerFragment"
+        android:name="com.example.internetcookbook.adapter.PagerFragment"
         android:label="fragment_pager"
         tools:layout="@layout/fragment_pager" >
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.example.internetcookbook.StartFragment"
+        android:name="com.example.internetcookbook.fragmentview.StartFragment"
         android:label="fragment_start"
         tools:layout="@layout/fragment_start" >
         <action

@@ -11,6 +11,7 @@
     <string name="first_fragment">First</string>
     <string name="second_fragment">Second</string>
     <string name="third_fragment">Third</string>
+    <string name="submit">Submit</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>

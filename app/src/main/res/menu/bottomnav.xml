@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/mNavCamera"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/camera_notification"
         android:title="@string/bottomNavCamera" />
 
     <item
         android:id="@+id/mNavHome"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/home_notification"
         android:title="@string/bottomNavHome" />
 
     <item
         android:id="@+id/mNavFavourites"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/star_notification"
         android:title="@string/bottomNavFollowers" />
 
 
