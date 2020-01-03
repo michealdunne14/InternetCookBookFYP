@@ -11,15 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.archaeologicalfieldwork.adapter.CardAdapter
 import com.example.archaeologicalfieldwork.adapter.PostListener
-import com.example.internetcookbook.PagerFragment
-import com.example.internetcookbook.PagerFragmentDirections
+import com.example.internetcookbook.adapter.PagerFragment
 import com.example.internetcookbook.R
-import com.example.internetcookbook.StartFragmentDirections
+import com.example.internetcookbook.adapter.PagerFragmentDirections
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.listitems.view.*
 
 class HomeFragmentView : Fragment(), PostListener {
 

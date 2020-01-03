@@ -7,6 +7,8 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Size
 import android.view.*
 import android.widget.Toast
@@ -15,9 +17,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
+import com.example.internetcookbook.adapter.PagerFragmentDirections
 import com.example.internetcookbook.adapter.ReceiptListAdapter
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.UserModel
@@ -25,6 +30,10 @@ import com.example.internetcookbook.network.Common
 import com.example.internetcookbook.network.HttpDataHandler
 import com.example.internetcookbook.network.InformationStore
 import com.example.internetcookbook.network.OnInformationListener
+import com.google.android.gms.vision.CameraSource
+import com.google.android.gms.vision.Detector
+import com.google.android.gms.vision.text.TextBlock
+import com.google.android.gms.vision.text.TextRecognizer
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
@@ -34,7 +43,10 @@ import kotlinx.android.synthetic.main.fragment_camera.view.*
 import kotlinx.android.synthetic.main.listitems.*
 import kotlinx.android.synthetic.main.listitems.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.getStackTraceString
+import org.jetbrains.anko.uiThread
+import java.io.IOException
 import java.lang.reflect.Type
 import java.nio.ByteBuffer
 import java.util.concurrent.Executors
@@ -116,6 +128,14 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
             updateTransform()
         }
 
+        homeView.mPostButton.setOnClickListener {
+            val action = PagerFragmentDirections.actionPagerFragmentToPostFragment2()
+            val extras = FragmentNavigatorExtras(
+                viewFinder to "image"
+            )
+            homeView.findNavController().navigate(action,extras)
+        }
+
         homeView.capture_button.setOnClickListener {
             if(!captureCheck) {
                 captureCheck = true
@@ -170,22 +190,25 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
             Toast.makeText(homeView.context,"No Text Found",Toast.LENGTH_SHORT).show()
             return
         }
-        for (block in resultText.textBlocks) {
-            for (line in block.lines){
-                for (element in line.elements){
-                    val foodModel = FoodModel()
-                    foodModel.foodName = element.text
-                    storedFood.add(foodModel)
-                    val common = Common()
-                    InformationStore.GetData().execute(common.getAddressApiName())
-                    val informationStore = InformationStore()
-                    informationStore.getUserData()
+        doAsync {
+            for (block in resultText.textBlocks) {
+                for (line in block.lines) {
+                    for (element in line.elements) {
+                        val foodModel = FoodModel()
+                        foodModel.foodName = element.text
+                        storedFood.add(foodModel)
+
+                    }
                 }
+            }
+            uiThread {
+                mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood)
+                mFoodListRecyclerView.adapter?.notifyDataSetChanged()
             }
         }
 
-        mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood)
-        mFoodListRecyclerView.adapter?.notifyDataSetChanged()
+        val informationStore = InformationStore()
+        val userdata = informationStore.getUserData()
         homeView.mCapturedImage.visibility = View.INVISIBLE
         homeView.mFoodListRecyclerView.visibility = View.VISIBLE
         homeView.mListItems.visibility = View.VISIBLE

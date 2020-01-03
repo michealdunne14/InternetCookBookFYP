@@ -1,9 +1,10 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.adapter
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.example.internetcookbook.R
 import com.example.internetcookbook.fragmentview.CameraFragment
 import com.example.internetcookbook.fragmentview.FriendFragmentView
 import com.example.internetcookbook.fragmentview.HomeFragmentView
