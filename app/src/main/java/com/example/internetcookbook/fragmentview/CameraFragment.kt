@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.fragment_camera.view.*
 import kotlinx.android.synthetic.main.listitems.*
 import kotlinx.android.synthetic.main.listitems.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.getStackTraceString
 import java.lang.reflect.Type
 import java.nio.ByteBuffer
 import java.util.concurrent.Executors
@@ -141,13 +142,7 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
         val analyzerUseCase = ImageAnalysis(analyzerConfig).apply {
             setAnalyzer(executor, LuminosityAnalyzer())
         }
-        try {
-            CameraX.bindToLifecycle(this, preview,analyzerUseCase)
-        }
-        catch (e: Exception) {
-            // handler
-        }
-
+        CameraX.bindToLifecycle(this, preview,analyzerUseCase)
     }
 
     private fun clearImageBitmap() {
@@ -208,19 +203,22 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
         // Compute the center of the view finder
         val centerX = viewFinder.width / 2f
         val centerY = viewFinder.height / 2f
+        try {
+            // Correct preview output to account for display rotation
+            val rotationDegrees = when (viewFinder.display.rotation) {
+                Surface.ROTATION_0 -> 0
+                Surface.ROTATION_90 -> 90
+                Surface.ROTATION_180 -> 180
+                Surface.ROTATION_270 -> 270
+                else -> return
+            }
+            matrix.postRotate(-rotationDegrees.toFloat(), centerX, centerY)
 
-        // Correct preview output to account for display rotation
-        val rotationDegrees = when(viewFinder.display.rotation) {
-            Surface.ROTATION_0 -> 0
-            Surface.ROTATION_90 -> 90
-            Surface.ROTATION_180 -> 180
-            Surface.ROTATION_270 -> 270
-            else -> return
+            // Finally, apply transformations to our TextureView
+            viewFinder.setTransform(matrix)
+        }catch (e: Exception){
+            e.getStackTraceString()
         }
-        matrix.postRotate(-rotationDegrees.toFloat(), centerX, centerY)
-
-        // Finally, apply transformations to our TextureView
-        viewFinder.setTransform(matrix)
     }
 
     /**
