@@ -27,8 +27,6 @@ class StartFragment : Fragment() {
         logo.setOnClickListener {
             val action =
                 StartFragmentDirections.transitionToPager()
-            val common = Common()
-            InformationStore.GetData().execute(common.getAddressApiName())
 
             view.findNavController().navigate(action)
         }

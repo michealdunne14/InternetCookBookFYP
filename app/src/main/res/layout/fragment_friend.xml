@@ -7,6 +7,14 @@
     tools:context=".fragmentview.FriendFragmentView">
 
 
+    <TextView
+        android:id="@+id/mResult"
+        android:layout_width="410dp"
+        android:layout_height="122dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mSubmitButton" />
+
     <EditText
         android:id="@+id/mName"
         android:layout_width="wrap_content"
