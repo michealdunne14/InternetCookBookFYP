@@ -29,7 +29,6 @@ import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.network.Common
 import com.example.internetcookbook.network.HttpDataHandler
 import com.example.internetcookbook.network.InformationStore
-import com.example.internetcookbook.network.OnInformationListener
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
@@ -207,8 +206,6 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
             }
         }
 
-        val informationStore = InformationStore()
-        val userdata = informationStore.getUserData()
         homeView.mCapturedImage.visibility = View.INVISIBLE
         homeView.mFoodListRecyclerView.visibility = View.VISIBLE
         homeView.mListItems.visibility = View.VISIBLE
