@@ -7,16 +7,32 @@
     tools:context=".fragmentview.StartFragment">
 
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="157dp"
-        android:layout_height="143dp"
-        android:layout_marginStart="202dp"
-        android:layout_marginTop="350dp"
-        android:layout_marginEnd="178dp"
-        android:layout_marginBottom="350dp"
-        android:src="@drawable/common_google_signin_btn_icon_disabled"
+    <Button
+        android:id="@+id/mStartLogin"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/mStartRegister"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:text="@string/register"
+        app:layout_constraintBottom_toTopOf="@+id/mStartLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/mLogo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@android:drawable/btn_dialog"
+        app:layout_constraintBottom_toTopOf="@+id/mStartRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

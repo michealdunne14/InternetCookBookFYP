@@ -57,14 +57,14 @@
         android:layout_height="match_parent"
         android:visibility="gone"/>
 
-    <ImageButton
-        android:id="@+id/mPostButton"
-        android:layout_width="72dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="24dp"
-        android:src="@drawable/common_full_open_on_phone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/capture_button" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/mPostButton"-->
+<!--        android:layout_width="72dp"-->
+<!--        android:layout_height="70dp"-->
+<!--        android:layout_marginBottom="24dp"-->
+<!--        android:src="@drawable/common_full_open_on_phone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/capture_button" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

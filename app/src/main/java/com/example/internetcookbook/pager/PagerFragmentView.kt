@@ -1,20 +1,27 @@
-package com.example.internetcookbook.adapter
+package com.example.internetcookbook.pager
 
 import android.os.Bundle
 import android.transition.TransitionInflater
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
+import com.example.internetcookbook.adapter.SampleFragmentPagerAdapter
+import com.example.internetcookbook.adapter.TabsPagerAdapter
+import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.fragmentpresenter.FriendFragmentPresenter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_pager.*
 import kotlinx.android.synthetic.main.fragment_pager.view.*
 import kotlinx.android.synthetic.main.fragment_pager.view_pager
+import org.jetbrains.anko.AnkoLogger
 import java.io.Serializable
 
-class PagerFragment : Fragment() {
+class PagerFragmentView : BaseView(), AnkoLogger {
+
+    lateinit var presenter: PagerFragmentPresenter
+
 
     interface ViewCreatedListener : Serializable {
         fun invoke()
@@ -27,6 +34,7 @@ class PagerFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_pager, container, false)
+        presenter = initPresenter(PagerFragmentPresenter(this)) as PagerFragmentPresenter
         handleTransition()
         initTabLayout(view)
         return view
@@ -67,7 +75,8 @@ class PagerFragment : Fragment() {
     private fun initTabLayout(view: View) {
         view.navigationView.selectedItemId =
             R.id.mNavHome
-        pagerAdapter = TabsPagerAdapter(activity!!.supportFragmentManager)
+        pagerAdapter =
+            TabsPagerAdapter(activity!!.supportFragmentManager)
         val viewPager = view.view_pager
         viewPager.adapter = pagerAdapter
         viewPager.currentItem = 1

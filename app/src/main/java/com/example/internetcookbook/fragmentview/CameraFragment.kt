@@ -22,7 +22,6 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
-import com.example.internetcookbook.adapter.PagerFragmentDirections
 import com.example.internetcookbook.adapter.ReceiptListAdapter
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.UserModel
@@ -127,13 +126,13 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
             updateTransform()
         }
 
-        homeView.mPostButton.setOnClickListener {
-            val action = PagerFragmentDirections.actionPagerFragmentToPostFragment2()
-            val extras = FragmentNavigatorExtras(
-                viewFinder to "image"
-            )
-            homeView.findNavController().navigate(action,extras)
-        }
+//        homeView.mPostButton.setOnClickListener {
+//            val action = PagerFragmentDirections.actionPagerFragmentToPostFragment2()
+//            val extras = FragmentNavigatorExtras(
+//                viewFinder to "image"
+//            )
+//            homeView.findNavController().navigate(action,extras)
+//        }
 
         homeView.capture_button.setOnClickListener {
             if(!captureCheck) {
@@ -161,7 +160,11 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
         val analyzerUseCase = ImageAnalysis(analyzerConfig).apply {
             setAnalyzer(executor, LuminosityAnalyzer())
         }
-        CameraX.bindToLifecycle(this, preview,analyzerUseCase)
+        try {
+            CameraX.bindToLifecycle(this, preview, analyzerUseCase)
+        }catch (e: java.lang.Exception){
+            e.getStackTraceString()
+        }
     }
 
     private fun clearImageBitmap() {
