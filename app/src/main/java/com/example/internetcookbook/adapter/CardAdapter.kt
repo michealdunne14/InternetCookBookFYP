@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
+import com.example.internetcookbook.adapter.ImageAdapter
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import kotlinx.android.synthetic.main.card_list.view.*
@@ -45,6 +47,14 @@ class CardAdapter(
         fun bind(postModel: PostModel, listener: PostListener, user: UserModel) {
             itemView.mCardName.text = postModel.name
             itemView.mCardDescription.text = postModel.description
+            doFindImages(postModel.images)
+        }
+
+        fun doFindImages(images: String) {
+            val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
+                val adapter = ImageAdapter(itemView.context, images)
+                viewPager.adapter = adapter
         }
     }
+
 }

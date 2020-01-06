@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.archaeologicalfieldwork.adapter.CardAdapter
 import com.example.archaeologicalfieldwork.adapter.PostListener
-import com.example.internetcookbook.adapter.PagerFragment
+import com.example.internetcookbook.pager.PagerFragmentView
 import com.example.internetcookbook.R
-import com.example.internetcookbook.adapter.PagerFragmentDirections
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
+import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 class HomeFragmentView : Fragment(), PostListener {
@@ -25,7 +25,7 @@ class HomeFragmentView : Fragment(), PostListener {
         private const val CALLBACK_FUNC = "callback"
 
         fun newInstance(
-            callback: PagerFragment.ViewCreatedListener
+            callback: PagerFragmentView.ViewCreatedListener
         ): HomeFragmentView {
             return HomeFragmentView().apply {
                 arguments = bundleOf(
@@ -35,12 +35,12 @@ class HomeFragmentView : Fragment(), PostListener {
         }
     }
 
-    private lateinit var callback: PagerFragment.ViewCreatedListener
+    private lateinit var callback: PagerFragmentView.ViewCreatedListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.getSerializable(CALLBACK_FUNC)?.let {
-            callback = it as PagerFragment.ViewCreatedListener
+            callback = it as PagerFragmentView.ViewCreatedListener
         }
     }
 
@@ -60,19 +60,14 @@ class HomeFragmentView : Fragment(), PostListener {
         view.mListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
         view.floatingActionButton.setOnClickListener {
-            val action = PagerFragmentDirections.actionPagerFragmentToPostFragment2()
+            val action = PagerFragmentViewDirections.actionPagerFragmentToPostFragment2()
             view.findNavController().navigate(action)
         }
 
 
         val user = UserModel()
-        val postModel = PostModel()
-        postModel.name = "Test"
-        postModel.description = "Tiushfkjsdhjlkfs"
-        postModelList.add(postModel)
-        postModel.name = "New Value"
-        postModel.description = "Description"
-        postModelList.add(postModel)
+//        postModelList.add(PostModel("Burger","Burger","https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1200px-RedDot_Burger.jpg"))
+//        postModelList.add(PostModel("Food","food","https://eatforum.org/content/uploads/2018/05/table_with_food_top_view_900x700.jpg"))
         view.mListRecyclerView.adapter = CardAdapter(postModelList, this, user)
         view.mListRecyclerView.adapter?.notifyDataSetChanged()
 //        showPosts()C

@@ -8,11 +8,12 @@ import com.example.internetcookbook.R
 import com.example.internetcookbook.fragmentview.CameraFragment
 import com.example.internetcookbook.fragmentview.FriendFragmentView
 import com.example.internetcookbook.fragmentview.HomeFragmentView
+import com.example.internetcookbook.pager.PagerFragmentView
 
 class SampleFragmentPagerAdapter(
     private val context: Context?,
     fragmentManager: FragmentManager,
-    callback: PagerFragment.ViewCreatedListener
+    callback: PagerFragmentView.ViewCreatedListener
 ) : FragmentStatePagerAdapter(fragmentManager) {
 
     private val fragmentList = listOf(

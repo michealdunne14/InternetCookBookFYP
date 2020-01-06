@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.internetcookbook.R
-import com.example.internetcookbook.network.Common
-import com.example.internetcookbook.network.InformationStore
-import kotlinx.android.synthetic.main.fragment_start.*
+import com.example.internetcookbook.pager.PagerFragmentViewDirections
+import kotlinx.android.synthetic.main.fragment_start.view.*
 
 class StartFragment : Fragment() {
 
@@ -19,15 +19,17 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initButtons(view)
 
-        initLogoButton(view)
     }
 
-    private fun initLogoButton(view: View) {
-        logo.setOnClickListener {
-            val action =
-                StartFragmentDirections.transitionToPager()
-
+    private fun initButtons(view: View) {
+        view.mStartLogin.setOnClickListener {
+            val action = StartFragmentDirections.actionStartFragmentToLoginFragmentView()
+            view.findNavController().navigate(action)
+        }
+        view.mStartRegister.setOnClickListener {
+            val action = StartFragmentDirections.actionStartFragmentToRegisterFragment()
             view.findNavController().navigate(action)
         }
     }
