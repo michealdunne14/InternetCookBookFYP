@@ -14,5 +14,7 @@ data class UserModel(
     @SerializedName("username")
     var username: String = "",
     @SerializedName("signupdate")
-    var signupdate: String = ""
+    var signupdate: String = "",
+    @SerializedName("loggedIn")
+    var loggedIn: Boolean = false
 )

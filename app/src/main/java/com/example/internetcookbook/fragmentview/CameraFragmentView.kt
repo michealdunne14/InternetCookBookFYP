@@ -9,6 +9,8 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.DisplayMetrics
+import android.util.Rational
 import android.util.Size
 import android.view.*
 import android.widget.Toast
@@ -33,6 +35,8 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.gson.Gson
@@ -50,7 +54,7 @@ import java.nio.ByteBuffer
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
+class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
 
     private val REQUEST_CODE_PERMISSIONS = 10
 
@@ -148,6 +152,10 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
             mChangeImageToText(viewFinder.bitmap)
         }
 
+        homeView.mScanBarcodeButton.setOnClickListener {
+            mScanBarCode(viewFinder.bitmap)
+        }
+
         // Setup image analysis pipeline that computes average pixel luminance
         val analyzerConfig = ImageAnalysisConfig.Builder().apply {
             // In our analysis, we care more about the latest image than
@@ -164,6 +172,41 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
             CameraX.bindToLifecycle(this, preview, analyzerUseCase)
         }catch (e: java.lang.Exception){
             e.getStackTraceString()
+        }
+    }
+
+    private fun mScanBarCode(bitmap: Bitmap?) {
+        if(bitmap != null) {
+            val image = FirebaseVisionImage.fromBitmap(bitmap)
+            val detector = FirebaseVision.getInstance().visionBarcodeDetector
+            val result = detector.detectInImage(image)
+                .addOnSuccessListener { barcodes ->
+                    for (barcode in barcodes) {
+                        val bounds = barcode.boundingBox
+                        val corners = barcode.cornerPoints
+
+                        val rawValue = barcode.rawValue
+
+                        val valueType = barcode.valueType
+                        // See API reference for complete list of supported types
+                        when (valueType) {
+                            FirebaseVisionBarcode.TYPE_WIFI -> {
+                                val ssid = barcode.wifi!!.ssid
+                                val password = barcode.wifi!!.password
+                                val type = barcode.wifi!!.encryptionType
+                            }
+                            FirebaseVisionBarcode.TYPE_URL -> {
+                                val title = barcode.url!!.title
+                                val url = barcode.url!!.url
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(homeView.context,"No Barcode Found Found",Toast.LENGTH_SHORT).show()
+                }
+        }else{
+            Toast.makeText(homeView.context,"No Barcode Found Found",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -185,6 +228,20 @@ class CameraFragment : Fragment(), LifecycleOwner,AnkoLogger {
                 .addOnFailureListener {
                 }
     }
+
+//    private fun setUpTapToFocus() {
+//        homeView.view_finder.setOnTouchListener { _, event ->
+//            if (event.action != MotionEvent.ACTION_UP) {
+//                return@setOnTouchListener false
+//            }
+//
+//            val factory = TextureViewMeteringPointFactory(textureView)
+//            val point = factory.createPoint(event.x, event.y)
+//            val action = FocusMeteringAction.Builder.from(point).build()
+//            cameraControl.startFocusAndMetering(action)
+//            return@setOnTouchListener true
+//        }
+//    }
 
 
     private fun processResultText(resultText: FirebaseVisionText) {

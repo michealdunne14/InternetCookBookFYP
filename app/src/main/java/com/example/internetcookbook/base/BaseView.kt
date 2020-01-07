@@ -14,6 +14,8 @@ open class BaseView: Fragment(), AnkoLogger {
 
     open fun showHillforts(post: List<PostModel>) {}
 
-    open fun showFloatingAction(){}
-    open fun hideFloatingAction(){}
+    open fun showProgress(){}
+    open fun hideProgress(){}
+    open fun getMainPageFromLoginPage(){}
+    open fun detailsIncorrect(){}
 }
