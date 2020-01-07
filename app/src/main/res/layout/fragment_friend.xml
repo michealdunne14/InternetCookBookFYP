@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/mName" />
 
     <TextView
-        android:id="@+id/mEmail"
+        android:id="@+id/mEmailRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -51,6 +51,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/mEmailRegister" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

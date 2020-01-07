@@ -20,6 +20,8 @@
     <string name="password">Password</string>
     <string name="sign_in">Sign in</string>
     <string name="return_string">Return</string>
+    <string name="username">Username</string>
+    <string name="sign_up">Sign up</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>

@@ -1,32 +1,21 @@
 package com.example.internetcookbook.network
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
+import android.widget.Toast
 import com.example.internetcookbook.models.UserModel
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.fragment_friend.view.*
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okio.IOException
-import org.json.JSONException
-import org.json.JSONObject
-import java.lang.reflect.Type
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
-
 
 
 class InformationStore(val context: Context)  {
     var client = OkHttpClient()
+    var user = UserModel()
     lateinit var emailSearchArray: Array<UserModel>
 
-    fun emailSearch(email: String) {
+    fun emailSearch(userModel: UserModel) {
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/user/email/${email}")
+            .url("http://52.51.34.156:3000/user/email/${userModel.email}")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -38,9 +27,6 @@ class InformationStore(val context: Context)  {
                 response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                    for ((name, value) in response.headers) {
-                        println("$name: $value")
-                    }
                     val body = response.body!!.string()
                     val gsonBuilder = GsonBuilder()
                     val gson = gsonBuilder.create()
@@ -52,22 +38,51 @@ class InformationStore(val context: Context)  {
         })
     }
 
-    fun createUser(){
-        val formBody: RequestBody = FormBody.Builder()
-            .add("username", "test")
-            .add("password", "test")
-            .add("name", "test")
-            .add("email", "test")
-            .add("signindate", "test").build()
-
-        val request: Request = Request.Builder()
-            .url("http://52.51.34.156:3000/user/create")
-            .post(formBody)
+    fun findEmail(userModel: UserModel): UserModel? {
+        lateinit var emailSearch: Array<UserModel>
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/user/email/${userModel.email}")
             .build()
 
-        val call = client.newCall(request)
-        val response = call.execute()
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
+            val body = response.body!!.string()
+            val gsonBuilder = GsonBuilder()
+            val gson = gsonBuilder.create()
+
+            emailSearch = gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
+        }
+
+        user = emailSearch[0]
+        user.loggedIn = true
+        return user
+    }
+
+    fun getCurrentUser(): UserModel{
+        return user
+    }
+
+    fun createUser(userModel: UserModel): String? {
+        user = userModel
+        val user = findEmail(userModel)
+        if (user == null) {
+            val formBody: RequestBody = FormBody.Builder()
+                .add("username", userModel.username)
+                .add("password", userModel.password)
+                .add("name", userModel.name)
+                .add("email", userModel.email)
+                .add("signupdate", userModel.signupdate).build()
+
+            val request: Request = Request.Builder()
+                .url("http://52.51.34.156:3000/user/create")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response -> return response.body!!.toString() }
+        }else{
+            return null
+        }
     }
 
 }

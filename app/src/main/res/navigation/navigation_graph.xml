@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_registerFragment_to_pagerFragment"
             app:destination="@id/pagerFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_startFragment"
+            app:destination="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragmentView"
@@ -52,5 +55,8 @@
         <action
             android:id="@+id/action_loginFragmentView_to_pagerFragment"
             app:destination="@id/pagerFragment" />
+        <action
+            android:id="@+id/action_loginFragmentView_to_startFragment"
+            app:destination="@id/startFragment" />
     </fragment>
 </navigation>

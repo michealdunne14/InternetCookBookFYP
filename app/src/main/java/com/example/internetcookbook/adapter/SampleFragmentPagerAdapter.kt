@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.example.internetcookbook.R
-import com.example.internetcookbook.fragmentview.CameraFragment
+import com.example.internetcookbook.fragmentview.CameraFragmentView
 import com.example.internetcookbook.fragmentview.FriendFragmentView
 import com.example.internetcookbook.fragmentview.HomeFragmentView
 import com.example.internetcookbook.pager.PagerFragmentView
@@ -17,7 +17,7 @@ class SampleFragmentPagerAdapter(
 ) : FragmentStatePagerAdapter(fragmentManager) {
 
     private val fragmentList = listOf(
-        CameraFragment(),
+        CameraFragmentView(),
         HomeFragmentView.newInstance(callback),
         FriendFragmentView()
     )

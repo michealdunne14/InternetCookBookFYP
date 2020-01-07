@@ -8,7 +8,7 @@
 
 
     <EditText
-        android:id="@+id/mFirstname"
+        android:id="@+id/mRegisterFirstname"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginTop="120dp"
@@ -26,54 +26,66 @@
         android:layout_height="50dp"
         android:layout_marginTop="120dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/surname"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/mFirstname"
+        app:layout_constraintStart_toEndOf="@+id/mRegisterFirstname"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/mRegisterButton"
+        android:id="@+id/mRegisterSignupButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sign_in"
-        app:layout_constraintBottom_toTopOf="@+id/mReturnButton"
+        android:text="@string/sign_up"
+        app:layout_constraintBottom_toTopOf="@+id/mRegisterReturnButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText5" />
+        app:layout_constraintTop_toBottomOf="@+id/mUsernameRegister" />
 
     <Button
-        android:id="@+id/mReturnButton"
+        android:id="@+id/mRegisterReturnButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/return_string"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mRegisterButton" />
+        app:layout_constraintTop_toBottomOf="@+id/mRegisterSignupButton" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/mEmailRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textEmailAddress"
         android:hint="@string/email"
-        app:layout_constraintBottom_toTopOf="@+id/editText5"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/mPasswordRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mFirstname" />
+        app:layout_constraintTop_toBottomOf="@+id/mRegisterFirstname" />
 
     <EditText
-        android:id="@+id/editText5"
+        android:id="@+id/mPasswordRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPassword"
         android:hint="@string/password"
-        app:layout_constraintBottom_toTopOf="@+id/mRegisterButton"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/mUsernameRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText4" />
+        app:layout_constraintTop_toBottomOf="@+id/mEmailRegister" />
+
+    <EditText
+        android:id="@+id/mUsernameRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/username"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/mRegisterSignupButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mPasswordRegister" />
 </androidx.constraintlayout.widget.ConstraintLayout>
