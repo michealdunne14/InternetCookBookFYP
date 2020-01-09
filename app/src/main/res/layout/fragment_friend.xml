@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/mResult"
+        android:id="@+id/mFriendName"
         android:layout_width="410dp"
         android:layout_height="0dp"
         android:text="TextView"
@@ -35,22 +35,22 @@
         app:layout_constraintTop_toBottomOf="@+id/mName" />
 
     <TextView
-        android:id="@+id/mEmailRegister"
+        android:id="@+id/mFriendEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mResult" />
+        app:layout_constraintTop_toBottomOf="@+id/mFriendName" />
 
     <TextView
-        android:id="@+id/mPassword"
+        android:id="@+id/mFriendPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mEmailRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/mFriendEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

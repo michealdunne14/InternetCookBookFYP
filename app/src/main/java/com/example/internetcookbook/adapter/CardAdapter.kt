@@ -1,6 +1,5 @@
 package com.example.archaeologicalfieldwork.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +44,7 @@ class CardAdapter(
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(postModel: PostModel, listener: PostListener, user: UserModel) {
-            itemView.mCardName.text = postModel.name
+            itemView.mCardName.text = postModel.title
             itemView.mCardDescription.text = postModel.description
             doFindImages(postModel.images)
         }

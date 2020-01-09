@@ -2,16 +2,44 @@ package com.example.internetcookbook.network
 
 import android.content.Context
 import android.widget.Toast
+import com.example.internetcookbook.MainApp
+import com.example.internetcookbook.helper.exists
+import com.example.internetcookbook.helper.read
+import com.example.internetcookbook.helper.write
+import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import okio.IOException
+import java.util.ArrayList
 
 
-class InformationStore(val context: Context)  {
+class InformationStore(val context: Context, val internetConnection: Boolean)  {
     var client = OkHttpClient()
     var user = UserModel()
     lateinit var emailSearchArray: Array<UserModel>
+
+    val JSON_FILE = "InformationStore.json"
+    val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
+    val listType = object : TypeToken<ArrayList<UserModel>>() {}.type
+
+    init {
+        if (exists(context, JSON_FILE)) {
+            deserialize()
+        }
+    }
+
+    private fun serialize() {
+        val jsonString = gsonBuilder.toJson(user, listType)
+        write(context, JSON_FILE, jsonString)
+    }
+
+    private fun deserialize() {
+        val jsonString = read(context, JSON_FILE)
+        user = Gson().fromJson(jsonString, listType)
+    }
 
     fun emailSearch(userModel: UserModel) {
         val request = Request.Builder()
@@ -39,24 +67,31 @@ class InformationStore(val context: Context)  {
     }
 
     fun findEmail(userModel: UserModel): UserModel? {
-        lateinit var emailSearch: Array<UserModel>
-        val request = Request.Builder()
-            .url("http://52.51.34.156:3000/user/email/${userModel.email}")
-            .build()
+        if(internetConnection) {
+            lateinit var emailSearch: Array<UserModel>
+            val request = Request.Builder()
+                .url("http://52.51.34.156:3000/user/email/${userModel.email}")
+                .build()
 
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-            val body = response.body!!.string()
-            val gsonBuilder = GsonBuilder()
-            val gson = gsonBuilder.create()
+                val body = response.body!!.string()
+                val gsonBuilder = GsonBuilder()
+                val gson = gsonBuilder.create()
 
-            emailSearch = gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
+                emailSearch = gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
+            }
+            if (!emailSearch.isEmpty()) {
+                user = emailSearch[0]
+                user.loggedIn = true
+                return user
+            } else {
+                return null
+            }
+        }else{
+            return null
         }
-
-        user = emailSearch[0]
-        user.loggedIn = true
-        return user
     }
 
     fun getCurrentUser(): UserModel{
@@ -85,4 +120,34 @@ class InformationStore(val context: Context)  {
         }
     }
 
+
+    fun createPost(postModel: PostModel): String? {
+            val formBody: RequestBody = FormBody.Builder()
+                .add("title", postModel.title)
+                .add("description", postModel.description)
+                .add("image", "randomimage")
+                .add("useroid", user.oid).build()
+
+            val request: Request = Request.Builder()
+                .url("http://52.51.34.156:3000/post/create")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response -> return response.body!!.toString() }
+        }
+
+    fun putPostToUser(postModel: PostModel): String? {
+        val formBody: RequestBody = FormBody.Builder()
+            .add("title", postModel.title)
+            .add("description", postModel.description)
+            .add("image", "randomimage")
+            .add("useroid", user.oid).build()
+
+        val request: Request = Request.Builder()
+            .url("http://52.51.34.156:3000/post/create")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response -> return response.body!!.toString() }
+    }
 }

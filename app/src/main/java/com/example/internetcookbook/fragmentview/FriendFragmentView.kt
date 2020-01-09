@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.fragmentpresenter.FriendFragmentPresenter
-import com.example.internetcookbook.models.UserModel
 import kotlinx.android.synthetic.main.fragment_friend.view.*
 import org.jetbrains.anko.AnkoLogger
 
@@ -26,10 +25,10 @@ class FriendFragmentView : BaseView(),AnkoLogger {
         friendView = view
         presenter = initPresenter(FriendFragmentPresenter(this)) as FriendFragmentPresenter
 
-        val userModel = UserModel()
-        view.mSubmitButton.setOnClickListener {
-            userModel.name = view.mName.text.toString()
-        }
+        val userModel = presenter.getCurrentUser()
+        view.mFriendName.text = userModel.name
+        view.mFriendEmail.text = userModel.email
+        view.mFriendPassword.text = userModel.password
 
         return view
     }

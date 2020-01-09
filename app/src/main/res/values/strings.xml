@@ -22,6 +22,9 @@
     <string name="return_string">Return</string>
     <string name="username">Username</string>
     <string name="sign_up">Sign up</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="post">Post</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>

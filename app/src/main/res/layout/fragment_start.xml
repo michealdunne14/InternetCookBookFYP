@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragmentview.StartFragment">
+    tools:context=".StartFragment">
 
 
     <Button
@@ -32,6 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@android:drawable/btn_dialog"
+        android:transitionName="@string/logo_transition"
         app:layout_constraintBottom_toTopOf="@+id/mStartRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

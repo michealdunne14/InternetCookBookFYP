@@ -1,4 +1,4 @@
-package com.example.internetcookbook.fragmentview
+package com.example.internetcookbook
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.example.internetcookbook.R
-import com.example.internetcookbook.pager.PagerFragmentViewDirections
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
 
 class StartFragment : Fragment() {
@@ -26,7 +25,11 @@ class StartFragment : Fragment() {
     private fun initButtons(view: View) {
         view.mStartLogin.setOnClickListener {
             val action = StartFragmentDirections.actionStartFragmentToLoginFragmentView()
-            view.findNavController().navigate(action)
+            val extras = FragmentNavigatorExtras(
+                mLogo to getString(R.string.logo_transition)
+            )
+
+            view.findNavController().navigate(action,extras)
         }
         view.mStartRegister.setOnClickListener {
             val action = StartFragmentDirections.actionStartFragmentToRegisterFragment()
