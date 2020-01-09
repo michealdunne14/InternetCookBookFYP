@@ -9,9 +9,7 @@ import androidx.navigation.findNavController
 
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
-import com.example.internetcookbook.login.LoginFragmentViewDirections
 import com.example.internetcookbook.models.UserModel
-import kotlinx.android.synthetic.main.fragment_login.view.*
 import kotlinx.android.synthetic.main.fragment_register.view.*
 import kotlinx.android.synthetic.main.fragment_register.view.mRegisterReturnButton
 import java.util.*
@@ -30,7 +28,7 @@ class RegisterFragmentView : BaseView() {
 
         view.mRegisterSignupButton.setOnClickListener {
             if(view.mRegisterFirstname.text.isNotEmpty() &&
-                view.mEmailRegister.text.isNotEmpty() &&
+                view.mFriendEmail.text.isNotEmpty() &&
                 view.mPasswordRegister.text.isNotEmpty() &&
                 view.mUsernameRegister.text.isNotEmpty()) {
                 val currentTime: Date = Calendar.getInstance().getTime()
@@ -38,7 +36,7 @@ class RegisterFragmentView : BaseView() {
                     UserModel(
                         "",
                         view.mRegisterFirstname.text.toString(),
-                        view.mEmailRegister.text.toString(),
+                        view.mFriendEmail.text.toString(),
                         view.mPasswordRegister.text.toString(),
                         view.mUsernameRegister.text.toString(),
                         currentTime.toString(),

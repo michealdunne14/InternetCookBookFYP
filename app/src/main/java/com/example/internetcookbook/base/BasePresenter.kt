@@ -2,6 +2,7 @@ package com.example.internetcookbook.base
 
 import android.content.Intent
 import com.example.internetcookbook.MainApp
+import com.example.internetcookbook.models.UserModel
 
 open class BasePresenter(var view: BaseView) {
     open fun doActivityResult(requestCode: Int,resultCode:Int,data: Intent){

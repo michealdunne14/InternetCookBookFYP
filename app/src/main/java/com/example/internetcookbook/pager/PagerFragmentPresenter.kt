@@ -10,7 +10,6 @@ class PagerFragmentPresenter(view: BaseView): BasePresenter(view) {
     var app : MainApp = view.activity?.application as MainApp
     var infoStore: InformationStore
 
-
     init {
         infoStore = app.informationStore
         val currentUser = infoStore.getCurrentUser()
