@@ -22,7 +22,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Run UnitTest
-          command: ./gradlew testDemoDebugUnitTest
+          command: ./gradlew ExampleUnitTest
 
 #          version: 2
             #jobs:
