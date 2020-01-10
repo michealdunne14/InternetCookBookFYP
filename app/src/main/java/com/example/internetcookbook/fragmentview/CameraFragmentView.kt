@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ReceiptListAdapter
 import com.example.internetcookbook.models.FoodModel
@@ -43,6 +42,7 @@ class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
     lateinit var homeView: View
     var storedFood = ArrayList<FoodModel>()
     var captureCheck = false
+    var torch = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +54,7 @@ class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)
 
-        view.mFoodListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        view.mFoodListRecyclerView.layoutManager = layoutManager
         view.mFloatingButton.setOnClickListener {
             storedFood.clear()
             view.mListItems.visibility = View.GONE
@@ -121,17 +121,37 @@ class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
 //            homeView.findNavController().navigate(action,extras)
 //        }
 
-        homeView.capture_button.setOnClickListener {
+        homeView.mCameraFlashButton.setOnClickListener {
+            torch = !torch
+        }
+
+        homeView.mCameraCaptureButton.setOnClickListener {
             if(!captureCheck) {
-                captureCheck = true
-                setImageBitmap()
+
+                doAsync {
+                    try {
+                        if (torch) {
+                            preview.enableTorch(torch)
+                            Thread.sleep(1000)
+                            preview.enableTorch(false)
+                        }
+                    }catch (e: Exception){
+                        e.printStackTrace()
+                    }
+                    uiThread {
+                        captureCheck = true
+                        setImageBitmap()
+                        homeView.mButtonFindText.visibility = View.VISIBLE
+                    }
+                }
             }else{
                 captureCheck = false
                 clearImageBitmap()
+                homeView.mButtonFindText.visibility = View.INVISIBLE
             }
         }
 
-        homeView.mFindText.setOnClickListener {
+        homeView.mButtonFindText.setOnClickListener {
             mChangeImageToText(viewFinder.bitmap)
         }
 

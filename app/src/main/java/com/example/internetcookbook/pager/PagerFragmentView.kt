@@ -73,10 +73,8 @@ class PagerFragmentView : BaseView(), AnkoLogger {
     lateinit var pagerAdapter: TabsPagerAdapter
 
     private fun initTabLayout(view: View) {
-        view.navigationView.selectedItemId =
-            R.id.mNavHome
-        pagerAdapter =
-            TabsPagerAdapter(activity!!.supportFragmentManager)
+        view.navigationView.selectedItemId = R.id.mNavHome
+        pagerAdapter = TabsPagerAdapter(activity!!.supportFragmentManager)
         val viewPager = view.view_pager
         viewPager.adapter = pagerAdapter
         viewPager.currentItem = 1
@@ -88,13 +86,13 @@ class PagerFragmentView : BaseView(), AnkoLogger {
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
+
             }
 
             override fun onPageSelected(position: Int) {
                 when (position) {
                     0 -> {
-                        navigationView.selectedItemId =
-                            R.id.mNavCamera
+                        navigationView.selectedItemId = R.id.mNavCamera
                     }
                     1 -> {
 
