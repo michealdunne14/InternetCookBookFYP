@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Size
 import android.view.*
 import android.widget.Toast
@@ -87,10 +88,13 @@ class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
     private lateinit var viewFinder: TextureView
 
     private fun startCamera() {
+        val metrics = DisplayMetrics().also { viewFinder.display.getRealMetrics(it) }
+        val screenSize = Size(metrics.widthPixels, metrics.heightPixels)
 
 //        // Create configuration object for the viewfinder use case
         val previewConfig = PreviewConfig.Builder().apply {
-            setTargetResolution(Size(640, 480))
+            setTargetResolution(screenSize)
+            setTargetRotation(viewFinder.display.rotation)
         }.build()
 
 
