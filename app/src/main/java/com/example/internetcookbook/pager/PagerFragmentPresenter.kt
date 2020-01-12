@@ -7,7 +7,7 @@ import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.network.InformationStore
 
 class PagerFragmentPresenter(view: BaseView): BasePresenter(view) {
-    var app : MainApp = view.activity?.application as MainApp
+    override var app : MainApp = view.activity?.application as MainApp
     var infoStore: InformationStore
 
     init {

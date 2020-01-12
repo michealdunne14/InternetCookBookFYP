@@ -7,19 +7,19 @@ import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 
-class ImageAdapter(private val mContext: Context, private val imageList: String) : PagerAdapter() {
+class ImageAdapter(private val mContext: Context, private val imageList: ArrayList<String>) : PagerAdapter() {
     override fun isViewFromObject(view: View, obj: Any): Boolean {
         return view === obj
     }
 
     override fun getCount(): Int {
-        return 1
+        return imageList.size
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val imageView = ImageView(mContext)
         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
-        Glide.with(mContext).load(imageList).into(imageView)
+        Glide.with(mContext).load(imageList[position]).into(imageView)
         container.addView(imageView,0)
         return imageView
     }

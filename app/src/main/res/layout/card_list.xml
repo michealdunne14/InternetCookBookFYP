@@ -90,11 +90,20 @@
 
 
         <ImageButton
-            android:id="@+id/mShareHillfort"
+            android:id="@+id/mShareFood"
             android:layout_width="60dp"
             android:layout_height="55dp"
             android:background="@null"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mCardNote"
+            app:srcCompat="?attr/actionModeShareDrawable" />
+
+        <ImageButton
+            android:id="@+id/mMakeFood"
+            android:layout_width="60dp"
+            android:layout_height="55dp"
+            android:background="@null"
+            app:layout_constraintStart_toEndOf="@+id/mShareFood"
             app:layout_constraintTop_toBottomOf="@+id/mCardNote"
             app:srcCompat="?attr/actionModeShareDrawable" />
 

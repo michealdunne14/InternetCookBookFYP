@@ -10,7 +10,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class RegisterFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
-    var app : MainApp = view.activity?.application as MainApp
+    override var app : MainApp = view.activity?.application as MainApp
     var infoStore: InformationStore? = null
 
     init {
