@@ -17,6 +17,13 @@
         <action
             android:id="@+id/action_pagerFragment_to_startFragment"
             app:destination="@id/startFragment" />
+        <action
+            android:id="@+id/action_pagerFragment_to_makeFragment"
+            app:destination="@id/makeFragment" >
+            <argument
+                android:name="postModel"
+                app:argType="com.example.internetcookbook.models.PostModel"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -38,6 +45,9 @@
         <action
             android:id="@+id/action_postFragment2_to_pagerFragment"
             app:destination="@id/pagerFragment" />
+        <action
+            android:id="@+id/action_postFragment2_to_ingredientsFragment"
+            app:destination="@id/ingredientsFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -62,5 +72,19 @@
         <action
             android:id="@+id/action_loginFragmentView_to_startFragment"
             app:destination="@id/startFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ingredientsFragment"
+        android:name="com.example.internetcookbook.ingredients.IngredientsFragment"
+        android:label="fragment_ingredients"
+        tools:layout="@layout/fragment_ingredients" />
+    <fragment
+        android:id="@+id/makeFragment"
+        android:name="com.example.internetcookbook.makefood.MakeFragment"
+        android:label="fragment_make"
+        tools:layout="@layout/fragment_make" >
+        <argument
+            android:name="postModel"
+            app:argType="com.example.internetcookbook.models.PostModel"/>
     </fragment>
 </navigation>

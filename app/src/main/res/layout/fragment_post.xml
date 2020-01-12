@@ -18,29 +18,51 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageView"
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/mFragmentPager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/camera_notification" />
+                android:layout_height="300dp" />
+
+            <Button
+                android:id="@+id/mAddImage"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="@string/add_images_to_post"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <EditText
                 android:id="@+id/mPostTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="@string/title" />
+                android:hint="@string/title"
+                android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/mPostDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="@string/description" />
+                android:hint="@string/description"
+                android:inputType="textPersonName" />
+
+            <Button
+                android:id="@+id/mIngredientsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ingredients"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mPostFoodRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <Button
                 android:id="@+id/mPostButton"

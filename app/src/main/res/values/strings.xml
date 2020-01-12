@@ -7,6 +7,7 @@
     <string name="bottomNavHome">Home</string>
     <string name="bottomNavCamera">Camera</string>
     <string name="logo_transition" translatable="false">Logo Transition</string>
+    <string name="select_image">Please Enter a Title</string>
 
     <string name="first_fragment">First</string>
     <string name="second_fragment">Second</string>
@@ -25,6 +26,8 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="post">Post</string>
+    <string name="add_images_to_post">Add Images to Post</string>
+    <string name="ingredients">Ingredients</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>

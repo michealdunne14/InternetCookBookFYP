@@ -5,6 +5,8 @@ import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.models.UserModel
 
 open class BasePresenter(var view: BaseView) {
+    open var app:MainApp = view.activity!!.application as MainApp
+
     open fun doActivityResult(requestCode: Int,resultCode:Int,data: Intent){
     }
 

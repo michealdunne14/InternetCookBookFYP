@@ -12,7 +12,7 @@ import org.jetbrains.anko.uiThread
 
 class LoginFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
-    var app : MainApp = view.activity?.application as MainApp
+    override var app : MainApp = view.activity?.application as MainApp
     var infoStore: InformationStore? = null
 
     init {
