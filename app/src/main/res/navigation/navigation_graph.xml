@@ -92,6 +92,10 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.internetcookbook.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:name="com.example.internetcookbook.SettingsFragmentView"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_startFragment"
+            app:destination="@id/startFragment" />
+    </fragment>
 </navigation>

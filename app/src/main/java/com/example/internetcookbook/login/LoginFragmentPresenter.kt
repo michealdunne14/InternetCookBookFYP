@@ -28,8 +28,12 @@ class LoginFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
             }
             onComplete {
                 if (signIn.email.isNotEmpty()){
-                    view.hideProgress()
-                    view.getMainPageFromLoginPage()
+                    if(signIn.password==userModel.password) {
+                        view.hideProgress()
+                        view.getMainPageFromLoginPage()
+                    }else{
+                        view.passwordIncorrect()
+                    }
                 }else{
                     view.detailsIncorrect()
                 }

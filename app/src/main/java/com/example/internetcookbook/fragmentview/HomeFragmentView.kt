@@ -1,7 +1,5 @@
 package com.example.internetcookbook.fragmentview
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
@@ -9,7 +7,6 @@ import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
@@ -25,8 +22,6 @@ import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_make.*
-import kotlinx.android.synthetic.main.fragment_make.view.*
 
 class HomeFragmentView : Fragment(), PostListener {
 
@@ -100,9 +95,9 @@ class HomeFragmentView : Fragment(), PostListener {
             }
             R.id.mNavBasket -> {
                 if(show)
-                    cancelMake()
+                    cancelFilter()
                 else
-                    showMake()
+                    showFilter()
             }
             R.id.mNavPost -> {
                 val action = PagerFragmentViewDirections.actionPagerFragmentToPostFragment2()
@@ -113,7 +108,7 @@ class HomeFragmentView : Fragment(), PostListener {
     }
 
 
-    private fun showMake(){
+    private fun showFilter(){
         show = true
 
         val constraintSet = ConstraintSet()
@@ -127,7 +122,7 @@ class HomeFragmentView : Fragment(), PostListener {
         constraintSet.applyTo(homeConstraint) //here constraint is the name of view to which we are applying the constraintSet
     }
 
-    private fun cancelMake(){
+    private fun cancelFilter(){
         show = false
         val constraintSet = ConstraintSet()
         constraintSet.clone(homeView.context, R.layout.fragment_home_filter)
@@ -140,15 +135,6 @@ class HomeFragmentView : Fragment(), PostListener {
         constraintSet.applyTo(homeConstraint)  //here constraint is the name of view to which we are applying the constraintSet
     }
 
-//    //  Show Hillforts
-//    fun showPosts(/*postModelList: ArrayList<PostModel>, user: UserModel*/) {
-//        val postModelList = ArrayList<PostModel>()
-//        val user = UserModel()
-//        postModel.name = "Test"
-//        postModelList.add(postModel)
-//        mListRecyclerView.adapter = CardAdapter(postModelList, this, user)
-//        mListRecyclerView.adapter?.notifyDataSetChanged()
-//    }
 
     override fun onPostClick(hillfort: PostModel) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

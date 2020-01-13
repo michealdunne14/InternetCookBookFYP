@@ -19,6 +19,7 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun hideProgress(){}
     open fun getMainPageFromLoginPage(){}
     open fun detailsIncorrect(){}
+    open fun passwordIncorrect(){}
     open fun addImages(listofImages: ArrayList<String>) {}
     open fun showIngredients(listofIngredients: ArrayList<FoodModel>){}
     open fun doFindImages(images: ArrayList<String>){}
