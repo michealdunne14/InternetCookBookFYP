@@ -24,6 +24,9 @@
                 android:name="postModel"
                 app:argType="com.example.internetcookbook.models.PostModel"/>
         </action>
+        <action
+            android:id="@+id/action_pagerFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -87,4 +90,8 @@
             android:name="postModel"
             app:argType="com.example.internetcookbook.models.PostModel"/>
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.internetcookbook.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

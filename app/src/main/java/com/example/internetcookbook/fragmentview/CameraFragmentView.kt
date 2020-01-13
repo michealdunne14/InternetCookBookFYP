@@ -72,7 +72,9 @@ class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
 
         // Request camera permissions
         if (allPermissionsGranted()) {
-            viewFinder.post { startCamera() }
+            doAsync {
+                viewFinder.post { startCamera() }
+            }
         } else {
             ActivityCompat.requestPermissions(activity!!, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
