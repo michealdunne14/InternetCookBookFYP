@@ -7,8 +7,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".makefood.MakeFragment">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutMake"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorWhite"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarMake"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <TextView
-        android:id="@+id/mTimeToCreate"
+        android:id="@+id/mMakeTimeToCreate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Time To Make"
@@ -41,7 +59,7 @@
         app:layout_constraintBottom_toTopOf="@+id/mMakeName"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutMake" />
 
     <TextView
         android:id="@+id/mMakeName"
@@ -57,7 +75,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Description"
-        app:layout_constraintBottom_toTopOf="@+id/mSelectedAmountofPeopel"
+        app:layout_constraintBottom_toTopOf="@+id/mMakeAmountofPeople"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -72,11 +90,11 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/mSelectedAmountofPeopel"
+        android:id="@+id/mMakeAmountofPeople"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Selected Amount of People"
-        app:layout_constraintBottom_toTopOf="@+id/mTimeToCreate"
+        app:layout_constraintBottom_toTopOf="@+id/mMakeTimeToCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

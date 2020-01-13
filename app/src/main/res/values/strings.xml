@@ -28,6 +28,7 @@
     <string name="post">Post</string>
     <string name="add_images_to_post">Add Images to Post</string>
     <string name="ingredients">Ingredients</string>
+    <string name="search_by_name">Search By Name</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>
