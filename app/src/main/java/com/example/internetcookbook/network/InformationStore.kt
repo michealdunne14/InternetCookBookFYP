@@ -19,6 +19,7 @@ import java.util.ArrayList
 class InformationStore(val context: Context, val internetConnection: Boolean)  {
     var client = OkHttpClient()
     var user = UserModel()
+    var userLocalStore = mutableListOf<UserModel>()
     lateinit var emailSearchArray: Array<UserModel>
 
     val JSON_FILE = "InformationStore.json"
@@ -32,13 +33,13 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
     }
 
     private fun serialize() {
-        val jsonString = gsonBuilder.toJson(user, listType)
+        val jsonString = gsonBuilder.toJson(userLocalStore, listType)
         write(context, JSON_FILE, jsonString)
     }
 
     private fun deserialize() {
         val jsonString = read(context, JSON_FILE)
-        user = Gson().fromJson(jsonString, listType)
+        userLocalStore = Gson().fromJson(jsonString, listType)
     }
 
     fun emailSearch(userModel: UserModel) {
@@ -85,6 +86,8 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
             if (!emailSearch.isEmpty()) {
                 user = emailSearch[0]
                 user.loggedIn = true
+                userLocalStore.add(user)
+                serialize()
                 return user
             } else {
                 return null
@@ -95,6 +98,9 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
     }
 
     fun getCurrentUser(): UserModel{
+        if(userLocalStore.isNotEmpty()){
+            user = userLocalStore[0]
+        }
         return user
     }
 
@@ -118,6 +124,11 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
         }else{
             return null
         }
+    }
+
+    fun userCreated() {
+        userLocalStore.add(user)
+        serialize()
     }
 
 
@@ -149,5 +160,10 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
             .build()
 
         client.newCall(request).execute().use { response -> return response.body!!.toString() }
+    }
+
+    fun logoutUser(){
+        userLocalStore.clear()
+        serialize()
     }
 }

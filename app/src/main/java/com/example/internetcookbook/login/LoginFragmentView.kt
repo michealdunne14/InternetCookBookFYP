@@ -86,5 +86,9 @@ class LoginFragmentView : BaseView() {
         Toast.makeText(loginView.context,"Fill in all fields", Toast.LENGTH_SHORT).show()
     }
 
+    override fun passwordIncorrect(){
+        Toast.makeText(loginView.context,"Password Incorrect", Toast.LENGTH_SHORT).show()
+    }
+
 
 }
