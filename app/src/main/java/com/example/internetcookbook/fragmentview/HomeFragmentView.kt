@@ -22,6 +22,15 @@ import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
+import kotlinx.android.synthetic.main.fragment_home.view.mHomeBasket
+import kotlinx.android.synthetic.main.fragment_home.view.mHomeItem
+import kotlinx.android.synthetic.main.fragment_home.view.mHomePost
+import kotlinx.android.synthetic.main.fragment_home.view.mHomeSettings
+import kotlinx.android.synthetic.main.fragment_home.view.mHomeTime
+import kotlinx.android.synthetic.main.fragment_home.view.mHomeTopPosts
+import kotlinx.android.synthetic.main.fragment_home.view.mListRecyclerView
+import kotlinx.android.synthetic.main.fragment_home.view.rangeBar
 
 class HomeFragmentView : Fragment(), PostListener {
 
@@ -39,13 +48,15 @@ class HomeFragmentView : Fragment(), PostListener {
 
     private lateinit var callback: PagerFragmentView.ViewCreatedListener
     private var show = false
+    private var time = false
+    private var item = false
+    private var top = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.getSerializable(CALLBACK_FUNC)?.let {
             callback = it as PagerFragmentView.ViewCreatedListener
         }
-        setHasOptionsMenu(true)
     }
 
 
@@ -62,12 +73,58 @@ class HomeFragmentView : Fragment(), PostListener {
         val layoutManager = LinearLayoutManager(context)
 
         callback.invoke()
-        val toolbar: Toolbar = view.findViewById(R.id.toolbarAdd)
-        toolbar.title = ""
-        (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
         view.mListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
 
+        view.mHomePost.setOnClickListener {
+            val action = PagerFragmentViewDirections.actionPagerFragmentToPostFragment2()
+            homeView.findNavController().navigate(action)
+        }
+
+        view.mHomeSettings.setOnClickListener {
+            val action = PagerFragmentViewDirections.actionPagerFragmentToSettingsFragment()
+            homeView.findNavController().navigate(action)
+        }
+
+        view.mHomeBasket.setOnClickListener {
+
+        }
+
+        view.mHomeTime.setOnClickListener {
+            if(show) {
+                time = false
+                cancelFilter()
+            }else {
+                time = true
+                top = false
+                item = false
+                showFilter()
+            }
+        }
+
+        view.mHomeItem.setOnClickListener {
+            if(show) {
+                item = false
+                cancelFilter()
+            }else {
+                item = true
+                top = false
+                time = false
+                showFilter()
+            }
+        }
+
+        view.mHomeTopPosts.setOnClickListener {
+            if(show) {
+                top = false
+                cancelFilter()
+            }else {
+                top = true
+                item = false
+                time = false
+                showFilter()
+            }
+        }
 
         val user = UserModel()
 //        postModelList.add(PostModel("Burger","Burger","https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1200px-RedDot_Burger.jpg"))
@@ -78,58 +135,45 @@ class HomeFragmentView : Fragment(), PostListener {
         postModelList.add(PostModel("Food","food",arrayList))
         view.mListRecyclerView.adapter = CardAdapter(postModelList, this, user)
         view.mListRecyclerView.adapter?.notifyDataSetChanged()
-//        showPosts()C
         return view
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu)
-        super.onCreateOptionsMenu(menu,inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.mNavSettings -> {
-                val action = PagerFragmentViewDirections.actionPagerFragmentToSettingsFragment()
-                homeView.findNavController().navigate(action)
-            }
-            R.id.mNavBasket -> {
-                if(show)
-                    cancelFilter()
-                else
-                    showFilter()
-            }
-            R.id.mNavPost -> {
-                val action = PagerFragmentViewDirections.actionPagerFragmentToPostFragment2()
-                homeView.findNavController().navigate(action)
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
 
     private fun showFilter(){
         show = true
 
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(homeView.context, R.layout.fragment_home_filter)
+        if(time){
+            homeView.filterbyItem.visibility = View.GONE
+            homeView.horizontalScrollBar.visibility = View.GONE
+            homeView.rangeBar.visibility = View.VISIBLE
+        }else if(item){
+            homeView.rangeBar.visibility = View.GONE
+            homeView.filterbyItem.visibility = View.VISIBLE
+            homeView.horizontalScrollBar.visibility = View.GONE
+        }else if(top){
+            homeView.rangeBar.visibility = View.GONE
+            homeView.filterbyItem.visibility = View.GONE
+            homeView.horizontalScrollBar.visibility = View.VISIBLE
+        }
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(homeView.context, R.layout.fragment_home_filter)
 
-        val transition = ChangeBounds()
-        transition.interpolator = AnticipateOvershootInterpolator(1.0f)
-        transition.duration = 1000
+            val transition = ChangeBounds()
+            transition.interpolator = AnticipateOvershootInterpolator(1.0f)
+            transition.duration = 500
 
-        TransitionManager.beginDelayedTransition(homeConstraint, transition)
-        constraintSet.applyTo(homeConstraint) //here constraint is the name of view to which we are applying the constraintSet
+            TransitionManager.beginDelayedTransition(homeConstraint, transition)
+            constraintSet.applyTo(homeConstraint) //here constraint is the name of view to which we are applying the constraintSet
     }
 
     private fun cancelFilter(){
         show = false
         val constraintSet = ConstraintSet()
-        constraintSet.clone(homeView.context, R.layout.fragment_home_filter)
+        constraintSet.clone(homeView.context, R.layout.fragment_home)
 
         val transition = ChangeBounds()
         transition.interpolator = AnticipateOvershootInterpolator(1.0f)
-        transition.duration = 1000
+        transition.duration = 500
 
         TransitionManager.beginDelayedTransition(homeConstraint, transition)
         constraintSet.applyTo(homeConstraint)  //here constraint is the name of view to which we are applying the constraintSet

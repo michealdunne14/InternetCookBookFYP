@@ -7,24 +7,73 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragmentview.HomeFragmentView">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintFragmentHome"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:fitsSystemWindows="true"
+        android:layout_height="35dp"
         android:background="@color/colorWhite"
+        android:fitsSystemWindows="true"
         app:layout_constraintBottom_toTopOf="@+id/mListRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarAdd"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <ImageButton
+                android:id="@+id/mHomeBasket"
+                android:layout_width="@dimen/dimension50"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                app:srcCompat="@drawable/outline_shopping_basket_black_36" />
+
+            <ImageButton
+                android:id="@+id/mHomeTime"
+                android:layout_width="@dimen/dimension50"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                app:srcCompat="@drawable/outline_access_time_black_36" />
+
+            <ImageButton
+                android:id="@+id/mHomeItem"
+                android:layout_width="@dimen/dimension50"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                app:srcCompat="@drawable/outline_search_black_36" />
+
+            <ImageButton
+                android:id="@+id/mHomeTopPosts"
+                android:layout_width="@dimen/dimension50"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                app:srcCompat="@drawable/baseline_favorite_black_36" />
+
+            <ImageButton
+                android:id="@+id/mHomeSettings"
+                android:layout_width="@dimen/dimension50"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                app:srcCompat="@drawable/baseline_settings_applications_black_36" />
+
+            <ImageButton
+                android:id="@+id/mHomePost"
+                android:layout_width="@dimen/dimension50"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                app:srcCompat="@drawable/outline_post_add_black_36" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,11 +81,31 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="@color/colorWhite"
-        app:layout_constraintBottom_toBottomOf="@+id/appBarLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintFragmentHome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"></androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/constraintFragmentHome" >
+
+        <include
+            android:id="@+id/horizontalScrollBar"
+            layout="@layout/horizontalscrollbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            android:id="@+id/filterbyItem"
+            layout="@layout/searchfilter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <include
+            android:id="@+id/rangeBar"
+            layout="@layout/rangebar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mListRecyclerView"
@@ -47,6 +116,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintFragmentHome" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

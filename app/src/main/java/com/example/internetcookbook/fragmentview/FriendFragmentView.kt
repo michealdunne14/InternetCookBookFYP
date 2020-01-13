@@ -25,10 +25,6 @@ class FriendFragmentView : BaseView(),AnkoLogger {
         friendView = view
         presenter = initPresenter(FriendFragmentPresenter(this)) as FriendFragmentPresenter
 
-        val userModel = presenter.getCurrentUser()
-        view.mFriendName.text = userModel.name
-        view.mFriendEmail.text = userModel.email
-        view.mFriendPassword.text = userModel.password
 
         return view
     }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/mRemoveName"
+        android:icon="@drawable/outline_person_black_48"
+        android:title="Remove Name"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/mRemoveDescription"
+        android:icon="@drawable/outline_description_black_48"
+        android:title="Remove Description"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/mRemoveNumberOfPeople"
+        android:icon="@drawable/outline_people_black_48"
+        android:title="Remove Number of People"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/mRemoveTimeToMake"
+        android:icon="@drawable/outline_access_time_black_48"
+        android:title="Remove Time To Make"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/mRemoveCreatedBy"
+        android:icon="@drawable/outline_create_black_48"
+        android:title="Remove Created By"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/mRemoveIngredients"
+        android:icon="@drawable/outline_fastfood_black_48"
+        android:title="Remove Ingredients"
+        app:showAsAction="always"/>
+</menu>
