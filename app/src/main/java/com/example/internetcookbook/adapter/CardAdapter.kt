@@ -61,8 +61,8 @@ class CardAdapter(
 
         fun doFindImages(images: ArrayList<String>) {
             val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
-                val adapter = ImageAdapter(itemView.context, images)
-                viewPager.adapter = adapter
+            val adapter = ImageAdapter(itemView.context, images)
+            viewPager.adapter = adapter
         }
     }
 

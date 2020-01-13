@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <item
+            android:id="@+id/mNavBasket"
+            android:icon="@drawable/outline_shopping_basket_black_48"
+            android:title="Filter by Items In Basket"
+            app:showAsAction="always"/>
+        <item
+            android:id="@+id/mNavTime"
+            android:icon="@drawable/outline_access_time_black_48"
+            android:title="Filter By Time Available"
+            app:showAsAction="always"/>
+        <item
+            android:id="@+id/mNavItem"
+            android:icon="@drawable/outline_search_black_48"
+            android:title="Filter By Special Item e.g Only Items with Chicken"
+            app:showAsAction="always"/>
+        <item
+            android:id="@+id/mNavSettings"
+            android:icon="@drawable/baseline_settings_applications_black_48"
+            android:title="Settings"
+            app:showAsAction="always"/>
+        <item
+            android:id="@+id/mNavPost"
+            android:icon="@drawable/outline_post_add_black_48"
+            android:title="Settings"
+            app:showAsAction="always"/>
+</menu>

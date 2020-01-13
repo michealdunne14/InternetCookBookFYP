@@ -21,4 +21,5 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun detailsIncorrect(){}
     open fun addImages(listofImages: ArrayList<String>) {}
     open fun showIngredients(listofIngredients: ArrayList<FoodModel>){}
+    open fun doFindImages(images: ArrayList<String>){}
 }
