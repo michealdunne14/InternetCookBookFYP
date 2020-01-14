@@ -20,42 +20,42 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/mTimeTen"
+                android:id="@+id/mHomeScrollBarFirstPosition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Recipes this Week" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/mHomeScrollBarSecondPosition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Recipes this Month" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/mHomeScrollBarThirdPosition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Recipes this Year" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/mHomeScrollBarForthPosition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Top Creator this week" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/mHomeScrollBarFifthPosition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Top Creator this month" />
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/mHomeScrollBarSixthPosition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

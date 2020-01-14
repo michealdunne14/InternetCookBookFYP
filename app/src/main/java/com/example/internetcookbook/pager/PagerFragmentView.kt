@@ -60,11 +60,7 @@ class PagerFragmentView : BaseView(), AnkoLogger {
                 }
             }
 
-            SampleFragmentPagerAdapter(
-                context,
-                fragmentManager,
-                callback
-            ).also {
+            SampleFragmentPagerAdapter(context, fragmentManager, callback).also {
                 view_pager.adapter = it
                 view_pager.currentItem = 1
             }

@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.UserModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_register.view.*
 import kotlinx.android.synthetic.main.fragment_register.view.mRegisterReturnButton
 import java.util.*
@@ -47,10 +48,10 @@ class RegisterFragmentView : BaseView() {
                     val action = RegisterFragmentViewDirections.actionRegisterFragmentToPagerFragment()
                     view.findNavController().navigate(action)
                 }else{
-                    Toast.makeText(view.context,"Email is already registered",Toast.LENGTH_SHORT).show()
+                    Snackbar.make(view,"Email is already registered", Snackbar.LENGTH_SHORT).show()
                 }
             }else{
-                Toast.makeText(view.context,"Fill in all fields", Toast.LENGTH_SHORT).show()
+                Snackbar.make(view,"Fill in all fields", Snackbar.LENGTH_SHORT).show()
             }
         }
 

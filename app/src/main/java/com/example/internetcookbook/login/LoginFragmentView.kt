@@ -18,6 +18,7 @@ import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentView
 import com.example.internetcookbook.register.RegisterFragmentPresenter
 import com.example.internetcookbook.register.RegisterFragmentViewDirections
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import kotlinx.android.synthetic.main.fragment_pager.*
 import java.io.Serializable
@@ -50,7 +51,7 @@ class LoginFragmentView : BaseView() {
                 userModel.password = view.mLoginPassword.text.toString()
                 presenter.doSignIn(userModel)
             }else{
-                Toast.makeText(view.context,"Fill in all fields", Toast.LENGTH_SHORT).show()
+                detailsIncorrect()
             }
         }
 
@@ -83,11 +84,12 @@ class LoginFragmentView : BaseView() {
     }
 
     override fun detailsIncorrect(){
-        Toast.makeText(loginView.context,"Fill in all fields", Toast.LENGTH_SHORT).show()
+        Snackbar.make(loginView,"Fill in all fields", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun passwordIncorrect(){
-        Toast.makeText(loginView.context,"Password Incorrect", Toast.LENGTH_SHORT).show()
+        Snackbar.make(loginView,"Password Incorrect", Snackbar.LENGTH_SHORT).show()
+
     }
 
 

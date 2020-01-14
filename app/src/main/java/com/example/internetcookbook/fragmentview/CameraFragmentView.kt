@@ -17,7 +17,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ReceiptListAdapter
+import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.FoodModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -33,7 +35,7 @@ import java.nio.ByteBuffer
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
+class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
     private val REQUEST_CODE_PERMISSIONS = 10
 
@@ -208,10 +210,10 @@ class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
                     }
                 }
                 .addOnFailureListener {
-                    Toast.makeText(homeView.context,"No Barcode Found Found",Toast.LENGTH_SHORT).show()
+                    Snackbar.make(homeView,"No Barcode Found Found", Snackbar.LENGTH_SHORT).show()
                 }
         }else{
-            Toast.makeText(homeView.context,"No Barcode Found Found",Toast.LENGTH_SHORT).show()
+            Snackbar.make(homeView,"No Barcode Found Found", Snackbar.LENGTH_SHORT).show()
         }
     }
 
@@ -251,7 +253,7 @@ class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
 
     private fun processResultText(resultText: FirebaseVisionText) {
         if (resultText.textBlocks.size == 0) {
-            Toast.makeText(homeView.context,"No Text Found",Toast.LENGTH_SHORT).show()
+            Snackbar.make(homeView,"No Text Found", Snackbar.LENGTH_SHORT).show()
             return
         }
         doAsync {
@@ -316,7 +318,7 @@ class CameraFragmentView : Fragment(), LifecycleOwner,AnkoLogger {
             if (allPermissionsGranted()) {
                 viewFinder.post { startCamera() }
             } else {
-                Toast.makeText(context, "Permissions not granted by the user.", Toast.LENGTH_SHORT).show()
+                Snackbar.make(homeView,"Permissions not granted by the user.", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
