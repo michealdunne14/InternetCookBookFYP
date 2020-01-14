@@ -13,13 +13,16 @@ import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.archaeologicalfieldwork.adapter.CardAdapter
 import com.example.archaeologicalfieldwork.adapter.PostListener
 import com.example.internetcookbook.pager.PagerFragmentView
 import com.example.internetcookbook.R
+import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
@@ -31,8 +34,9 @@ import kotlinx.android.synthetic.main.fragment_home.view.mHomeTime
 import kotlinx.android.synthetic.main.fragment_home.view.mHomeTopPosts
 import kotlinx.android.synthetic.main.fragment_home.view.mListRecyclerView
 import kotlinx.android.synthetic.main.fragment_home.view.rangeBar
+import kotlinx.android.synthetic.main.horizontalscrollbar.view.*
 
-class HomeFragmentView : Fragment(), PostListener {
+class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshListener{
 
     lateinit var homeView: View
     companion object {
@@ -51,6 +55,7 @@ class HomeFragmentView : Fragment(), PostListener {
     private var time = false
     private var item = false
     private var top = false
+    private var basket = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +79,13 @@ class HomeFragmentView : Fragment(), PostListener {
 
         callback.invoke()
         view.mListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
+        swipeRefreshLayout.setOnRefreshListener(this)
+
+        swipeRefreshLayout.setOnRefreshListener {
+            Snackbar.make(homeView,"Swipe Refreshed", Snackbar.LENGTH_SHORT).show()
+            swipeRefreshLayout.isRefreshing = false
+        }
 
 
         view.mHomePost.setOnClickListener {
@@ -87,7 +99,16 @@ class HomeFragmentView : Fragment(), PostListener {
         }
 
         view.mHomeBasket.setOnClickListener {
-
+            if(show) {
+                time = false
+                cancelFilter()
+            }else {
+                basket = true
+                time = false
+                top = false
+                item = false
+                showFilter()
+            }
         }
 
         view.mHomeTime.setOnClickListener {
@@ -98,6 +119,7 @@ class HomeFragmentView : Fragment(), PostListener {
                 time = true
                 top = false
                 item = false
+                basket = false
                 showFilter()
             }
         }
@@ -110,11 +132,13 @@ class HomeFragmentView : Fragment(), PostListener {
                 item = true
                 top = false
                 time = false
+                basket = false
                 showFilter()
             }
         }
 
         view.mHomeTopPosts.setOnClickListener {
+
             if(show) {
                 top = false
                 cancelFilter()
@@ -122,6 +146,7 @@ class HomeFragmentView : Fragment(), PostListener {
                 top = true
                 item = false
                 time = false
+                basket = false
                 showFilter()
             }
         }
@@ -139,6 +164,7 @@ class HomeFragmentView : Fragment(), PostListener {
     }
 
 
+
     private fun showFilter(){
         show = true
 
@@ -154,6 +180,25 @@ class HomeFragmentView : Fragment(), PostListener {
             homeView.rangeBar.visibility = View.GONE
             homeView.filterbyItem.visibility = View.GONE
             homeView.horizontalScrollBar.visibility = View.VISIBLE
+
+            homeView.mHomeScrollBarFirstPosition.text = "Recipes this Week"
+            homeView.mHomeScrollBarSecondPosition.text = "Recipes this Month"
+            homeView.mHomeScrollBarThirdPosition.visibility = View.VISIBLE
+            homeView.mHomeScrollBarForthPosition.visibility = View.VISIBLE
+            homeView.mHomeScrollBarFifthPosition.visibility = View.VISIBLE
+            homeView.mHomeScrollBarSixthPosition.visibility = View.VISIBLE
+        }
+        else if(basket){
+            homeView.rangeBar.visibility = View.GONE
+            homeView.filterbyItem.visibility = View.GONE
+            homeView.horizontalScrollBar.visibility = View.VISIBLE
+
+            homeView.mHomeScrollBarFirstPosition.text = "Filter to basket Items"
+            homeView.mHomeScrollBarSecondPosition.text = "View Items In Basket"
+            homeView.mHomeScrollBarThirdPosition.visibility = View.GONE
+            homeView.mHomeScrollBarForthPosition.visibility = View.GONE
+            homeView.mHomeScrollBarFifthPosition.visibility = View.GONE
+            homeView.mHomeScrollBarSixthPosition.visibility = View.GONE
         }
             val constraintSet = ConstraintSet()
             constraintSet.clone(homeView.context, R.layout.fragment_home_filter)
@@ -168,6 +213,7 @@ class HomeFragmentView : Fragment(), PostListener {
 
     private fun cancelFilter(){
         show = false
+
         val constraintSet = ConstraintSet()
         constraintSet.clone(homeView.context, R.layout.fragment_home)
 
@@ -182,6 +228,10 @@ class HomeFragmentView : Fragment(), PostListener {
 
     override fun onPostClick(hillfort: PostModel) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onRefresh() {
+
     }
 
 }
