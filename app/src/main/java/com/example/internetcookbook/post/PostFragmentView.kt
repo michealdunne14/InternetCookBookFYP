@@ -47,8 +47,10 @@ class PostFragmentView : BaseView(),AnkoLogger {
             postModel.title = view.mPostTitle.text.toString()
             postModel.description = view.mPostDescription.text.toString()
             presenter.doPostRecipe(postModel)
-            val action = PostFragmentViewDirections.actionPostFragment2ToPagerFragment()
-            view.findNavController().navigate(action)
+        }
+
+        view.mReturnButton.setOnClickListener {
+            !postView.findNavController().navigateUp()
         }
 
         view.mIngredientsButton.setOnClickListener {

@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -83,8 +84,9 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         swipeRefreshLayout.setOnRefreshListener(this)
 
         swipeRefreshLayout.setOnRefreshListener {
-            Snackbar.make(homeView,"Swipe Refreshed", Snackbar.LENGTH_SHORT).show()
-            swipeRefreshLayout.isRefreshing = false
+//            Snackbar.make(homeView,"Swipe Refreshed", Snackbar.LENGTH_SHORT).show()
+//            swipeRefreshLayout.isRefreshing = false
+            !homeView.findNavController().navigateUp()
         }
 
 

@@ -83,12 +83,15 @@
         tools:layout="@layout/fragment_ingredients" />
     <fragment
         android:id="@+id/makeFragment"
-        android:name="com.example.internetcookbook.makefood.MakeFragment"
+        android:name="com.example.internetcookbook.makefood.MakeFragmentView"
         android:label="fragment_make"
         tools:layout="@layout/fragment_make" >
         <argument
             android:name="postModel"
             app:argType="com.example.internetcookbook.models.PostModel"/>
+        <action
+            android:id="@+id/action_makeFragment_to_pagerFragment"
+            app:destination="@id/pagerFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

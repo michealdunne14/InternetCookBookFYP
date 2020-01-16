@@ -1,6 +1,7 @@
 package com.example.internetcookbook.base
 
 import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import org.jetbrains.anko.AnkoLogger
@@ -22,5 +23,4 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun passwordIncorrect(){}
     open fun addImages(listofImages: ArrayList<String>) {}
     open fun showIngredients(listofIngredients: ArrayList<FoodModel>){}
-    open fun doFindImages(images: ArrayList<String>){}
 }

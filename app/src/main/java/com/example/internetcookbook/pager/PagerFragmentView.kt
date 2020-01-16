@@ -21,6 +21,8 @@ import java.io.Serializable
 class PagerFragmentView : BaseView(), AnkoLogger {
 
     lateinit var presenter: PagerFragmentPresenter
+    lateinit var pagerAdapter: TabsPagerAdapter
+
 
 
     interface ViewCreatedListener : Serializable {
@@ -66,7 +68,6 @@ class PagerFragmentView : BaseView(), AnkoLogger {
             }
         }
     }
-    lateinit var pagerAdapter: TabsPagerAdapter
 
     private fun initTabLayout(view: View) {
         pagerAdapter = TabsPagerAdapter(activity!!.supportFragmentManager)
