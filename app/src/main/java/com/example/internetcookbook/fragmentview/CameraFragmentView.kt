@@ -1,23 +1,22 @@
 package com.example.internetcookbook.fragmentview
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.util.Size
 import android.view.*
-import android.widget.Toast
 import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ReceiptListAdapter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
+import com.example.internetcookbook.helper.readImageFromPath
 import com.example.internetcookbook.models.FoodModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ml.vision.FirebaseVision
@@ -46,6 +45,8 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     var captureCheck = false
     var torch = false
 
+    lateinit var presenter: CameraFragmentPresenter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,6 +56,8 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         homeView = view
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)
+        presenter = initPresenter(CameraFragmentPresenter(this)) as CameraFragmentPresenter
+
 
         view.mFoodListRecyclerView.layoutManager = layoutManager
         view.mFloatingButton.setOnClickListener {
@@ -66,7 +69,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         return view
     }
-
+    var cameraStarted = false
     override fun onStart() {
         super.onStart()
 
@@ -74,8 +77,10 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         // Request camera permissions
         if (allPermissionsGranted()) {
-            doAsync {
-                viewFinder.post { startCamera() }
+            if (!cameraStarted) {
+                doAsync {
+                    viewFinder.post { startCamera() }
+                }
             }
         } else {
             ActivityCompat.requestPermissions(activity!!, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
@@ -92,12 +97,12 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     private lateinit var viewFinder: TextureView
 
     private fun startCamera() {
-        val metrics = DisplayMetrics().also { viewFinder.display.getRealMetrics(it) }
-        val screenSize = Size(metrics.widthPixels, metrics.heightPixels)
+//        val metrics = DisplayMetrics().also { viewFinder.display.getRealMetrics(it) }
+//        val screenSize = Size(metrics.widthPixels, metrics.heightPixels)
 
 //        // Create configuration object for the viewfinder use case
         val previewConfig = PreviewConfig.Builder().apply {
-            setTargetResolution(screenSize)
+            setTargetAspectRatio(AspectRatio.RATIO_16_9)
             setTargetRotation(viewFinder.display.rotation)
         }.build()
 
@@ -131,7 +136,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         homeView.mCameraCaptureButton.setOnClickListener {
             if(!captureCheck) {
-
                 doAsync {
                     try {
                         if (torch) {
@@ -160,7 +164,8 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
 
         homeView.mScanBarcodeButton.setOnClickListener {
-            mScanBarCode(viewFinder.bitmap)
+//            mScanBarCode(viewFinder.bitmap)
+            presenter.doSelectImage()
         }
 
         // Setup image analysis pipeline that computes average pixel luminance
@@ -177,6 +182,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
         try {
             CameraX.bindToLifecycle(this, preview, analyzerUseCase)
+            cameraStarted = true
         }catch (e: java.lang.Exception){
             e.getStackTraceString()
         }
@@ -284,6 +290,18 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         homeView.mCapturedImage.visibility = View.VISIBLE
     }
 
+    override fun addImageToCamera(stringData: String) {
+        val bitmap = readImageFromPath(homeView.context,stringData)
+        homeView.view_finder.visibility = View.INVISIBLE
+        homeView.mCapturedImage.setImageBitmap(bitmap)
+        homeView.mCapturedImage.visibility = View.VISIBLE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startCamera()
+    }
+
     private fun updateTransform() {
         val matrix = Matrix()
 
@@ -320,6 +338,13 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             } else {
                 Snackbar.make(homeView,"Permissions not granted by the user.", Snackbar.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(data != null){
+            presenter.doActivityResult(requestCode,resultCode,data,homeView.context)
         }
     }
 

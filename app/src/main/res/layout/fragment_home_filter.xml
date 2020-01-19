@@ -22,7 +22,7 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/mHomeBasket"
+                android:id="@+id/mBasketSearch"
                 android:layout_width="@dimen/dimension50"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

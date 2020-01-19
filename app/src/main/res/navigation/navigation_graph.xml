@@ -27,6 +27,13 @@
         <action
             android:id="@+id/action_pagerFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_pagerFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" >
+            <argument
+                android:name="postModel"
+                app:argType="com.example.internetcookbook.models.PostModel"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -95,7 +102,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.internetcookbook.SettingsFragmentView"
+        android:name="com.example.internetcookbook.settings.SettingsFragmentView"
         android:label="SettingsFragment" >
         <action
             android:id="@+id/action_settingsFragment_to_startFragment"
@@ -110,4 +117,14 @@
             android:id="@+id/action_splashFragment_to_pagerFragment"
             app:destination="@id/pagerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="com.example.internetcookbook.comments.CommentsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_comments" />
+    <fragment
+        android:id="@+id/friendFragmentView"
+        android:name="com.example.internetcookbook.fragmentview.FriendFragmentView"
+        android:label="fragment_friend"
+        tools:layout="@layout/fragment_friend" />
 </navigation>

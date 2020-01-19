@@ -1,11 +1,13 @@
 package com.example.archaeologicalfieldwork.adapter
 
+import android.transition.ChangeBounds
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import android.view.animation.AnticipateOvershootInterpolator
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
@@ -14,7 +16,6 @@ import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.card_list.view.*
-import kotlinx.android.synthetic.main.fragment_start.*
 
 interface PostListener {
     fun onPostClick(
@@ -48,13 +49,27 @@ class CardAdapter(
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
+        private var showDetails = false
         fun bind(postModel: PostModel, listener: PostListener, user: UserModel) {
             itemView.mCardName.text = postModel.title
             itemView.mCardDescription.text = postModel.description
             doFindImages(postModel.images)
 
+            itemView.mShowRecipeDetails.setOnClickListener {
+//                if(showDetails) {
+//                    cancelDetailsShow(itemView)
+//                }else {
+//                    showDetailsShow(itemView)
+//                }
+            }
+
             itemView.mMakeFood.setOnClickListener {
                 val action = PagerFragmentViewDirections.actionPagerFragmentToMakeFragment(postModel)
+                itemView.findNavController().navigate(action)
+            }
+
+            itemView.mCommentsPage.setOnClickListener {
+                val action = PagerFragmentViewDirections.actionPagerFragmentToCommentsFragment(postModel)
                 itemView.findNavController().navigate(action)
             }
         }
@@ -64,6 +79,33 @@ class CardAdapter(
             val adapter = ImageAdapter(itemView.context, images)
             viewPager.adapter = adapter
         }
+
+        private fun showDetailsShow(itemView: View) {
+            showDetails = true
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(itemView.context, R.layout.card_list_show_details)
+
+            val transition = ChangeBounds()
+            transition.interpolator = AnticipateOvershootInterpolator(1.0f)
+            transition.duration = 1000
+
+            TransitionManager.beginDelayedTransition(itemView.homeDetailsConstraint, transition)
+            constraintSet.applyTo(itemView.homeDetailsConstraint)
+        }
+
+        private fun cancelDetailsShow(itemView: View) {
+            showDetails = false
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(itemView.context, R.layout.card_list)
+
+            val transition = ChangeBounds()
+            transition.interpolator = AnticipateOvershootInterpolator(1.0f)
+            transition.duration = 1000
+
+            TransitionManager.beginDelayedTransition(itemView.homeDetailsConstraint, transition)
+            constraintSet.applyTo(itemView.homeDetailsConstraint)
+        }
+
     }
 
 }

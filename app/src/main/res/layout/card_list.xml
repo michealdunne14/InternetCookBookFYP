@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -8,8 +8,13 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/homeDetailsConstraint"
         android:layout_width="match_parent"
-        android:layout_height="500dp">
+        android:layout_height="500dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/mCardImageList"
@@ -22,6 +27,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:id="@+id/mCardName"
@@ -43,59 +49,26 @@
             android:fontFamily="@font/quicksand"
             android:text="helloworld"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/mCardLocation"
+            app:layout_constraintBottom_toTopOf="@+id/mCardComment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mCardName" />
 
-        <TextView
-            android:id="@+id/mCardLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mCardDescription"
-            android:fontFamily="@font/quicksand"
-            android:text="TextView"
-            app:layout_constraintBottom_toTopOf="@+id/mDate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mCardDescription" />
-
-        <TextView
-            android:id="@+id/mDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mCardLocation"
-            android:fontFamily="@font/quicksand"
-            android:text="TextView"
-            app:layout_constraintBottom_toTopOf="@+id/mCardNote"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mCardLocation" />
-
 
         <EditText
-            android:id="@+id/mCardNote"
+            android:id="@+id/mCardComment"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:ems="10"
             android:fontFamily="@font/quicksand"
-            android:hint="Note"
+            android:hint="Comment"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toTopOf="@+id/mShareFood"
             app:layout_constraintEnd_toStartOf="@+id/mCardSendButton"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mDate" />
-
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="@dimen/dimension50"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageButton"
-            app:layout_constraintTop_toBottomOf="@+id/mCardNote"
-            android:background="@null"
-            app:srcCompat="@drawable/baseline_favorite_black_36" />
+            app:layout_constraintTop_toBottomOf="@+id/mCardDescription" />
 
         <ImageButton
             android:id="@+id/mCardSendButton"
@@ -103,23 +76,35 @@
             android:layout_height="0dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="4dp"
-            android:layout_toEndOf="@+id/mCardNote"
-            android:layout_toRightOf="@+id/mCardNote"
+            android:layout_toEndOf="@+id/mCardComment"
+            android:layout_toRightOf="@+id/mCardComment"
             android:background="@null"
-            app:layout_constraintBottom_toBottomOf="@+id/mCardNote"
+            app:layout_constraintBottom_toBottomOf="@+id/mCardComment"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/mCardNote"
-            app:layout_constraintTop_toTopOf="@+id/mCardNote"
+            app:layout_constraintStart_toEndOf="@+id/mCardComment"
+            app:layout_constraintTop_toTopOf="@+id/mCardComment"
             app:srcCompat="@android:drawable/ic_menu_send" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="@dimen/dimension50"
+            android:layout_height="0dp"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mShowRecipeDetails"
+            app:layout_constraintStart_toEndOf="@+id/imageButton"
+            app:layout_constraintTop_toBottomOf="@+id/mCardComment"
+            app:srcCompat="@drawable/baseline_favorite_black_36" />
 
         <ImageButton
             android:id="@+id/mShareFood"
             android:layout_width="60dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mMakeFood"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mCardNote"
+            app:layout_constraintTop_toBottomOf="@+id/mCardComment"
             app:srcCompat="@drawable/baseline_share_black_36" />
 
         <ImageButton
@@ -128,8 +113,9 @@
             android:layout_height="0dp"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
             app:layout_constraintStart_toEndOf="@+id/mShareFood"
-            app:layout_constraintTop_toBottomOf="@+id/mCardNote"
+            app:layout_constraintTop_toBottomOf="@+id/mCardComment"
             app:srcCompat="@drawable/outline_fastfood_black_36" />
 
         <ImageButton
@@ -138,9 +124,30 @@
             android:layout_height="0dp"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton2"
             app:layout_constraintStart_toEndOf="@+id/mMakeFood"
-            app:layout_constraintTop_toBottomOf="@+id/mCardNote"
+            app:layout_constraintTop_toBottomOf="@+id/mCardComment"
             app:srcCompat="@drawable/baseline_save_black_36" />
 
+        <ImageButton
+            android:id="@+id/mShowRecipeDetails"
+            android:layout_width="@dimen/dimension50"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageButton2"
+            app:layout_constraintTop_toBottomOf="@+id/mCardComment"
+            app:srcCompat="@drawable/baseline_details_black_36" />
+
+        <ImageButton
+            android:id="@+id/mCommentsPage"
+            android:layout_width="@dimen/dimension50"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/mShowRecipeDetails"
+            app:layout_constraintTop_toBottomOf="@+id/mCardComment"
+            app:srcCompat="@drawable/baseline_comment_black_36" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

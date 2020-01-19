@@ -1,7 +1,7 @@
 package com.example.internetcookbook.base
 
+import android.graphics.Bitmap
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import org.jetbrains.anko.AnkoLogger
@@ -22,5 +22,7 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun detailsIncorrect(){}
     open fun passwordIncorrect(){}
     open fun addImages(listofImages: ArrayList<String>) {}
+    open fun addImageToCamera(stringData: String) {}
+    open fun setProfileImage(image: Bitmap?){}
     open fun showIngredients(listofIngredients: ArrayList<FoodModel>){}
 }

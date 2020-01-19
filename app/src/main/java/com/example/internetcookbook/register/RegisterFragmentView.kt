@@ -1,10 +1,10 @@
 package com.example.internetcookbook.register
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.findNavController
 
 import com.example.internetcookbook.R
@@ -19,6 +19,8 @@ class RegisterFragmentView : BaseView() {
 
     lateinit var presenter: RegisterFragmentPresenter
 
+    lateinit var registerView: View
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,6 +28,10 @@ class RegisterFragmentView : BaseView() {
         // Inflate the layout for this fragment
         presenter = initPresenter(RegisterFragmentPresenter(this)) as RegisterFragmentPresenter
         val view=  inflater.inflate(R.layout.fragment_register, container, false)
+        registerView = view
+        view.mRegisterProfilePic.setOnClickListener {
+            presenter.doSelectImage()
+        }
 
         view.mRegisterSignupButton.setOnClickListener {
             if(view.mRegisterFirstname.text.isNotEmpty() &&
@@ -62,4 +68,7 @@ class RegisterFragmentView : BaseView() {
         return view
     }
 
+    override fun setProfileImage(image: Bitmap?){
+        registerView.mRegisterProfilePic.setImageBitmap(image)
+    }
 }

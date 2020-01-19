@@ -3,4 +3,5 @@
     <dimen name="dimension100">100dp</dimen>
     <dimen name="dimension80">80dp</dimen>
     <dimen name="dimension50">50dp</dimen>
+    <dimen name="dimension250">250dp</dimen>
 </resources>
