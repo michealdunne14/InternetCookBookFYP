@@ -5,13 +5,9 @@ import android.transition.ChangeBounds
 import android.transition.TransitionManager
 import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -23,11 +19,10 @@ import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
-import kotlinx.android.synthetic.main.fragment_home.view.mHomeBasket
+import kotlinx.android.synthetic.main.fragment_home.view.mBasketSearch
 import kotlinx.android.synthetic.main.fragment_home.view.mHomeItem
 import kotlinx.android.synthetic.main.fragment_home.view.mHomePost
 import kotlinx.android.synthetic.main.fragment_home.view.mHomeSettings
@@ -100,17 +95,8 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             homeView.findNavController().navigate(action)
         }
 
-        view.mHomeBasket.setOnClickListener {
-            if(show) {
-                time = false
-                cancelFilter()
-            }else {
-                basket = true
-                time = false
-                top = false
-                item = false
-                showFilter()
-            }
+        view.mBasketSearch.setOnClickListener {
+
         }
 
         view.mHomeTime.setOnClickListener {
@@ -121,7 +107,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 time = true
                 top = false
                 item = false
-                basket = false
                 showFilter()
             }
         }
@@ -134,13 +119,11 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 item = true
                 top = false
                 time = false
-                basket = false
                 showFilter()
             }
         }
 
         view.mHomeTopPosts.setOnClickListener {
-
             if(show) {
                 top = false
                 cancelFilter()
@@ -148,7 +131,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 top = true
                 item = false
                 time = false
-                basket = false
                 showFilter()
             }
         }
@@ -160,6 +142,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         arrayList.add("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1200px-RedDot_Burger.jpg")
 
         postModelList.add(PostModel("Food","food",arrayList))
+        postModelList.add(PostModel("lhajskdf","kahsdljkashd",arrayList))
         view.mListRecyclerView.adapter = CardAdapter(postModelList, this, user)
         view.mListRecyclerView.adapter?.notifyDataSetChanged()
         return view
@@ -184,23 +167,10 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             homeView.horizontalScrollBar.visibility = View.VISIBLE
 
             homeView.mHomeScrollBarFirstPosition.text = "Recipes this Week"
-            homeView.mHomeScrollBarSecondPosition.text = "Recipes this Month"
             homeView.mHomeScrollBarThirdPosition.visibility = View.VISIBLE
             homeView.mHomeScrollBarForthPosition.visibility = View.VISIBLE
             homeView.mHomeScrollBarFifthPosition.visibility = View.VISIBLE
             homeView.mHomeScrollBarSixthPosition.visibility = View.VISIBLE
-        }
-        else if(basket){
-            homeView.rangeBar.visibility = View.GONE
-            homeView.filterbyItem.visibility = View.GONE
-            homeView.horizontalScrollBar.visibility = View.VISIBLE
-
-            homeView.mHomeScrollBarFirstPosition.text = "Filter to basket Items"
-            homeView.mHomeScrollBarSecondPosition.text = "View Items In Basket"
-            homeView.mHomeScrollBarThirdPosition.visibility = View.GONE
-            homeView.mHomeScrollBarForthPosition.visibility = View.GONE
-            homeView.mHomeScrollBarFifthPosition.visibility = View.GONE
-            homeView.mHomeScrollBarSixthPosition.visibility = View.GONE
         }
             val constraintSet = ConstraintSet()
             constraintSet.clone(homeView.context, R.layout.fragment_home_filter)

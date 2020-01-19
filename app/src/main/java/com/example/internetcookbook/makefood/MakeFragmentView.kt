@@ -3,14 +3,15 @@ package com.example.internetcookbook.makefood
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnticipateOvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ImageAdapter
 import com.example.internetcookbook.adapter.IngredientsAdapter

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragmentview.FriendFragmentView">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintFragmentHome"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -17,12 +17,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarAdd"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </com.google.android.material.appbar.AppBarLayout>
+        <EditText
+            android:id="@+id/mSearchText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/search_by_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColorHint="@color/colorBlack"
+            android:textColor="@color/colorBlack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="413dp"

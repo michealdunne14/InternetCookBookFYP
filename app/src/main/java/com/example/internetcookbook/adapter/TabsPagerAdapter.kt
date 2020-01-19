@@ -3,8 +3,8 @@ package com.example.internetcookbook.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.internetcookbook.basket.BasketFragmentView
 import com.example.internetcookbook.fragmentview.CameraFragmentView
-import com.example.internetcookbook.fragmentview.FriendFragmentView
 import com.example.internetcookbook.fragmentview.HomeFragmentView
 
 class TabsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -18,7 +18,7 @@ class TabsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
                 return HomeFragmentView()
             }
             2 -> {
-                return FriendFragmentView()
+                return BasketFragmentView()
             }
             else -> return HomeFragmentView()
         }

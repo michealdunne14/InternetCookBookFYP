@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
         <item
-            android:id="@+id/mHomeBasket"
+            android:id="@+id/mBasketSearch"
             android:icon="@drawable/outline_shopping_basket_black_48"
             android:title="Filter by Items In Basket"
             app:showAsAction="always" />

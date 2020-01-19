@@ -1,5 +1,6 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.settings
 
+import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.network.InformationStore

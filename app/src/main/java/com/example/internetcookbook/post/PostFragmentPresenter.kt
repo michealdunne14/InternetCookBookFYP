@@ -2,6 +2,9 @@ package com.example.internetcookbook.post
 
 import android.content.Context
 import android.content.Intent
+import android.provider.MediaStore
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.startActivityForResult
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
@@ -30,11 +33,11 @@ class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
 
     fun doSelectImage() {
-        showImagePicker(view.activity!!,IMAGE_REQUEST)
+
     }
 
     //  When a result comes back
-    fun doActivityResult(requestCode: Int, resultCode: Int, data: Intent?, context: Context) {
+    override fun doActivityResult(requestCode: Int, resultCode: Int, data: Intent?, context: Context) {
         when(requestCode){
             IMAGE_REQUEST -> {
                 if (data != null){
