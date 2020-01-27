@@ -13,13 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ImageAdapter
-import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.card_list.view.*
-import kotlinx.android.synthetic.main.fragment_ingredients.view.*
 
 interface PostListener {
     fun onPostClick(
@@ -57,7 +55,7 @@ class CardAdapter(
         fun bind(postModel: PostModel, listener: PostListener, user: UserModel) {
             itemView.mCardName.text = postModel.title
             itemView.mCardDescription.text = postModel.description
-            doFindImages(postModel.images)
+//            doFindImages(postModel.data)
 
             itemView.mShowRecipeDetails.setOnClickListener {
 //                if(showDetails) {

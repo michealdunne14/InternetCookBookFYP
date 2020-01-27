@@ -136,8 +136,8 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         arrayList.add("https://eatforum.org/content/uploads/2018/05/table_with_food_top_view_900x700.jpg")
         arrayList.add("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1200px-RedDot_Burger.jpg")
 
-        postModelList.add(PostModel("Food","food",arrayList))
-        postModelList.add(PostModel("lhajskdf","kahsdljkashd",arrayList))
+//        postModelList.add(PostModel("Food","food",arrayList))
+//        postModelList.add(PostModel("lhajskdf","kahsdljkashd",arrayList))
         view.mListRecyclerView.adapter = CardAdapter(postModelList, this, user)
         view.mListRecyclerView.adapter?.notifyDataSetChanged()
         return view

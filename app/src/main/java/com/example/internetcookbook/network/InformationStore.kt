@@ -1,6 +1,9 @@
 package com.example.internetcookbook.network
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.util.Base64
+import android.util.Log
 import com.example.internetcookbook.helper.exists
 import com.example.internetcookbook.helper.read
 import com.example.internetcookbook.helper.write
@@ -11,8 +14,10 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.internal.http2.Header
 import okio.IOException
 import java.io.File
+import java.nio.ByteBuffer
 import kotlin.collections.ArrayList
 
 
@@ -132,7 +137,8 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         serialize()
     }
 
-    fun getImages(): String? {
+    fun getPostData(): PostModel? {
+        lateinit var postArray: PostModel
         if (internetConnection) {
             val request = Request.Builder()
                 .url("http://52.51.34.156:3000/post/id/5e2cdb993f01492a6e39c73a")
@@ -141,12 +147,16 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
+
                 val body = response.body!!.string()
                 val gsonBuilder = GsonBuilder()
                 val gson = gsonBuilder.create()
-                println(gson)
-                println(body)
-//                emailSearch = gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
+//                val decodedString: ByteArray = Base64.decode(encodedImage, Base64.DEFAULT)
+//                val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+                postArray = gson.fromJson(body, PostModel::class.java)
+                val decodedString: ByteArray = Base64.decode(postArray.data, Base64.DEFAULT)
+                val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+                return postArray
             }
         }
         return null

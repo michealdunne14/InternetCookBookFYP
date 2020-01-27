@@ -2,11 +2,9 @@ package com.example.internetcookbook.post
 
 import android.content.Context
 import android.content.Intent
-import android.view.View
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
-import com.example.internetcookbook.helper.showImagePicker
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
@@ -25,7 +23,7 @@ class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     }
 
     fun doPostRecipe(postModel: PostModel) {
-        postModel.images = listofImages
+//        postModel.data = listofImages
         doAsync {
             infoStore!!.createPost(postModel)!!
             onComplete {
@@ -41,10 +39,10 @@ class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 //        showImagePicker(fragment,IMAGE_REQUEST)
         var images = ""
         doAsync {
-            images = infoStore!!.getImages()!!
+            infoStore!!.getPostData()!!
             onComplete {
-                listofImages.add(images)
-                view.addImages(listofImages)
+//                listofImages.add(images)
+//                view.addImages(listofImages)
             }
         }
     }
