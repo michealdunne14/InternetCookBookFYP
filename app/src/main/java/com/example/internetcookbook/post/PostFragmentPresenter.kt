@@ -2,9 +2,7 @@ package com.example.internetcookbook.post
 
 import android.content.Context
 import android.content.Intent
-import android.provider.MediaStore
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.startActivityForResult
+import android.view.View
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
@@ -13,12 +11,14 @@ import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.onComplete
 
 class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app : MainApp = view.activity?.application as MainApp
     var infoStore: InformationStore? = null
     val IMAGE_REQUEST = 1
     var listofImages = ArrayList<String>()
+    var oid = ""
 
     init {
         infoStore = app.informationStore as InformationStore
@@ -27,13 +27,26 @@ class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     fun doPostRecipe(postModel: PostModel) {
         postModel.images = listofImages
         doAsync {
-            infoStore!!.createPost(postModel)
+            infoStore!!.createPost(postModel)!!
+            onComplete {
+                doAsync {
+                    infoStore!!.uploadImages(oid,listofImages)
+                }
+            }
         }
     }
 
 
-    fun doSelectImage() {
-
+    fun doSelectImage(fragment: BaseView) {
+//        showImagePicker(fragment,IMAGE_REQUEST)
+        var images = ""
+        doAsync {
+            images = infoStore!!.getImages()!!
+            onComplete {
+                listofImages.add(images)
+                view.addImages(listofImages)
+            }
+        }
     }
 
     //  When a result comes back

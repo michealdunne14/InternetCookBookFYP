@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateOvershootInterpolator
+import android.widget.ArrayAdapter
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,21 @@ import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_make.*
 import kotlinx.android.synthetic.main.fragment_make.view.*
+import kotlinx.android.synthetic.main.fragment_make.view.mCardIngredients
+import kotlinx.android.synthetic.main.fragment_make.view.mMakeButton
+import kotlinx.android.synthetic.main.fragment_make.view.mMakeCreatedBy
+import kotlinx.android.synthetic.main.fragment_make.view.mMakeDescription
+import kotlinx.android.synthetic.main.fragment_make.view.mMakeList
+import kotlinx.android.synthetic.main.fragment_make.view.mMakeName
+import kotlinx.android.synthetic.main.fragment_make.view.mMakeTimeToCreate
+import kotlinx.android.synthetic.main.fragment_make.view.mRemoveCreatedBy
+import kotlinx.android.synthetic.main.fragment_make.view.mRemoveDescription
+import kotlinx.android.synthetic.main.fragment_make.view.mRemoveIngredients
+import kotlinx.android.synthetic.main.fragment_make.view.mRemoveName
+import kotlinx.android.synthetic.main.fragment_make.view.mRemoveTimeToMake
+import kotlinx.android.synthetic.main.fragment_make.view.mReturnButton
+import kotlinx.android.synthetic.main.fragment_make.view.mSelectPeopleNumbSpinner
+import kotlinx.android.synthetic.main.fragment_make_show.view.*
 
 class MakeFragmentView : BaseView() {
 
@@ -50,7 +66,7 @@ class MakeFragmentView : BaseView() {
         val postModel = MakeFragmentViewArgs.fromBundle(arguments!!).postModel
 
         val layoutManager = LinearLayoutManager(context)
-        view.mMakeIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        view.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
         val makeLayoutManager = LinearLayoutManager(context)
         view.mMakeList.layoutManager = makeLayoutManager as RecyclerView.LayoutManager?
         makeView = view
@@ -68,10 +84,22 @@ class MakeFragmentView : BaseView() {
         postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.images))
 
 
-        view.mMakeIngredients.adapter = IngredientsAdapter(foodModelArrayList)
-        view.mMakeIngredients.adapter?.notifyDataSetChanged()
+        view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
+        view.mCardIngredients.adapter?.notifyDataSetChanged()
         view.mMakeList.adapter = MakeAdapter(postModelArrayList)
         view.mMakeList.adapter?.notifyDataSetChanged()
+
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            view.context,
+            R.array.number_of_people,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            view.mSelectPeopleNumbSpinner.adapter = adapter
+        }
 
 
         makeView.mMakeButton.setOnClickListener {
@@ -140,19 +168,12 @@ class MakeFragmentView : BaseView() {
                 }
             }
         makeView.mRemoveCreatedBy.setOnClickListener {
-                if (makeView.mMakeCreatedBy.visibility == View.GONE){
-                    makeView.mMakeCreatedBy.visibility = View.VISIBLE
-                }else {
-                    makeView.mMakeCreatedBy.visibility = View.GONE
-                }
+            if (makeView.mMakeCreatedBy.visibility == View.GONE){
+                makeView.mMakeCreatedBy.visibility = View.VISIBLE
+            }else {
+                makeView.mMakeCreatedBy.visibility = View.GONE
             }
-        makeView.mRemoveNumberOfPeople.setOnClickListener {
-                if (makeView.mMakeAmountofPeople.visibility == View.GONE){
-                    makeView.mMakeAmountofPeople.visibility = View.VISIBLE
-                }else {
-                    makeView.mMakeAmountofPeople.visibility = View.GONE
-                }
-            }
+        }
         makeView.mRemoveTimeToMake.setOnClickListener {
                 if (makeView.mMakeTimeToCreate.visibility == View.GONE){
                     makeView.mMakeTimeToCreate.visibility = View.VISIBLE
@@ -161,10 +182,10 @@ class MakeFragmentView : BaseView() {
                 }
             }
         makeView.mRemoveIngredients.setOnClickListener {
-                if (makeView.mMakeIngredients.visibility == View.GONE){
-                    makeView.mMakeIngredients.visibility = View.VISIBLE
+                if (makeView.mCardIngredients.visibility == View.GONE){
+                    makeView.mCardIngredients.visibility = View.VISIBLE
                 }else {
-                    makeView.mMakeIngredients.visibility = View.GONE
+                    makeView.mCardIngredients.visibility = View.GONE
                 }
             }
     }

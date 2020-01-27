@@ -22,14 +22,9 @@ import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
-import kotlinx.android.synthetic.main.fragment_home.view.mBasketSearch
-import kotlinx.android.synthetic.main.fragment_home.view.mHomeItem
-import kotlinx.android.synthetic.main.fragment_home.view.mHomePost
-import kotlinx.android.synthetic.main.fragment_home.view.mHomeSettings
-import kotlinx.android.synthetic.main.fragment_home.view.mHomeTime
-import kotlinx.android.synthetic.main.fragment_home.view.mHomeTopPosts
 import kotlinx.android.synthetic.main.fragment_home.view.mListRecyclerView
 import kotlinx.android.synthetic.main.fragment_home.view.rangeBar
+import kotlinx.android.synthetic.main.fragment_home_nav.view.*
 import kotlinx.android.synthetic.main.horizontalscrollbar.view.*
 
 class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshListener{

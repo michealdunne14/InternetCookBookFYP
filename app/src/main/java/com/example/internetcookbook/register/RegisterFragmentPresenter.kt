@@ -34,7 +34,7 @@ class RegisterFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger
     }
 
     fun doSelectImage() {
-        showImagePicker(view.activity!!,IMAGE_REQUEST)
+//        showImagePicker(this,IMAGE_REQUEST)
     }
 
     override fun doActivityResult(requestCode: Int, resultCode: Int, data: Intent?, context: Context) {

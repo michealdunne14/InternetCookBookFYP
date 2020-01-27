@@ -1,8 +1,6 @@
 package com.example.internetcookbook.network
 
 import android.content.Context
-import android.widget.Toast
-import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.helper.exists
 import com.example.internetcookbook.helper.read
 import com.example.internetcookbook.helper.write
@@ -12,11 +10,13 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okio.IOException
-import java.util.ArrayList
+import java.io.File
+import kotlin.collections.ArrayList
 
 
-class InformationStore(val context: Context, val internetConnection: Boolean)  {
+class InformationStore(val context: Context, val internetConnection: Boolean) {
     var client = OkHttpClient()
     var user = UserModel()
     var userLocalStore = mutableListOf<UserModel>()
@@ -60,7 +60,8 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
                     val gsonBuilder = GsonBuilder()
                     val gson = gsonBuilder.create()
 
-                    val emailSearch: Array<UserModel> = gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
+                    val emailSearch: Array<UserModel> =
+                        gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
                     emailSearchArray = emailSearch
                 }
             }
@@ -68,7 +69,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
     }
 
     fun findEmail(userModel: UserModel): UserModel? {
-        if(internetConnection) {
+        if (internetConnection) {
             lateinit var emailSearch: Array<UserModel>
             val request = Request.Builder()
                 .url("http://52.51.34.156:3000/user/email/${userModel.email}")
@@ -92,13 +93,13 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
             } else {
                 return null
             }
-        }else{
+        } else {
             return null
         }
     }
 
-    fun getCurrentUser(): UserModel{
-        if(userLocalStore.isNotEmpty()){
+    fun getCurrentUser(): UserModel {
+        if (userLocalStore.isNotEmpty()) {
             user = userLocalStore[0]
         }
         return user
@@ -131,21 +132,64 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
         serialize()
     }
 
-
-    fun createPost(postModel: PostModel): String? {
-            val formBody: RequestBody = FormBody.Builder()
-                .add("title", postModel.title)
-                .add("description", postModel.description)
-                .add("image", "randomimage")
-                .add("useroid", user.oid).build()
-
-            val request: Request = Request.Builder()
-                .url("http://52.51.34.156:3000/post/create")
-                .post(formBody)
+    fun getImages(): String? {
+        if (internetConnection) {
+            val request = Request.Builder()
+                .url("http://52.51.34.156:3000/post/id/5e2cdb993f01492a6e39c73a")
                 .build()
 
-            client.newCall(request).execute().use { response -> return response.body!!.toString() }
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                val gsonBuilder = GsonBuilder()
+                val gson = gsonBuilder.create()
+                println(gson)
+                println(body)
+//                emailSearch = gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
+            }
         }
+        return null
+    }
+
+    fun uploadImages(oid: String, listofImages: ArrayList<String>) {
+        //        val file = File(listofImages[0])
+//        val requestBody: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+//            .addFormDataPart("imageFiles", listofImages[0], RequestBody.create(MEDIA_TYPE_PNG, file))
+//            .build()
+//
+//        val request = Request.Builder()
+//            .url(" http://52.51.34.156:3000/post/upload/${oid}")
+//            .post(requestBody)
+//            .build()
+//
+//        client.newCall(request).execute().use { response ->
+//            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+//
+//            println(response.body!!.string())
+//        }
+
+    }
+
+
+    fun createPost(postModel: PostModel): String? {
+        val formBody: RequestBody = FormBody.Builder()
+            .add("title", postModel.title)
+            .add("description", postModel.description)
+            .add("useroid", user.oid).build()
+
+        val request: Request = Request.Builder()
+            .url("http://52.51.34.156:3000/post/create")
+            .post(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            return response.body!!.string()
+        }
+    }
+
 
     fun putPostToUser(postModel: PostModel): String? {
         val formBody: RequestBody = FormBody.Builder()
@@ -162,7 +206,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean)  {
         client.newCall(request).execute().use { response -> return response.body!!.toString() }
     }
 
-    fun logoutUser(){
+    fun logoutUser() {
         userLocalStore.clear()
         serialize()
     }

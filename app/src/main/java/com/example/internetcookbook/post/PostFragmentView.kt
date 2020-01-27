@@ -1,8 +1,9 @@
 package com.example.internetcookbook.post
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
     lateinit var postView: View
     var postModel = PostModel()
     var foodModelArrayList = ArrayList<FoodModel>()
+    var personalPost = false
 
 
     override fun onCreateView(
@@ -59,8 +61,21 @@ class PostFragmentView : BaseView(),AnkoLogger {
             view.findNavController().navigate(action)
         }
 
+        view.mPersonalPost.setOnClickListener {
+            if (!personalPost) {
+                personalPost = true
+                view.mIngredientsButton.visibility = View.GONE
+                view.mPostFoodRecyclerView.visibility = View.GONE
+            }else{
+                personalPost = false
+                view.mIngredientsButton.visibility = View.VISIBLE
+                view.mPostFoodRecyclerView.visibility = View.VISIBLE
+            }
+
+        }
+
         view.mAddImage.setOnClickListener {
-            presenter.doSelectImage()
+            presenter.doSelectImage(this)
         }
 
         return view
@@ -82,10 +97,24 @@ class PostFragmentView : BaseView(),AnkoLogger {
 
     }
 
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if(data != null){
+//            presenter.doActivityResult(requestCode,resultCode,data,postView.context)
+//        }
+//    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(data != null){
-            presenter.doActivityResult(requestCode,resultCode,data,postView.context)
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            try {
+                val bundle = data!!.extras
+                val bitmap = bundle!!.getParcelable<Bitmap>("data")
+//                img_user.setImageBitmap(bitmap)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

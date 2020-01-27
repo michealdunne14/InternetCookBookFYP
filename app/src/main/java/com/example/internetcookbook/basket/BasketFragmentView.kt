@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
@@ -11,6 +14,7 @@ import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.register.RegisterFragmentPresenter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_basket.view.*
 import kotlinx.android.synthetic.main.fragment_ingredients.view.*
 
@@ -27,6 +31,21 @@ class BasketFragmentView : BaseView() {
         foodModelArrayList.add(FoodModel("hello"))
         foodModelArrayList.add(FoodModel("hello"))
         foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+        foodModelArrayList.add(FoodModel("hello"))
+
     }
 
 
@@ -39,6 +58,10 @@ class BasketFragmentView : BaseView() {
         presenter = initPresenter(BasketFragmentPresenter(this)) as BasketFragmentPresenter
         basketView = view
         showIngredients(foodModelArrayList)
+
+        val navView: BottomNavigationView = view.findViewById(R.id.navigationView)
+
+
         return view
     }
 
