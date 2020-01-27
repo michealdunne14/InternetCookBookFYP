@@ -30,10 +30,31 @@
     <string name="ingredients">Ingredients</string>
     <string name="search_by_name">Search By Name</string>
     <string name="search_basket">Search Basket</string>
+    <string name="cupboard">Cupboard</string>
+    <string name="basket">Basket</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>
         <item>@string/second_fragment</item>
         <item>@string/third_fragment</item>
+    </string-array>
+
+    <string-array name="number_of_people">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
     </string-array>
 </resources>

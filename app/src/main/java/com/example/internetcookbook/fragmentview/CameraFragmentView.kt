@@ -69,7 +69,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         return view
     }
-    var cameraStarted = false
+
     override fun onStart() {
         super.onStart()
 
@@ -77,11 +77,9 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         // Request camera permissions
         if (allPermissionsGranted()) {
-            if (!cameraStarted) {
                 doAsync {
                     viewFinder.post { startCamera() }
                 }
-            }
         } else {
             ActivityCompat.requestPermissions(activity!!, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
@@ -165,7 +163,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         homeView.mScanBarcodeButton.setOnClickListener {
 //            mScanBarCode(viewFinder.bitmap)
-            presenter.doSelectImage()
+            presenter.doSelectImage(this)
         }
 
         // Setup image analysis pipeline that computes average pixel luminance
@@ -182,7 +180,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
         try {
             CameraX.bindToLifecycle(this, preview, analyzerUseCase)
-            cameraStarted = true
         }catch (e: java.lang.Exception){
             e.getStackTraceString()
         }
@@ -295,11 +292,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         homeView.view_finder.visibility = View.INVISIBLE
         homeView.mCapturedImage.setImageBitmap(bitmap)
         homeView.mCapturedImage.visibility = View.VISIBLE
-    }
-
-    override fun onResume() {
-        super.onResume()
-        startCamera()
     }
 
     private fun updateTransform() {

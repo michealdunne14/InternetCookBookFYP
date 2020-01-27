@@ -8,6 +8,7 @@ import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.showImagePicker
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
 
 class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app : MainApp = view.activity?.application as MainApp
@@ -18,8 +19,8 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         infoStore = app.informationStore as InformationStore
     }
 
-    fun doSelectImage() {
-        showImagePicker(view.activity!!,IMAGE_REQUEST)
+    fun doSelectImage(fragment: BaseView) {
+        showImagePicker(fragment,IMAGE_REQUEST)
     }
 
     override fun doActivityResult(requestCode: Int, resultCode: Int, data: Intent?, context: Context) {

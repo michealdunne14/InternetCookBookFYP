@@ -26,6 +26,11 @@ class SettingsFragmentView:BaseView() {
         ) as SettingsFragmentPresenter
 
 
+        view.mReturnButton.setOnClickListener {
+            val action = SettingsFragmentViewDirections.actionSettingsFragmentToPagerFragment()
+            view.findNavController().navigate(action)
+        }
+
         view.mLogoutButton.setOnClickListener {
             presenter.doLogout()
             val action = SettingsFragmentViewDirections.actionSettingsFragmentToStartFragment()

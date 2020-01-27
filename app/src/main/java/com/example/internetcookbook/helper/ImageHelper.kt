@@ -8,16 +8,17 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import com.example.internetcookbook.R
+import com.example.internetcookbook.base.BaseView
 import java.io.IOException
 
 
-fun showImagePicker(parent: Activity, id: Int) {
+fun showImagePicker(view: BaseView, id: Int) {
     val intent = Intent()
     intent.type = "image/*"
     intent.action = Intent.ACTION_OPEN_DOCUMENT
     intent.addCategory(Intent.CATEGORY_OPENABLE)
     val chooser = Intent.createChooser(intent, R.string.select_image.toString())
-    parent.startActivityForResult(chooser, id)
+    view.activity?.startActivityForResult(chooser, id)
 }
 
 //Reads image

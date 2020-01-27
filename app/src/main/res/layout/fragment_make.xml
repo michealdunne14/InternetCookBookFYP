@@ -7,25 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".makefood.MakeFragmentView">
 
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:id="@+id/appBarLayoutMake"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="45dp"-->
-<!--        android:background="@color/colorWhite"-->
-<!--        android:fitsSystemWindows="true"-->
-<!--        app:layout_constraintBottom_toTopOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
-
-<!--        <androidx.appcompat.widget.Toolbar-->
-<!--            android:id="@+id/toolbarMake"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
-
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintFragmentMake"
         android:layout_width="match_parent"
@@ -58,13 +39,6 @@
             <ImageButton
                 android:id="@+id/mRemoveDescription"
                 app:srcCompat="@drawable/outline_description_black_36"
-                android:layout_width="@dimen/dimension50"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@null"/>
-            <ImageButton
-                android:id="@+id/mRemoveNumberOfPeople"
-                app:srcCompat="@drawable/outline_people_black_36"
                 android:layout_width="@dimen/dimension50"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -105,10 +79,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mMakeIngredients"
+        android:id="@+id/mCardIngredients"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/mMakeButton"
+        app:layout_constraintBottom_toTopOf="@+id/mSelectPeopleNumbSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -145,7 +119,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Description"
-        app:layout_constraintBottom_toTopOf="@+id/mMakeAmountofPeople"
+        app:layout_constraintBottom_toTopOf="@+id/mMakeTimeToCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -155,16 +129,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Created By"
-        app:layout_constraintBottom_toTopOf="@+id/mMakeIngredients"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/mMakeAmountofPeople"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Selected Amount of People"
-        app:layout_constraintBottom_toTopOf="@+id/mMakeTimeToCreate"
+        app:layout_constraintBottom_toTopOf="@+id/mCardIngredients"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -177,6 +142,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.509" />
+
+    <Spinner
+        android:id="@+id/mSelectPeopleNumbSpinner"
+        android:layout_width="208dp"
+        android:layout_height="44dp"
+        android:padding="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/mMakeButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Select the amount of people"
+        app:layout_constraintBottom_toTopOf="@+id/mMakeButton"
+        app:layout_constraintEnd_toStartOf="@+id/mSelectPeopleNumbSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mCardIngredients" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,14 +8,18 @@ import android.view.ViewGroup
 import android.view.animation.AnticipateOvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ImageAdapter
+import com.example.internetcookbook.adapter.IngredientsAdapter
+import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.card_list.view.*
+import kotlinx.android.synthetic.main.fragment_ingredients.view.*
 
 interface PostListener {
     fun onPostClick(
@@ -63,6 +67,26 @@ class CardAdapter(
 //                }
             }
 
+            val foodModelArrayList = ArrayList<FoodModel>()
+
+            // Inflate the layout for this fragment
+            val layoutManager = LinearLayoutManager(itemView.context)
+
+
+//            itemView.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
+//
+//
+//            foodModelArrayList.add(FoodModel("Food"))
+//            foodModelArrayList.add(FoodModel("Food"))
+//            foodModelArrayList.add(FoodModel("Food"))
+//            foodModelArrayList.add(FoodModel("Food"))
+//            foodModelArrayList.add(FoodModel("Food"))
+//            foodModelArrayList.add(FoodModel("Food"))
+//            foodModelArrayList.add(FoodModel("Food"))
+//            foodModelArrayList.add(FoodModel("Food"))
+//            itemView.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
+//            itemView.mCardIngredients.adapter?.notifyDataSetChanged()
+
             itemView.mMakeFood.setOnClickListener {
                 val action = PagerFragmentViewDirections.actionPagerFragmentToMakeFragment(postModel)
                 itemView.findNavController().navigate(action)
@@ -70,6 +94,10 @@ class CardAdapter(
 
             itemView.mCommentsPage.setOnClickListener {
                 val action = PagerFragmentViewDirections.actionPagerFragmentToCommentsFragment(postModel)
+                itemView.findNavController().navigate(action)
+            }
+            itemView.mPostName.setOnClickListener {
+                val action = PagerFragmentViewDirections.actionPagerFragmentToProfileFragment()
                 itemView.findNavController().navigate(action)
             }
         }
