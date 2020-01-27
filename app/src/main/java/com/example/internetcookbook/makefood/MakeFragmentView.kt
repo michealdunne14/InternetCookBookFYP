@@ -21,7 +21,6 @@ import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_make.*
-import kotlinx.android.synthetic.main.fragment_make.view.*
 import kotlinx.android.synthetic.main.fragment_make.view.mCardIngredients
 import kotlinx.android.synthetic.main.fragment_make.view.mMakeButton
 import kotlinx.android.synthetic.main.fragment_make.view.mMakeCreatedBy
@@ -36,7 +35,6 @@ import kotlinx.android.synthetic.main.fragment_make.view.mRemoveName
 import kotlinx.android.synthetic.main.fragment_make.view.mRemoveTimeToMake
 import kotlinx.android.synthetic.main.fragment_make.view.mReturnButton
 import kotlinx.android.synthetic.main.fragment_make.view.mSelectPeopleNumbSpinner
-import kotlinx.android.synthetic.main.fragment_make_show.view.*
 
 class MakeFragmentView : BaseView() {
 
@@ -72,16 +70,16 @@ class MakeFragmentView : BaseView() {
         makeView = view
         makeView.mMakeName.text = postModel.title
         makeView.mMakeDescription.text = postModel.description
-        doFindImages(postModel.images)
+//        doFindImages(postModel.data)
         hideAndShowToolbarButtons()
 
         foodModelArrayList.add(FoodModel("Food"))
         foodModelArrayList.add(FoodModel("Food"))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.images))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.images))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.images))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.images))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.images))
+        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
+        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
+        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
+        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
+        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
 
 
         view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)

@@ -6,4 +6,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class PostModel(var title: String = "",
                      var description: String = "",
-                     var images: ArrayList<String> = ArrayList()) : Parcelable
+                     var data: String = "",
+                     var useroid: String = "") : Parcelable
