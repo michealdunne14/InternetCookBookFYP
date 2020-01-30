@@ -16,9 +16,12 @@ import com.example.archaeologicalfieldwork.adapter.PostListener
 import com.example.internetcookbook.pager.PagerFragmentView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
+import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
+import com.example.internetcookbook.register.RegisterFragmentPresenter
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
@@ -28,6 +31,9 @@ import kotlinx.android.synthetic.main.fragment_home_nav.view.*
 import kotlinx.android.synthetic.main.horizontalscrollbar.view.*
 
 class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshListener{
+
+    lateinit var presenter: HomeFragPresenter
+
 
     lateinit var homeView: View
     companion object {
@@ -62,8 +68,9 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     ): View? {
         // Inflate the layout for this fragment
         val view=  inflater.inflate(R.layout.fragment_home, container, false)
-        val postModelList = ArrayList<PostModel>()
         homeView = view
+
+        presenter = initPresenter(HomeFragPresenter(this)) as HomeFragPresenter
 
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)
@@ -131,14 +138,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         }
 
         val user = UserModel()
-//        postModelList.add(PostModel("Burger","Burger","https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1200px-RedDot_Burger.jpg"))
-        val arrayList = ArrayList<String>()
-        arrayList.add("https://eatforum.org/content/uploads/2018/05/table_with_food_top_view_900x700.jpg")
-        arrayList.add("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1200px-RedDot_Burger.jpg")
-
-//        postModelList.add(PostModel("Food","food",arrayList))
-//        postModelList.add(PostModel("lhajskdf","kahsdljkashd",arrayList))
-        view.mListRecyclerView.adapter = CardAdapter(postModelList, this, user)
+        view.mListRecyclerView.adapter = CardAdapter(presenter.doFindHomeData(), this, user)
         view.mListRecyclerView.adapter?.notifyDataSetChanged()
         return view
     }

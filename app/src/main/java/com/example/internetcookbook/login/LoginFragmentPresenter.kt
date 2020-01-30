@@ -31,6 +31,9 @@ class LoginFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                     if(signIn.password==userModel.password) {
                         view.hideProgress()
                         view.getMainPageFromLoginPage()
+                        doAsync {
+                            infoStore!!.getPostData()
+                        }
                     }else{
                         view.passwordIncorrect()
                     }

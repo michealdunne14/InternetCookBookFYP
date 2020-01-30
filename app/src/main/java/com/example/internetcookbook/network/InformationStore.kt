@@ -1,31 +1,31 @@
 package com.example.internetcookbook.network
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import android.util.Log
 import com.example.internetcookbook.helper.exists
 import com.example.internetcookbook.helper.read
 import com.example.internetcookbook.helper.write
+import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.internal.http2.Header
 import okio.IOException
-import java.io.File
-import java.nio.ByteBuffer
 import kotlin.collections.ArrayList
 
 
 class InformationStore(val context: Context, val internetConnection: Boolean) {
     var client = OkHttpClient()
     var user = UserModel()
+    var imageArrayList = ArrayList<Bitmap>()
+    var postData = ArrayList<DataModel>()
     var userLocalStore = mutableListOf<UserModel>()
     lateinit var emailSearchArray: Array<UserModel>
+
 
     val JSON_FILE = "InformationStore.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
@@ -137,11 +137,15 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         serialize()
     }
 
-    fun getPostData(): PostModel? {
-        lateinit var postArray: PostModel
+    fun getHomeData(): ArrayList<DataModel> {
+        return postData
+    }
+
+    fun getPostData(){
+        lateinit var dataArray: DataModel
         if (internetConnection) {
             val request = Request.Builder()
-                .url("http://52.51.34.156:3000/post/id/5e2cdb993f01492a6e39c73a")
+                .url("http://52.51.34.156:3000/post/id/5e315bd7199936697ba74c9e")
                 .build()
 
             client.newCall(request).execute().use { response ->
@@ -151,15 +155,10 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 val body = response.body!!.string()
                 val gsonBuilder = GsonBuilder()
                 val gson = gsonBuilder.create()
-//                val decodedString: ByteArray = Base64.decode(encodedImage, Base64.DEFAULT)
-//                val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
-                postArray = gson.fromJson(body, PostModel::class.java)
-                val decodedString: ByteArray = Base64.decode(postArray.data, Base64.DEFAULT)
-                val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
-                return postArray
+                dataArray = gson.fromJson(body, DataModel::class.java)
+                postData.add(dataArray)
             }
         }
-        return null
     }
 
     fun uploadImages(oid: String, listofImages: ArrayList<String>) {
