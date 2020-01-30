@@ -16,5 +16,7 @@ data class UserModel(
     @SerializedName("signupdate")
     var signupdate: String = "",
     @SerializedName("loggedIn")
-    var loggedIn: Boolean = false
+    var loggedIn: Boolean = false,
+    @SerializedName("posts")
+    val posts: Array<PostOidModel?> = arrayOfNulls<PostOidModel>(5)
 )

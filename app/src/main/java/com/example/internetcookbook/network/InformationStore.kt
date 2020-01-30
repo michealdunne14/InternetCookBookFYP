@@ -144,19 +144,21 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     fun getPostData(){
         lateinit var dataArray: DataModel
         if (internetConnection) {
-            val request = Request.Builder()
-                .url("http://52.51.34.156:3000/post/id/5e315bd7199936697ba74c9e")
-                .build()
+            for (post in getCurrentUser().posts) {
+                val request = Request.Builder()
+                    .url("http://52.51.34.156:3000/post/id/${post?.postoid}")
+                    .build()
 
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
 
-                val body = response.body!!.string()
-                val gsonBuilder = GsonBuilder()
-                val gson = gsonBuilder.create()
-                dataArray = gson.fromJson(body, DataModel::class.java)
-                postData.add(dataArray)
+                    val body = response.body!!.string()
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    dataArray = gson.fromJson(body, DataModel::class.java)
+                    postData.add(dataArray)
+                }
             }
         }
     }
