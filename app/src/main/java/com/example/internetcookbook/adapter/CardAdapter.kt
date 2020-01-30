@@ -1,5 +1,6 @@
 package com.example.archaeologicalfieldwork.adapter
 
+import android.graphics.Bitmap
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -12,7 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
+import com.example.internetcookbook.adapter.BitmapCardAdapter
 import com.example.internetcookbook.adapter.ImageAdapter
+import com.example.internetcookbook.helper.readBit64Image
+import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
@@ -26,7 +30,7 @@ interface PostListener {
 }
 
 class CardAdapter(
-    private var posts: ArrayList<PostModel>,
+    private var posts: ArrayList<DataModel>,
     private val listener: PostListener,
     private val user: UserModel
 ) : RecyclerView.Adapter<CardAdapter.MainHolder>() {
@@ -52,10 +56,12 @@ class CardAdapter(
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         private var showDetails = false
-        fun bind(postModel: PostModel, listener: PostListener, user: UserModel) {
-            itemView.mCardName.text = postModel.title
-            itemView.mCardDescription.text = postModel.description
-//            doFindImages(postModel.data)
+        fun bind(dataModel: DataModel, listener: PostListener, user: UserModel) {
+            itemView.mCardName.text = dataModel.post.title
+            itemView.mCardDescription.text = dataModel.post.description
+            itemView.mCardImageList
+            val bitmapImages = readBit64Image(dataModel)
+            doFindImages(bitmapImages)
 
             itemView.mShowRecipeDetails.setOnClickListener {
 //                if(showDetails) {
@@ -86,12 +92,12 @@ class CardAdapter(
 //            itemView.mCardIngredients.adapter?.notifyDataSetChanged()
 
             itemView.mMakeFood.setOnClickListener {
-                val action = PagerFragmentViewDirections.actionPagerFragmentToMakeFragment(postModel)
+                val action = PagerFragmentViewDirections.actionPagerFragmentToMakeFragment(dataModel.post)
                 itemView.findNavController().navigate(action)
             }
 
             itemView.mCommentsPage.setOnClickListener {
-                val action = PagerFragmentViewDirections.actionPagerFragmentToCommentsFragment(postModel)
+                val action = PagerFragmentViewDirections.actionPagerFragmentToCommentsFragment(dataModel.post)
                 itemView.findNavController().navigate(action)
             }
             itemView.mPostName.setOnClickListener {
@@ -100,9 +106,9 @@ class CardAdapter(
             }
         }
 
-        fun doFindImages(images: ArrayList<String>) {
+        fun doFindImages(images: ArrayList<Bitmap>) {
             val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
-            val adapter = ImageAdapter(itemView.context, images)
+            val adapter = BitmapCardAdapter(itemView.context, images)
             viewPager.adapter = adapter
         }
 

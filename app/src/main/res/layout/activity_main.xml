@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainView">
 
-<!--    <include-->
-<!--        layout="@layout/main_layout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent" />-->
-
     <fragment
         android:id="@+id/navigationHostFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"

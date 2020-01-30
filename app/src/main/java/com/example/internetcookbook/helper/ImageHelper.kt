@@ -7,8 +7,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Base64
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.models.DataModel
 import java.io.IOException
 
 
@@ -32,6 +34,16 @@ fun readImage(activity: Activity, resultCode: Int, data: Intent?): Bitmap? {
         }
     }
     return bitmap
+}
+
+fun readBit64Image(dataModel: DataModel): ArrayList<Bitmap> {
+    val imageArrayList = ArrayList<Bitmap>()
+    for (image in dataModel.data) {
+        val decodedString: ByteArray = Base64.decode(image, Base64.DEFAULT)
+        val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+        imageArrayList.add(decodedByte)
+    }
+    return imageArrayList
 }
 
 //Reads Image from path

@@ -75,12 +75,12 @@ class MakeFragmentView : BaseView() {
 
         foodModelArrayList.add(FoodModel("Food"))
         foodModelArrayList.add(FoodModel("Food"))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
-        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
-
+//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
+//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
+//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
+//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
+//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
+//
 
         view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
         view.mCardIngredients.adapter?.notifyDataSetChanged()
