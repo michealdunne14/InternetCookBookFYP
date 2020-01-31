@@ -20,9 +20,9 @@
         <action
             android:id="@+id/action_pagerFragment_to_makeFragment"
             app:destination="@id/makeFragment" >
-            <argument
-                android:name="postModel"
-                app:argType="com.example.internetcookbook.models.PostModel"/>
+<!--            <argument-->
+<!--                android:name="dataModel"-->
+<!--                app:argType="com.example.internetcookbook.models.DataModel"/>-->
         </action>
         <action
             android:id="@+id/action_pagerFragment_to_settingsFragment"
@@ -31,8 +31,8 @@
             android:id="@+id/action_pagerFragment_to_commentsFragment"
             app:destination="@id/commentsFragment" >
             <argument
-                android:name="postModel"
-                app:argType="com.example.internetcookbook.models.PostModel"/>
+                android:name="dataModel"
+                app:argType="com.example.internetcookbook.models.DataModel"/>
         </action>
         <action
             android:id="@+id/action_pagerFragment_to_friendFragmentView"
@@ -100,8 +100,8 @@
         android:label="fragment_make"
         tools:layout="@layout/fragment_make" >
         <argument
-            android:name="postModel"
-            app:argType="com.example.internetcookbook.models.PostModel"/>
+            android:name="dataModel"
+            app:argType="com.example.internetcookbook.models.DataModel"/>
         <action
             android:id="@+id/action_makeFragment_to_pagerFragment"
             app:destination="@id/pagerFragment" />

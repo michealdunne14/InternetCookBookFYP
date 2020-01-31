@@ -19,9 +19,7 @@ import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
 import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.PostModel
-import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
-import com.example.internetcookbook.register.RegisterFragmentPresenter
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
@@ -83,7 +81,8 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         swipeRefreshLayout.setOnRefreshListener {
 //            Snackbar.make(homeView,"Swipe Refreshed", Snackbar.LENGTH_SHORT).show()
 //            swipeRefreshLayout.isRefreshing = false
-            !homeView.findNavController().navigateUp()
+//            !homeView.findNavController().navigateUp()
+            presenter.doRefreshData(view)
         }
 
 
@@ -137,12 +136,13 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             }
         }
 
-        val user = UserModel()
-        view.mListRecyclerView.adapter = CardAdapter(presenter.doFindHomeData(), this, user)
-        view.mListRecyclerView.adapter?.notifyDataSetChanged()
         return view
     }
 
+    override fun showInformation(homeData: ArrayList<DataModel>) {
+        homeView.mListRecyclerView.adapter = CardAdapter(homeData, this)
+        homeView.mListRecyclerView.adapter?.notifyDataSetChanged()
+    }
 
 
     private fun showFilter(){

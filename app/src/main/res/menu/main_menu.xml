@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<!--        Filter by Items In Basket-->
         <item
             android:id="@+id/mBasketSearch"
             android:icon="@drawable/outline_shopping_basket_black_48"
-            android:title="Filter by Items In Basket"
-            app:showAsAction="always" />
+            android:title="" />
+<!--        Filter By Time Available-->
         <item
             android:id="@+id/mHomeTime"
             android:icon="@drawable/outline_access_time_black_48"
-            android:title="Filter By Time Available"
-            app:showAsAction="always"/>
+            android:title="" />
+<!--        Filter By Special Item e.g Only Items with Chicken-->
         <item
             android:id="@+id/mHomeItem"
             android:icon="@drawable/outline_search_black_48"
-            android:title="Filter By Special Item e.g Only Items with Chicken"
-            app:showAsAction="always"/>
+            android:title="" />
+<!--        Top Posts-->
         <item
             android:id="@+id/mHomeTopPosts"
             android:icon="@drawable/baseline_favorite_black_48"
-            android:title="Top Posts"
-            app:showAsAction="always"/>
+            android:title="" />
+<!--        Settings-->
         <item
             android:id="@+id/mHomeSettings"
             android:icon="@drawable/baseline_settings_applications_black_48"
-            android:title="Settings"
-            app:showAsAction="always"/>
+            android:title="" />
         <item
             android:id="@+id/mHomePost"
             android:icon="@drawable/outline_post_add_black_48"
-            android:title="Settings"
-            app:showAsAction="always"/>
+            android:title="" />
 </menu>
