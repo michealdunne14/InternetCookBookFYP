@@ -142,9 +142,10 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     fun getPostData(){
+        postData.clear()
         lateinit var dataArray: DataModel
         if (internetConnection) {
-            for (post in getCurrentUser().posts) {
+            for (post in user.posts) {
                 val request = Request.Builder()
                     .url("http://52.51.34.156:3000/post/id/${post?.postoid}")
                     .build()

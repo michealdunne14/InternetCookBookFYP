@@ -3,7 +3,7 @@ package com.example.internetcookbook.adapter
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.example.internetcookbook.basket.BasketFragmentView
+import com.example.internetcookbook.item.ItemFragmentView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.fragmentview.CameraFragmentView
@@ -19,7 +19,7 @@ class SampleFragmentPagerAdapter(
     private val fragmentList = listOf(
         CameraFragmentView(),
         HomeFragmentView.newInstance(callback),
-        BasketFragmentView()
+        ItemFragmentView()
     )
 
     override fun getItem(position: Int): BaseView = fragmentList[position] as BaseView

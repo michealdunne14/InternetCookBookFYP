@@ -1,5 +1,6 @@
 package com.example.internetcookbook.makefood
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
@@ -14,10 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
+import com.example.internetcookbook.adapter.BitmapCardAdapter
 import com.example.internetcookbook.adapter.ImageAdapter
 import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.adapter.MakeAdapter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.helper.readBit64Image
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_make.*
@@ -61,7 +64,8 @@ class MakeFragmentView : BaseView() {
         val view =  inflater.inflate(R.layout.fragment_make, container, false)
 //        val args = SecondFragmentArgs.fromBundle(arguments).users
         presenter = initPresenter(MakeFragmentPresenter(this)) as MakeFragmentPresenter
-        val postModel = MakeFragmentViewArgs.fromBundle(arguments!!).postModel
+        val postModel = MakeFragmentViewArgs.fromBundle(arguments!!).dataModel.post
+        val images = MakeFragmentViewArgs.fromBundle(arguments!!).dataModel
 
         val layoutManager = LinearLayoutManager(context)
         view.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
@@ -70,16 +74,12 @@ class MakeFragmentView : BaseView() {
         makeView = view
         makeView.mMakeName.text = postModel.title
         makeView.mMakeDescription.text = postModel.description
-//        doFindImages(postModel.data)
+        val bitmapImages = readBit64Image(images)
+        doFindImages(bitmapImages)
         hideAndShowToolbarButtons()
 
         foodModelArrayList.add(FoodModel("Food"))
         foodModelArrayList.add(FoodModel("Food"))
-//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
-//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
-//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
-//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
-//        postModelArrayList.add(PostModel("hello","sjhdfkjs",postModel.data))
 //
 
         view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
@@ -139,9 +139,9 @@ class MakeFragmentView : BaseView() {
     }
 
 
-    fun doFindImages(images: ArrayList<String>) {
+    fun doFindImages(images: ArrayList<Bitmap>) {
         val viewPager = makeView.findViewById<ViewPager>(R.id.mMakeImage)
-        val adapter = ImageAdapter(makeView.context, images)
+        val adapter = BitmapCardAdapter(makeView.context, images)
         viewPager.adapter = adapter
     }
 

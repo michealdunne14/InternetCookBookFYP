@@ -31,8 +31,7 @@ interface PostListener {
 
 class CardAdapter(
     private var posts: ArrayList<DataModel>,
-    private val listener: PostListener,
-    private val user: UserModel
+    private val listener: PostListener
 ) : RecyclerView.Adapter<CardAdapter.MainHolder>() {
 
 
@@ -51,12 +50,12 @@ class CardAdapter(
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val postModel = posts[holder.adapterPosition]
-        holder.bind(postModel,listener,user)
+        holder.bind(postModel,listener)
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         private var showDetails = false
-        fun bind(dataModel: DataModel, listener: PostListener, user: UserModel) {
+        fun bind(dataModel: DataModel, listener: PostListener) {
             itemView.mCardName.text = dataModel.post.title
             itemView.mCardDescription.text = dataModel.post.description
             itemView.mCardImageList
@@ -77,27 +76,13 @@ class CardAdapter(
             val layoutManager = LinearLayoutManager(itemView.context)
 
 
-//            itemView.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
-//
-//
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            itemView.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
-//            itemView.mCardIngredients.adapter?.notifyDataSetChanged()
-
             itemView.mMakeFood.setOnClickListener {
-                val action = PagerFragmentViewDirections.actionPagerFragmentToMakeFragment(dataModel.post)
+                val action = PagerFragmentViewDirections.actionPagerFragmentToMakeFragment(dataModel)
                 itemView.findNavController().navigate(action)
             }
 
             itemView.mCommentsPage.setOnClickListener {
-                val action = PagerFragmentViewDirections.actionPagerFragmentToCommentsFragment(dataModel.post)
+                val action = PagerFragmentViewDirections.actionPagerFragmentToCommentsFragment(dataModel)
                 itemView.findNavController().navigate(action)
             }
             itemView.mPostName.setOnClickListener {
