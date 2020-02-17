@@ -26,10 +26,7 @@ import com.google.firebase.ml.vision.text.FirebaseVisionText
 import kotlinx.android.synthetic.main.fragment_camera.view.*
 import kotlinx.android.synthetic.main.listitems.*
 import kotlinx.android.synthetic.main.listitems.view.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.getStackTraceString
-import org.jetbrains.anko.uiThread
+import org.jetbrains.anko.*
 import java.nio.ByteBuffer
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -263,15 +260,24 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             for (block in resultText.textBlocks) {
                 for (line in block.lines) {
                     for (element in line.elements) {
-                        val foodModel = FoodModel()
-                        foodModel.foodName = element.text
-                        storedFood.add(foodModel)
+                        doAsync {
+                            val searchedShop = presenter.searchShop("Tesco")
+                            onComplete {
+                                if(searchedShop != null){
 
+                                }
+                            }
+                        }
+                        val foodModel = FoodModel()
+                        foodModel.name = element.text
+                        foodModel.price = 6
+                        foodModel.shop = "Tesco"
+                        storedFood.add(foodModel)
                     }
                 }
             }
             uiThread {
-                mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood)
+                mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood,presenter)
                 mFoodListRecyclerView.adapter?.notifyDataSetChanged()
             }
         }
@@ -346,6 +352,42 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(homeView.context, it) == PackageManager.PERMISSION_GRANTED
     }
+
+//    private fun runTextRecognition() {
+//        val image = FirebaseVisionImage.fromBitmap(mSelectedImage)
+//        val recognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
+//        mTextButton.setEnabled(false)
+//        recognizer.processImage(image)
+//            .addOnSuccessListener { texts ->
+////                mTextButton.setEnabled(true)
+//                processTextRecognitionResult(texts!!)
+//            }
+//            .addOnFailureListener { e ->
+//                // Task failed with an exception
+////                mTextButton.setEnabled(true)
+//                e.printStackTrace()
+//            }
+//    }
+//
+//    private fun processTextRecognitionResult(texts: FirebaseVisionText) {
+//        val blocks = texts.textBlocks
+//        if (blocks.size == 0) {
+////            showToast("No text found")
+//            return
+//        }
+//        mGraphicOverlay.clear()
+//        for (i in blocks.indices) {
+//            val lines = blocks[i].lines
+//            for (j in lines.indices) {
+//                val elements =
+//                    lines[j].elements
+//                for (k in elements.indices) {
+//                    val textGraphic: Graphic = TextGraphic(mGraphicOverlay, elements[k])
+//                    mGraphicOverlay.add(textGraphic)
+//                }
+//            }
+//        }
+//    }
 }
 
 

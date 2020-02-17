@@ -89,7 +89,7 @@
         android:layout_height="0dp"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintStart_toEndOf="@+id/mSaveRecipe"
         app:srcCompat="@drawable/baseline_favorite_black_36" />
 
     <ImageButton
@@ -111,7 +111,7 @@
         app:srcCompat="@drawable/outline_fastfood_black_36" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/mSaveRecipe"
         android:layout_width="@dimen/dimension50"
         android:layout_height="0dp"
         android:background="@null"

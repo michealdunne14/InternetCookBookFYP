@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.models.FoodModel
 import kotlinx.android.synthetic.main.basket_list.view.*
-import kotlinx.android.synthetic.main.ingredients_list.view.*
 
 class BasketAdapter(private var basketItem: ArrayList<FoodModel>) : RecyclerView.Adapter<BasketAdapter.MainHolder>() {
 
@@ -31,7 +30,7 @@ class BasketAdapter(private var basketItem: ArrayList<FoodModel>) : RecyclerView
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(foodModel: FoodModel) {
-            itemView.mBasketName.text = foodModel.foodName
+            itemView.mBasketName.text = foodModel.name
         }
     }
 }

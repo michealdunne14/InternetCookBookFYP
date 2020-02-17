@@ -65,11 +65,19 @@ class ItemFragmentView : BaseView() {
             R.id.mNavCupboard -> {
                 fragmentCart.visibility = View.VISIBLE
                 fragmentBasket.visibility = View.INVISIBLE
+                fragmentFollowers.visibility = View.INVISIBLE
                 return@OnNavigationItemSelectedListener true
             }
             R.id.mNavBasket -> {
                 fragmentBasket.visibility = View.VISIBLE
                 fragmentCart.visibility = View.INVISIBLE
+                fragmentFollowers.visibility = View.INVISIBLE
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.mNavFollowing -> {
+                fragmentBasket.visibility = View.INVISIBLE
+                fragmentCart.visibility = View.INVISIBLE
+                fragmentFollowers.visibility = View.VISIBLE
                 return@OnNavigationItemSelectedListener true
             }
         }
