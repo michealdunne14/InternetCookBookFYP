@@ -2,12 +2,11 @@ package com.example.internetcookbook.network
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
 import com.example.internetcookbook.helper.exists
 import com.example.internetcookbook.helper.read
 import com.example.internetcookbook.helper.write
 import com.example.internetcookbook.models.DataModel
+import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import com.google.gson.Gson
@@ -113,7 +112,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     fun createUser(userModel: UserModel): String? {
         user = userModel
         val user = findEmail(userModel)
-        if (user == null) {
+//        if (user == null) {
             val formBody: RequestBody = FormBody.Builder()
                 .add("username", userModel.username)
                 .add("password", userModel.password)
@@ -127,8 +126,66 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .build()
 
             client.newCall(request).execute().use { response -> return response.body!!.toString() }
-        }else{
-            return null
+//        }else{
+//            return null
+//        }
+    }
+
+    fun createFood(foodModel: FoodModel): String {
+        val formBody: RequestBody = FormBody.Builder()
+            .add("name", foodModel.name)
+            .add("price", foodModel.price.toString())
+            .add("shop", foodModel.shop).build()
+
+        val request: Request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/create")
+            .post(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response -> return response.body!!.toString() }
+    }
+
+    fun findShop(shop: String): String? {
+        lateinit var foodModel: Array<FoodModel>
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/shop/${shop}")
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            val body = response.body!!.string()
+            val gsonBuilder = GsonBuilder()
+            val gson = gsonBuilder.create()
+
+            foodModel = gson.fromJson<Array<FoodModel>>(body, Array<FoodModel>::class.java)
+        }
+        return if (foodModel.isNotEmpty()) {
+            foodModel[0].shop
+        } else {
+            null
+        }
+    }
+
+    fun findItem(item: String): String? {
+        lateinit var foodModel: Array<FoodModel>
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/name/${item}")
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            val body = response.body!!.string()
+            val gsonBuilder = GsonBuilder()
+            val gson = gsonBuilder.create()
+
+            foodModel = gson.fromJson<Array<FoodModel>>(body, Array<FoodModel>::class.java)
+        }
+        return if (foodModel.isNotEmpty()) {
+            foodModel[0].shop
+        } else {
+            null
         }
     }
 

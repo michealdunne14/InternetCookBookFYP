@@ -15,12 +15,14 @@ import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
 import com.example.internetcookbook.adapter.ImageAdapter
+import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.helper.readBit64Image
 import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.card_list.view.*
 
 interface PostListener {
@@ -63,17 +65,36 @@ class CardAdapter(
             doFindImages(bitmapImages)
 
             itemView.mShowRecipeDetails.setOnClickListener {
-//                if(showDetails) {
-//                    cancelDetailsShow(itemView)
-//                }else {
-//                    showDetailsShow(itemView)
-//                }
+                if(showDetails) {
+                    cancelDetailsShow(itemView)
+                }else {
+                    showDetailsShow(itemView)
+                }
+            }
+
+
+            itemView.mSaveRecipe.setOnClickListener {
+                Snackbar.make(itemView,"Saved on Profile Page", Snackbar.LENGTH_SHORT).show()
             }
 
             val foodModelArrayList = ArrayList<FoodModel>()
 
             // Inflate the layout for this fragment
             val layoutManager = LinearLayoutManager(itemView.context)
+
+            itemView.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
+
+
+            foodModelArrayList.add(FoodModel("Food"))
+            foodModelArrayList.add(FoodModel("Food"))
+            foodModelArrayList.add(FoodModel("Food"))
+            foodModelArrayList.add(FoodModel("Food"))
+            foodModelArrayList.add(FoodModel("Food"))
+            foodModelArrayList.add(FoodModel("Food"))
+            foodModelArrayList.add(FoodModel("Food"))
+            foodModelArrayList.add(FoodModel("Food"))
+            itemView.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
+            itemView.mCardIngredients.adapter?.notifyDataSetChanged()
 
 
             itemView.mMakeFood.setOnClickListener {

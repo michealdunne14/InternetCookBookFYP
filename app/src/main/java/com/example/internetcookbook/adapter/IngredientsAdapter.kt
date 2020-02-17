@@ -31,7 +31,7 @@ class IngredientsAdapter(private var food: ArrayList<FoodModel>) : RecyclerView.
 
         class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
             fun bind(foodModel: FoodModel) {
-                itemView.mIngredientsName.text = foodModel.foodName
+                itemView.mIngredientsName.text = foodModel.name
                 itemView.mSelectedIngredient.setOnClickListener {
                     
                 }

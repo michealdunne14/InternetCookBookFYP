@@ -11,4 +11,9 @@
         android:icon="@drawable/outline_shopping_basket_black_36"
         android:title="@string/basket" />
 
+    <item
+        android:id="@+id/mNavFollowing"
+        android:icon="@drawable/outline_person_black_36"
+        android:title="@string/following" />
+
 </menu>

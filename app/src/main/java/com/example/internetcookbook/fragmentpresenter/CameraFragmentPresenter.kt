@@ -6,6 +6,7 @@ import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.showImagePicker
+import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
@@ -31,6 +32,20 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                     view.addImageToCamera(stringData)
                 }
             }
+        }
+    }
+
+    fun searchShop(element: String): String? {
+        return infoStore!!.findShop(element)
+    }
+
+    fun searchItems(element: String): String? {
+        return infoStore!!.findItem(element)
+    }
+
+    fun doAddFoodItem(foodModel: FoodModel) {
+        doAsync {
+            infoStore!!.createFood(foodModel)
         }
     }
 }

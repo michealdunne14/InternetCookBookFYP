@@ -46,7 +46,7 @@ class LoginFragmentView : BaseView() {
         handleTransition()
         loginView = view
         view.mLoginSignInButton.setOnClickListener {
-            if (view.mLoginEmail.text.isNotEmpty() && view.mLoginPassword.text.isNotEmpty()) {
+            if (view.mLoginEmail.text.isNotEmpty() && view.mLoginPassword.text.isNotEmpty() && checkEmail(view.mLoginEmail.text.toString())) {
                 userModel.email = view.mLoginEmail.text.toString()
                 userModel.password = view.mLoginPassword.text.toString()
                 presenter.doSignIn(userModel)
@@ -63,6 +63,10 @@ class LoginFragmentView : BaseView() {
         startPostponedEnterTransition()
 
         return view
+    }
+
+    fun checkEmail(email: String):Boolean{
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     override fun getMainPageFromLoginPage(){
