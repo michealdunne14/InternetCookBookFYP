@@ -45,9 +45,6 @@ class ReceiptListAdapter(
             itemView.mFoodItemText.setText(foodModel.name)
             doAsync {
                 val result = presenter.searchItems(foodModel.name)
-                uiThread {
-                    //                    Progress Bar here
-                }
                 onComplete {
                     if(result != null) {
                         itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
@@ -60,9 +57,6 @@ class ReceiptListAdapter(
                 val text= itemView.mFoodItemText.text.toString()
                 doAsync { 
                     val result = presenter.searchItems(text)
-                    uiThread {
-                        //                    Progress Bar here
-                    }
                     onComplete {
                         if(result != null) {
                             itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))

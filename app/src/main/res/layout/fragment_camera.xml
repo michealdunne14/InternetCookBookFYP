@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragmentview.CameraFragmentView">
 
-    <ImageView
-        android:id="@+id/mCapturedImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
-
     <TextureView
         android:id="@+id/view_finder"
         android:layout_width="match_parent"
@@ -25,32 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/mCameraCaptureButton"
-        android:layout_width="140dp"
-        android:layout_height="110dp"
-        android:layout_marginBottom="32dp"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toStartOf="@+id/mScanBarcodeButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/mButtonFindText"
-        app:srcCompat="@drawable/baseline_panorama_fish_eye_white_48" />
-
-    <ImageButton
-        android:id="@+id/mButtonFindText"
-        android:layout_width="82dp"
-        android:layout_height="62dp"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toStartOf="@+id/mCameraCaptureButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/sharp_search_white_48" />
-
     <include
         android:id="@+id/mListItems"
         layout="@layout/listitems"
@@ -58,33 +22,11 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-    <ImageButton
-        android:id="@+id/mScanBarcodeButton"
-        android:layout_width="@dimen/dimension80"
-        android:layout_height="@dimen/dimension50"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        android:src="@drawable/outline_add_box_white_48"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/mCameraCaptureButton" />
+    <include
+        android:id="@+id/mCameraShow"
+        layout="@layout/camera_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <ImageButton
-        android:id="@+id/mCameraFlashButton"
-        android:layout_width="@dimen/dimension80"
-        android:layout_height="@dimen/dimension50"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        android:src="@drawable/flashon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="50dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

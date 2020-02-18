@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.internetcookbook.CustomDialog
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ReceiptListAdapter
 import com.example.internetcookbook.base.BaseView
@@ -23,6 +24,8 @@ import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
+import kotlinx.android.synthetic.main.activity_custom.*
+import kotlinx.android.synthetic.main.camera_show.view.*
 import kotlinx.android.synthetic.main.fragment_camera.view.*
 import kotlinx.android.synthetic.main.listitems.*
 import kotlinx.android.synthetic.main.listitems.view.*
@@ -41,6 +44,8 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     var storedFood = ArrayList<FoodModel>()
     var captureCheck = false
     var torch = false
+    lateinit var customDialog: CustomDialog
+
 
     lateinit var presenter: CameraFragmentPresenter
 
@@ -57,9 +62,10 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
 
         view.mFoodListRecyclerView.layoutManager = layoutManager
-        view.mFloatingButton.setOnClickListener {
+        view.mRetakePicture.setOnClickListener {
             storedFood.clear()
             view.mListItems.visibility = View.GONE
+            homeView.mCameraShow.visibility = View.VISIBLE
             captureCheck = false
             clearImageBitmap()
         }
@@ -155,7 +161,35 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
 
         homeView.mButtonFindText.setOnClickListener {
-            mChangeImageToText(viewFinder.bitmap)
+            customDialog = CustomDialog(activity!!)
+
+            customDialog.show()
+            customDialog.setCanceledOnTouchOutside(false)
+            customDialog.mRetake.setOnClickListener {
+                storedFood.clear()
+                homeView.mListItems.visibility = View.GONE
+                homeView.mCameraShow.visibility = View.VISIBLE
+                captureCheck = false
+                homeView.view_finder.visibility = View.VISIBLE
+                homeView.mCapturedImage.setImageBitmap(null)
+                customDialog.cancel()
+            }
+
+            var shop: String?
+            customDialog.mConfirm.setOnClickListener {
+                doAsync {
+                    shop = presenter.searchShop(customDialog.mDialogSearch.text.toString())
+                    onComplete {
+                        if(shop != null){
+                            homeView.mShoppedAt.text = shop
+                            customDialog.cancel()
+                            mChangeImageToText(viewFinder.bitmap, shop!!)
+                        }else{
+                            Snackbar.make(homeView,"Not Known Shop", Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
         }
 
         homeView.mScanBarcodeButton.setOnClickListener {
@@ -224,13 +258,12 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
 
 
-    fun mChangeImageToText(bitmap: Bitmap) {
+    fun mChangeImageToText(bitmap: Bitmap, shop: String) {
             val image = FirebaseVisionImage.fromBitmap(bitmap)
             val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
 
-            detector.processImage(image)
-                .addOnSuccessListener { firebaseVisionText ->
-                    processResultText(firebaseVisionText)
+            detector.processImage(image).addOnSuccessListener { firebaseVisionText ->
+                    processResultText(firebaseVisionText,shop)
                 }
                 .addOnFailureListener {
                 }
@@ -251,27 +284,25 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 //    }
 
 
-    private fun processResultText(resultText: FirebaseVisionText) {
+    private fun processResultText(
+        resultText: FirebaseVisionText,
+        shop: String
+    ) {
         if (resultText.textBlocks.size == 0) {
             Snackbar.make(homeView,"No Text Found", Snackbar.LENGTH_SHORT).show()
             return
+        }else{
+            homeView.mCameraShow.visibility = View.GONE
         }
+        info { "Select Country Started" }
         doAsync {
             for (block in resultText.textBlocks) {
                 for (line in block.lines) {
                     for (element in line.elements) {
-                        doAsync {
-                            val searchedShop = presenter.searchShop("Tesco")
-                            onComplete {
-                                if(searchedShop != null){
-
-                                }
-                            }
-                        }
                         val foodModel = FoodModel()
                         foodModel.name = element.text
                         foodModel.price = 6
-                        foodModel.shop = "Tesco"
+                        foodModel.shop = shop
                         storedFood.add(foodModel)
                     }
                 }
@@ -281,7 +312,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                 mFoodListRecyclerView.adapter?.notifyDataSetChanged()
             }
         }
-
         homeView.mCapturedImage.visibility = View.INVISIBLE
         homeView.mFoodListRecyclerView.visibility = View.VISIBLE
         homeView.mListItems.visibility = View.VISIBLE
