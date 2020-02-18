@@ -33,6 +33,7 @@
     <string name="cupboard">Cupboard</string>
     <string name="basket">Basket</string>
     <string name="following">Following</string>
+    <string name="enter_shop">Enter Shop</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>

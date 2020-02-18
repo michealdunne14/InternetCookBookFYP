@@ -6,6 +6,7 @@ import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.showImagePicker
+import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
@@ -39,8 +40,12 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return infoStore!!.findShop(element)
     }
 
-    fun searchItems(element: String): String? {
+    fun searchItems(element: String): FoodMasterModel? {
         return infoStore!!.findItem(element)
+    }
+
+    fun searchDate(element: String): String {
+        return "10/11/2020"
     }
 
     fun doAddFoodItem(foodModel: FoodModel) {

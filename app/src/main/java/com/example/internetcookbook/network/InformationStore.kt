@@ -5,10 +5,7 @@ import android.graphics.Bitmap
 import com.example.internetcookbook.helper.exists
 import com.example.internetcookbook.helper.read
 import com.example.internetcookbook.helper.write
-import com.example.internetcookbook.models.DataModel
-import com.example.internetcookbook.models.FoodModel
-import com.example.internetcookbook.models.PostModel
-import com.example.internetcookbook.models.UserModel
+import com.example.internetcookbook.models.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -22,6 +19,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var user = UserModel()
     var imageArrayList = ArrayList<Bitmap>()
     var postData = ArrayList<DataModel>()
+    var foodData = ArrayList<FoodMasterModel>()
     var userLocalStore = mutableListOf<UserModel>()
     lateinit var emailSearchArray: Array<UserModel>
 
@@ -46,31 +44,31 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         userLocalStore = Gson().fromJson(jsonString, listType)
     }
 
-    fun emailSearch(userModel: UserModel) {
-        val request = Request.Builder()
-            .url("http://52.51.34.156:3000/user/email/${userModel.email}")
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                response.use {
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-                    val body = response.body!!.string()
-                    val gsonBuilder = GsonBuilder()
-                    val gson = gsonBuilder.create()
-
-                    val emailSearch: Array<UserModel> =
-                        gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
-                    emailSearchArray = emailSearch
-                }
-            }
-        })
-    }
+//    fun emailSearch(userModel: UserModel) {
+//        val request = Request.Builder()
+//            .url("http://52.51.34.156:3000/user/email/${userModel.email}")
+//            .build()
+//
+//        client.newCall(request).enqueue(object : Callback {
+//            override fun onFailure(call: Call, e: IOException) {
+//                e.printStackTrace()
+//            }
+//
+//            override fun onResponse(call: Call, response: Response) {
+//                response.use {
+//                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+//
+//                    val body = response.body!!.string()
+//                    val gsonBuilder = GsonBuilder()
+//                    val gson = gsonBuilder.create()
+//
+//                    val emailSearch: Array<UserModel> =
+//                        gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
+//                    emailSearchArray = emailSearch
+//                }
+//            }
+//        })
+//    }
 
     fun findEmail(userModel: UserModel): UserModel? {
         if (internetConnection) {
@@ -167,8 +165,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-    fun findItem(item: String): String? {
-        lateinit var foodModel: Array<FoodModel>
+    fun findItem(item: String): FoodMasterModel? {
         val request = Request.Builder()
             .url("http://52.51.34.156:3000/food/name/${item}")
             .build()
@@ -179,13 +176,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             val body = response.body!!.string()
             val gsonBuilder = GsonBuilder()
             val gson = gsonBuilder.create()
-
-            foodModel = gson.fromJson<Array<FoodModel>>(body, Array<FoodModel>::class.java)
-        }
-        return if (foodModel.isNotEmpty()) {
-            foodModel[0].shop
-        } else {
-            null
+            return gson.fromJson(body, FoodMasterModel::class.java)
         }
     }
 
