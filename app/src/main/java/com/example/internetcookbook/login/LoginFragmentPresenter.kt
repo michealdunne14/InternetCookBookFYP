@@ -3,6 +3,7 @@ package com.example.internetcookbook.login
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
@@ -20,15 +21,15 @@ class LoginFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     }
 
     fun doSignIn(userModel: UserModel){
-        var signIn = UserModel()
+        var signIn = UserMasterModel()
         doAsync {
             signIn = infoStore!!.findEmail(userModel)!!
             uiThread {
                 view.showProgress()
             }
             onComplete {
-                if (signIn.email.isNotEmpty()){
-                    if(signIn.password==userModel.password) {
+                if (signIn.user.email.isNotEmpty()){
+                    if(signIn.user.password==userModel.password) {
                         view.hideProgress()
                         view.getMainPageFromLoginPage()
                         doAsync {

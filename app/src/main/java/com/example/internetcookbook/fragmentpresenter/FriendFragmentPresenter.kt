@@ -4,6 +4,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.models.UserModel
 import com.example.internetcookbook.network.InformationStore
 
@@ -15,7 +16,7 @@ class FriendFragmentPresenter(view: BaseView): BasePresenter(view) {
         infoStore = app.informationStore as InformationStore
     }
 
-    fun getCurrentUser(): UserModel{
+    fun getCurrentUser(): UserMasterModel{
         return infoStore!!.getCurrentUser()
     }
 }

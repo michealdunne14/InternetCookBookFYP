@@ -4,6 +4,6 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PostOidModel(
-    val postoid: String = ""
+data class BasketOidModel(
+    val basketoid: String = ""
 ): Parcelable
