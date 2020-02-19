@@ -15,6 +15,7 @@ import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ImageAdapter
 import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_ingredients.view.*
@@ -26,7 +27,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
     lateinit var presenter: PostFragmentPresenter
     lateinit var postView: View
     var postModel = PostModel()
-    var foodModelArrayList = ArrayList<FoodModel>()
+    var foodModelArrayList = ArrayList<FoodMasterModel>()
     var personalPost = false
 
 
@@ -89,7 +90,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
         viewPager.adapter = adapter
     }
 
-    override fun showIngredients(listofIngredients: ArrayList<FoodModel>){
+    override fun showIngredients(listofIngredients: ArrayList<FoodMasterModel>){
         val layoutManager = LinearLayoutManager(context)
         postView.mIngredientsRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
         postView.mIngredientsRecyclerView.adapter = IngredientsAdapter(listofIngredients)

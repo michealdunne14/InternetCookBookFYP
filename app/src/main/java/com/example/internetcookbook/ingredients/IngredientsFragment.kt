@@ -29,10 +29,10 @@ class IngredientsFragment : Fragment() {
         view.mIngredientsRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
 
-        foodModelArrayList.add(FoodModel("Food"))
-        foodModelArrayList.add(FoodModel("Food"))
-        view.mIngredientsRecyclerView.adapter = IngredientsAdapter(foodModelArrayList)
-        view.mIngredientsRecyclerView.adapter?.notifyDataSetChanged()
+//        foodModelArrayList.add(FoodModel("Food"))
+//        foodModelArrayList.add(FoodModel("Food"))
+//        view.mIngredientsRecyclerView.adapter = IngredientsAdapter(foodModelArrayList)
+//        view.mIngredientsRecyclerView.adapter?.notifyDataSetChanged()
 
         return view
     }

@@ -19,7 +19,10 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var userMaster = UserMasterModel()
     var imageArrayList = ArrayList<Bitmap>()
     var postData = ArrayList<DataModel>()
-    var foodData = ArrayList<FoodMasterModel>()
+    var cupboardData = ArrayList<FoodMasterModel>()
+    var basketData = ArrayList<FoodMasterModel>()
+    var basket = ArrayList<FoodMasterModel>()
+    var followingData = ArrayList<UserMasterModel>()
     var userLocalStore = mutableListOf<UserMasterModel>()
     lateinit var emailSearchArray: Array<UserModel>
 
@@ -130,6 +133,37 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 //        }
     }
 
+    fun updateUserInfo(userModel: UserModel): UserMasterModel? {
+        if (internetConnection) {
+            lateinit var emailSearch: UserMasterModel
+            val request = Request.Builder()
+                .url("http://52.51.34.156:3000/user/id/${userModel.oid}")
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                val gsonBuilder = GsonBuilder()
+                val gson = gsonBuilder.create()
+
+                emailSearch = gson.fromJson(body,UserMasterModel::class.java)
+            }
+            if (!emailSearch.user.email.isEmpty()) {
+                userLocalStore.clear()
+                userMaster = emailSearch
+                userMaster.user.loggedIn = true
+                userLocalStore.add(userMaster)
+                serialize()
+                return userMaster
+            } else {
+                return null
+            }
+        } else {
+            return null
+        }
+    }
+
     fun createFood(foodModel: FoodModel): String {
         val formBody: RequestBody = FormBody.Builder()
             .add("name", foodModel.name)
@@ -210,7 +244,110 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                     postData.add(dataArray)
                 }
             }
+            for (following in followingData){
+                for(posts in following.user.posts) {
+                    val request = Request.Builder()
+                        .url("http://52.51.34.156:3000/post/id/${posts?.postoid}")
+                        .build()
+
+                    client . newCall (request).execute().use { response ->
+                        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+
+                        val body = response.body!!.string()
+                        val gsonBuilder = GsonBuilder()
+                        val gson = gsonBuilder.create()
+                        dataArray = gson.fromJson(body, DataModel::class.java)
+
+                        postData.add(dataArray)
+                    }
+                }
+            }
         }
+    }
+
+    fun getCupboardData(){
+        cupboardData.clear()
+        lateinit var dataArray: FoodMasterModel
+        if (internetConnection) {
+            for (cupboard in userMaster.user.cupboard) {
+                val request = Request.Builder()
+                    .url("http://52.51.34.156:3000/food/foodId/${cupboard?.cupboardoid}")
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+
+                    val body = response.body!!.string()
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+
+                    dataArray = gson.fromJson(body, FoodMasterModel::class.java)
+                    cupboardData.add(dataArray)
+                }
+            }
+        }
+    }
+
+
+    fun getBasketData(){
+        basketData.clear()
+        lateinit var dataArray: FoodMasterModel
+        if (internetConnection) {
+            for (basket in userMaster.user.basket) {
+                val request = Request.Builder()
+                    .url("http://52.51.34.156:3000/food/foodId/${basket?.basketoid}")
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                    val body = response.body!!.string()
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+
+                    dataArray = gson.fromJson(body, FoodMasterModel::class.java)
+                    basketData.add(dataArray)
+                }
+            }
+        }
+    }
+
+    fun getFollowingData(){
+        followingData.clear()
+        lateinit var dataArray: UserMasterModel
+        if (internetConnection) {
+            for (following in userMaster.user.following) {
+                val request = Request.Builder()
+                    .url("http://52.51.34.156:3000/user/id/${following?.followingoid}")
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+
+                    val body = response.body!!.string()
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+
+                    dataArray = gson.fromJson(body, UserMasterModel::class.java)
+                    followingData.add(dataArray)
+                }
+            }
+        }
+    }
+
+    fun findFollowingData(): ArrayList<UserMasterModel> {
+        return followingData
+    }
+
+    fun findBasketData(): ArrayList<FoodMasterModel> {
+        return basketData
+    }
+
+    fun findCupboardData(): ArrayList<FoodMasterModel> {
+        return cupboardData
     }
 
     fun uploadImages(oid: String, listofImages: ArrayList<String>) {
