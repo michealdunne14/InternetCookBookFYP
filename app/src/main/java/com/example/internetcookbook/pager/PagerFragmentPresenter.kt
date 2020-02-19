@@ -13,7 +13,7 @@ class PagerFragmentPresenter(view: BaseView): BasePresenter(view) {
     init {
         infoStore = app.informationStore
         val currentUser = infoStore.getCurrentUser()
-        if(!currentUser.loggedIn){
+        if(!currentUser.user.loggedIn){
             val action = PagerFragmentViewDirections.actionPagerFragmentToStartFragment()
             view.findNavController().navigate(action)
         }

@@ -16,17 +16,17 @@ import kotlin.collections.ArrayList
 
 class InformationStore(val context: Context, val internetConnection: Boolean) {
     var client = OkHttpClient()
-    var user = UserModel()
+    var userMaster = UserMasterModel()
     var imageArrayList = ArrayList<Bitmap>()
     var postData = ArrayList<DataModel>()
     var foodData = ArrayList<FoodMasterModel>()
-    var userLocalStore = mutableListOf<UserModel>()
+    var userLocalStore = mutableListOf<UserMasterModel>()
     lateinit var emailSearchArray: Array<UserModel>
 
 
     val JSON_FILE = "InformationStore.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
-    val listType = object : TypeToken<ArrayList<UserModel>>() {}.type
+    val listType = object : TypeToken<ArrayList<UserMasterModel>>() {}.type
 
     init {
         if (exists(context, JSON_FILE)) {
@@ -70,9 +70,9 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 //        })
 //    }
 
-    fun findEmail(userModel: UserModel): UserModel? {
+    fun findEmail(userModel: UserModel): UserMasterModel? {
         if (internetConnection) {
-            lateinit var emailSearch: Array<UserModel>
+            lateinit var emailSearch: UserMasterModel
             val request = Request.Builder()
                 .url("http://52.51.34.156:3000/user/email/${userModel.email}")
                 .build()
@@ -84,14 +84,15 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 val gsonBuilder = GsonBuilder()
                 val gson = gsonBuilder.create()
 
-                emailSearch = gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
+                emailSearch = gson.fromJson(body,UserMasterModel::class.java)
             }
-            if (!emailSearch.isEmpty()) {
-                user = emailSearch[0]
-                user.loggedIn = true
-                userLocalStore.add(user)
+            if (!emailSearch.user.email.isEmpty()) {
+                userLocalStore.clear()
+                userMaster = emailSearch
+                userMaster.user.loggedIn = true
+                userLocalStore.add(userMaster)
                 serialize()
-                return user
+                return userMaster
             } else {
                 return null
             }
@@ -100,15 +101,15 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-    fun getCurrentUser(): UserModel {
+    fun getCurrentUser(): UserMasterModel {
         if (userLocalStore.isNotEmpty()) {
-            user = userLocalStore[0]
+            userMaster = userLocalStore[0]
         }
-        return user
+        return userMaster
     }
 
     fun createUser(userModel: UserModel): String? {
-        user = userModel
+//        userMaster.user = userModel
         val user = findEmail(userModel)
 //        if (user == null) {
             val formBody: RequestBody = FormBody.Builder()
@@ -181,7 +182,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     fun userCreated() {
-        userLocalStore.add(user)
+        userLocalStore.add(userMaster)
         serialize()
     }
 
@@ -193,7 +194,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         postData.clear()
         lateinit var dataArray: DataModel
         if (internetConnection) {
-            for (post in user.posts) {
+            for (post in userMaster.user.posts) {
                 val request = Request.Builder()
                     .url("http://52.51.34.156:3000/post/id/${post?.postoid}")
                     .build()
@@ -236,7 +237,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val formBody: RequestBody = FormBody.Builder()
             .add("title", postModel.title)
             .add("description", postModel.description)
-            .add("useroid", user.oid).build()
+            .add("useroid", userMaster.user.oid).build()
 
         val request: Request = Request.Builder()
             .url("http://52.51.34.156:3000/post/create")
@@ -256,7 +257,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .add("title", postModel.title)
             .add("description", postModel.description)
             .add("image", "randomimage")
-            .add("useroid", user.oid).build()
+            .add("useroid", userMaster.user.oid).build()
 
         val request: Request = Request.Builder()
             .url("http://52.51.34.156:3000/post/create")

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PostOidModel(
-    val postoid: String = ""
-): Parcelable
+data class UserMasterModel(
+    val image: String = "",
+    val user: UserModel = UserModel()
+) : Parcelable
