@@ -16,11 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
-import com.example.internetcookbook.adapter.ImageAdapter
 import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.adapter.MakeAdapter
 import com.example.internetcookbook.base.BaseView
-import com.example.internetcookbook.helper.readBit64Image
+import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_make.*
@@ -74,15 +73,15 @@ class MakeFragmentView : BaseView() {
         makeView = view
         makeView.mMakeName.text = postModel.title
         makeView.mMakeDescription.text = postModel.description
-        val bitmapImages = readBit64Image(images)
+        val bitmapImages = readBit64ImageArrayList(images)
         doFindImages(bitmapImages)
         hideAndShowToolbarButtons()
 
-        foodModelArrayList.add(FoodModel("Food"))
-        foodModelArrayList.add(FoodModel("Food"))
+//        foodModelArrayList.add(FoodModel("Food"))
+//        foodModelArrayList.add(FoodModel("Food"))
+////
 //
-
-        view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
+//        view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
         view.mCardIngredients.adapter?.notifyDataSetChanged()
         view.mMakeList.adapter = MakeAdapter(postModelArrayList)
         view.mMakeList.adapter?.notifyDataSetChanged()
