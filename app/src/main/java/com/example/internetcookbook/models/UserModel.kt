@@ -23,13 +23,13 @@ data class UserModel(
     @SerializedName("profilePicture")
     var profilePicture: String = "",
     @SerializedName("posts")
-    val posts: Array<PostOidModel?> = arrayOfNulls<PostOidModel>(5),
+    val posts: MutableList<PostOidModel?> = mutableListOf(),
     @SerializedName("followers")
-    val followers: Array<FollowersOidModel?> = arrayOfNulls<FollowersOidModel>(5),
+    val followers: MutableList<FollowersOidModel> = mutableListOf(),
     @SerializedName("following")
-    val following: Array<FollowingOidModel?> = arrayOfNulls<FollowingOidModel>(5),
+    val following: MutableList<FollowingOidModel> = mutableListOf(),
     @SerializedName("basket")
-    val basket: Array<BasketOidModel?> = arrayOfNulls<BasketOidModel>(5),
+    val basket: MutableList<BasketOidModel> = mutableListOf(),
     @SerializedName("cupboard")
-    val cupboard: Array<CupboardOidModel?> = arrayOfNulls<CupboardOidModel>(5)
+    val cupboard: MutableList<CupboardOidModel> = mutableListOf()
 ): Parcelable

@@ -5,6 +5,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ImageModel(
-    val data: Array<String?> = arrayOfNulls<String>(100),
+    val data: MutableList<String?> = mutableListOf(),
     val postoid: String = ""
 ): Parcelable
