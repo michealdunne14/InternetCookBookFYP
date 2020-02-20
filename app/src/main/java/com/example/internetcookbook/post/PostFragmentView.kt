@@ -14,9 +14,9 @@ import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ImageAdapter
 import com.example.internetcookbook.adapter.IngredientsAdapter
+import com.example.internetcookbook.adapter.MakeAdapter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.FoodMasterModel
-import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_ingredients.view.*
 import kotlinx.android.synthetic.main.fragment_post.view.*
@@ -29,6 +29,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
     var postModel = PostModel()
     var foodModelArrayList = ArrayList<FoodMasterModel>()
     var personalPost = false
+    var methodStepsArrayList = ArrayList<String>()
 
 
     override fun onCreateView(
@@ -44,7 +45,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
         if(foodModelArrayList.size > 0){
             showIngredients(foodModelArrayList)
         }else{
-            view.mPostFoodRecyclerView.visibility = View.GONE
+            view.mPostIngredientRecyclerView.visibility = View.GONE
         }
 
         view.mPostButton.setOnClickListener {
@@ -66,14 +67,21 @@ class PostFragmentView : BaseView(),AnkoLogger {
             if (!personalPost) {
                 personalPost = true
                 view.mIngredientsButton.visibility = View.GONE
-                view.mPostFoodRecyclerView.visibility = View.GONE
+                view.mPostIngredientRecyclerView.visibility = View.GONE
             }else{
                 personalPost = false
                 view.mIngredientsButton.visibility = View.VISIBLE
-                view.mPostFoodRecyclerView.visibility = View.VISIBLE
+                view.mPostIngredientRecyclerView.visibility = View.VISIBLE
             }
-
         }
+
+        view.mPostAddMethod.setOnClickListener {
+            methodStepsArrayList.add(view.mPostMethodStep.text.toString())
+            view.mPostMethodStep.setText("")
+            showMethod(methodStepsArrayList)
+        }
+
+
 
         view.mAddImage.setOnClickListener {
             presenter.doSelectImage(this)
@@ -95,7 +103,13 @@ class PostFragmentView : BaseView(),AnkoLogger {
         postView.mIngredientsRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
         postView.mIngredientsRecyclerView.adapter = IngredientsAdapter(listofIngredients)
         postView.mIngredientsRecyclerView.adapter?.notifyDataSetChanged()
+    }
 
+    fun showMethod(listofMethods: ArrayList<String>){
+        val layoutManager = LinearLayoutManager(context)
+        postView.mPostMethodRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        postView.mPostMethodRecyclerView.adapter = MakeAdapter(listofMethods)
+        postView.mPostMethodRecyclerView.adapter?.notifyDataSetChanged()
     }
 
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

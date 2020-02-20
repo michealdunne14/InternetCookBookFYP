@@ -7,11 +7,13 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AnimationUtils
 import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.internetcookbook.Bounce
 import com.example.internetcookbook.CustomDialog
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ReceiptListAdapter
@@ -133,6 +135,19 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         homeView.mCameraFlashButton.setOnClickListener {
             torch = !torch
+            if (torch) {
+                val myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce)
+                val interpolator = Bounce(0.2, 20.0)
+                myAnim.interpolator = interpolator
+                homeView.mCameraFlashButton.startAnimation(myAnim)
+                homeView.mCameraFlashButton.setImageResource(R.drawable.flashon)
+            }else{
+                val myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce)
+                val interpolator = Bounce(0.2, 20.0)
+                myAnim.interpolator = interpolator
+                homeView.mCameraFlashButton.startAnimation(myAnim)
+                homeView.mCameraFlashButton.setImageResource(R.drawable.baseline_flash_off_white_36)
+            }
         }
 
         homeView.mCameraCaptureButton.setOnClickListener {

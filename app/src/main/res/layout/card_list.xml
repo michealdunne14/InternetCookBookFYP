@@ -90,7 +90,7 @@
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mSaveRecipe"
-        app:srcCompat="@drawable/baseline_favorite_black_36" />
+        app:srcCompat="@drawable/baseline_favorite_border_black_36" />
 
     <ImageButton
         android:id="@+id/mShareFood"

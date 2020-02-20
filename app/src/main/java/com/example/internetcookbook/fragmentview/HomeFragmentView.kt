@@ -50,6 +50,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     private var time = false
     private var item = false
     private var top = false
+    private var difficulty = false
     private var basket = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,9 +80,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         swipeRefreshLayout.setOnRefreshListener(this)
 
         swipeRefreshLayout.setOnRefreshListener {
-//            Snackbar.make(homeView,"Swipe Refreshed", Snackbar.LENGTH_SHORT).show()
-//            swipeRefreshLayout.isRefreshing = false
-//            !homeView.findNavController().navigateUp()
             presenter.doRefreshData(view)
         }
 
@@ -108,6 +106,20 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 time = true
                 top = false
                 item = false
+                difficulty = false
+                showFilter()
+            }
+        }
+
+        view.mHomeDifficultyLevel.setOnClickListener {
+            if(show) {
+                difficulty = false
+                cancelFilter()
+            }else {
+                difficulty = true
+                item = false
+                top = false
+                time = false
                 showFilter()
             }
         }
@@ -120,6 +132,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 item = true
                 top = false
                 time = false
+                difficulty = false
                 showFilter()
             }
         }
@@ -132,6 +145,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 top = true
                 item = false
                 time = false
+                difficulty = false
                 showFilter()
             }
         }
@@ -147,7 +161,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
     private fun showFilter(){
         show = true
-
         if(time){
             homeView.filterbyItem.visibility = View.GONE
             homeView.horizontalScrollBar.visibility = View.GONE
@@ -166,6 +179,17 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             homeView.mHomeScrollBarForthPosition.visibility = View.VISIBLE
             homeView.mHomeScrollBarFifthPosition.visibility = View.VISIBLE
             homeView.mHomeScrollBarSixthPosition.visibility = View.VISIBLE
+        }else if(difficulty){
+            homeView.rangeBar.visibility = View.GONE
+            homeView.filterbyItem.visibility = View.GONE
+            homeView.horizontalScrollBar.visibility = View.VISIBLE
+
+            homeView.mHomeScrollBarFirstPosition.text = "Easy"
+            homeView.mHomeScrollBarSecondPosition.text = "Medium"
+            homeView.mHomeScrollBarThirdPosition.text = "Hard"
+            homeView.mHomeScrollBarForthPosition.visibility = View.GONE
+            homeView.mHomeScrollBarFifthPosition.visibility = View.GONE
+            homeView.mHomeScrollBarSixthPosition.visibility = View.GONE
         }
             val constraintSet = ConstraintSet()
             constraintSet.clone(homeView.context, R.layout.fragment_home_filter)

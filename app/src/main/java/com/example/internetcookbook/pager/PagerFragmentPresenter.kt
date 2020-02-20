@@ -14,34 +14,5 @@ class PagerFragmentPresenter(view: BaseView): BasePresenter(view) {
 
     init {
         infoStore = app.informationStore
-        val currentUser = infoStore.getCurrentUser()
-        if(!currentUser.user.loggedIn){
-            val action = PagerFragmentViewDirections.actionPagerFragmentToStartFragment()
-            view.findNavController().navigate(action)
-        }else{
-            doAsync {
-                infoStore.updateUserInfo(currentUser.user)
-                onComplete {
-                    doAsync {
-                        infoStore.getFollowingData()
-                        onComplete {
-                            doAsync {
-                                infoStore.getPostData()
-                            }
-                        }
-                    }
-                    doAsync {
-                        infoStore.getCupboardData()
-                    }
-                    doAsync {
-                        infoStore.getBasketData()
-                    }
-                    doAsync {
-                        infoStore.getUserPostData()
-                    }
-                }
-            }
-        }
-
     }
 }
