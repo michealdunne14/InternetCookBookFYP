@@ -362,6 +362,37 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         return cupboardData
     }
 
+    fun searchCupboard(query: CharSequence?): ArrayList<FoodMasterModel> {
+        val searchedPosts = ArrayList<FoodMasterModel>()
+        for(marks in cupboardData){
+            if (marks.food.name.contains(query!!)){
+                searchedPosts.add(marks)
+            }
+        }
+        return searchedPosts
+    }
+
+
+    fun searchBasket(query: CharSequence?): ArrayList<FoodMasterModel> {
+        val searchedPosts = ArrayList<FoodMasterModel>()
+        for(marks in basketData){
+            if (marks.food.name.contains(query!!)){
+                searchedPosts.add(marks)
+            }
+        }
+        return searchedPosts
+    }
+
+    fun searchFollowing(query: CharSequence?): ArrayList<UserMasterModel> {
+        val searchedPosts = ArrayList<UserMasterModel>()
+        for(marks in followingData){
+            if (marks.user.name.contains(query!!)){
+                searchedPosts.add(marks)
+            }
+        }
+        return searchedPosts
+    }
+
     fun uploadImages(oid: String, listofImages: ArrayList<String>) {
         //        val file = File(listofImages[0])
 //        val requestBody: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)

@@ -7,7 +7,6 @@ import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
 
 class ItemFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app : MainApp = view.activity?.application as MainApp
@@ -30,4 +29,15 @@ class ItemFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return infoStore!!.findCupboardData()
     }
 
+    fun doSearchCupboard(characterSearch: CharSequence?): ArrayList<FoodMasterModel>{
+        return infoStore!!.searchCupboard(characterSearch)
+    }
+
+    fun doSearchBasket(characterSearch: CharSequence?): ArrayList<FoodMasterModel>{
+        return infoStore!!.searchBasket(characterSearch)
+    }
+
+    fun doSearchFollowers(characterSearch: CharSequence?): ArrayList<UserMasterModel>{
+        return infoStore!!.searchFollowing(characterSearch)
+    }
 }
