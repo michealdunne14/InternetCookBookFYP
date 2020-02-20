@@ -140,7 +140,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     }
 
     override fun showInformation(homeData: ArrayList<DataModel>) {
-        homeView.mListRecyclerView.adapter = CardAdapter(homeData, this)
+        homeView.mListRecyclerView.adapter = CardAdapter(homeData, presenter)
         homeView.mListRecyclerView.adapter?.notifyDataSetChanged()
     }
 

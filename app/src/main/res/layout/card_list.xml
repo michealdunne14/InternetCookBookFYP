@@ -63,7 +63,7 @@
         android:id="@+id/mCardIngredients"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton2"
+        app:layout_constraintBottom_toTopOf="@+id/mHeartButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -84,7 +84,7 @@
         app:srcCompat="@android:drawable/ic_menu_send" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/mHeartButton"
         android:layout_width="@dimen/dimension50"
         android:layout_height="0dp"
         android:background="@null"
@@ -125,7 +125,7 @@
         android:layout_height="wrap_content"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton2"
+        app:layout_constraintStart_toEndOf="@+id/mHeartButton"
         app:srcCompat="@drawable/baseline_details_black_36" />
 
     <TextView

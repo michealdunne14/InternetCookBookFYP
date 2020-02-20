@@ -37,9 +37,6 @@
         <action
             android:id="@+id/action_pagerFragment_to_friendFragmentView"
             app:destination="@id/friendFragmentView" />
-        <action
-            android:id="@+id/action_pagerFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -91,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/ingredientsFragment"
-        android:name="com.example.internetcookbook.ingredients.IngredientsFragment"
+        android:name="com.example.internetcookbook.ingredients.IngredientsFragmentView"
         android:label="fragment_ingredients"
         tools:layout="@layout/fragment_ingredients" />
     <fragment
@@ -116,6 +113,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_pagerFragment"
             app:destination="@id/pagerFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -138,11 +138,11 @@
         tools:layout="@layout/fragment_friend" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.internetcookbook.profile.ProfileFragment"
+        android:name="com.example.internetcookbook.profile.ProfileFragmentView"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profileFragment_to_pagerFragment"
-            app:destination="@id/pagerFragment" />
+            android:id="@+id/action_profileFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 </navigation>

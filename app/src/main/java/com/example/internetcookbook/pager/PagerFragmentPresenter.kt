@@ -36,6 +36,9 @@ class PagerFragmentPresenter(view: BaseView): BasePresenter(view) {
                     doAsync {
                         infoStore.getBasketData()
                     }
+                    doAsync {
+                        infoStore.getUserPostData()
+                    }
                 }
             }
         }

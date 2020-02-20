@@ -18,5 +18,7 @@ open class BasePresenter(var view: BaseView) {
 
     }
 
+    open fun doHeartData(id: String){}
+
 //    open fun doCreateNote(fireStore: HillfortFireStore?, note: String, hillfort: HillFortModel){}
 }

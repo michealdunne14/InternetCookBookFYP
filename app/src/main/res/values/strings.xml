@@ -34,6 +34,7 @@
     <string name="basket">Basket</string>
     <string name="following">Following</string>
     <string name="enter_shop">Enter Shop</string>
+    <string name="search">Search</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>
