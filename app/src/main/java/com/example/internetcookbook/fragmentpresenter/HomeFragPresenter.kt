@@ -38,4 +38,10 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     fun doFindHomeData(){
         view.showInformation(infoStore!!.getHomeData())
     }
+
+    override fun doHeartData(id: String) {
+        doAsync {
+            infoStore!!.putHeart(id)
+        }
+    }
 }

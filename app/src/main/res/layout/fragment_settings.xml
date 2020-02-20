@@ -16,20 +16,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <ImageButton
+            android:id="@+id/mProfileFragment"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@null"
+            app:srcCompat="@drawable/outline_person_black_36" />
 
-
-            <ImageButton
-                android:id="@+id/mReturnButton"
-                app:srcCompat="@drawable/baseline_arrow_back_black_36"
-                android:layout_width="@dimen/dimension50"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:background="@null"/>
-
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/mReturnButton"
+            android:layout_width="@dimen/dimension50"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/baseline_arrow_back_black_36" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

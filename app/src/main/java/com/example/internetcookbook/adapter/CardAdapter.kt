@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
-import com.example.internetcookbook.adapter.IngredientsAdapter
+import com.example.internetcookbook.base.BasePresenter
+import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.DataModel
-import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import com.google.android.material.snackbar.Snackbar
@@ -31,7 +31,7 @@ interface PostListener {
 
 class CardAdapter(
     private var posts: ArrayList<DataModel>,
-    private val listener: PostListener
+    private val presenter: BasePresenter
 ) : RecyclerView.Adapter<CardAdapter.MainHolder>() {
 
 
@@ -50,15 +50,22 @@ class CardAdapter(
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val postModel = posts[holder.adapterPosition]
-        holder.bind(postModel,listener)
+        holder.bind(postModel,presenter)
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         private var showDetails = false
-        fun bind(dataModel: DataModel, listener: PostListener) {
+        fun bind(
+            dataModel: DataModel,
+            presenter: BasePresenter
+        ) {
             itemView.mCardName.text = dataModel.post.title
             itemView.mCardDescription.text = dataModel.post.description
-            itemView.mCardImageList
+
+            itemView.mHeartButton.setOnClickListener {
+                presenter.doHeartData(dataModel.post._id)
+            }
+
             val bitmapImages = readBit64ImageArrayList(dataModel)
             doFindImages(bitmapImages)
 
@@ -75,25 +82,10 @@ class CardAdapter(
                 Snackbar.make(itemView,"Saved on Profile Page", Snackbar.LENGTH_SHORT).show()
             }
 
-            val foodModelArrayList = ArrayList<FoodModel>()
-
             // Inflate the layout for this fragment
             val layoutManager = LinearLayoutManager(itemView.context)
 
             itemView.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
-
-//
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            foodModelArrayList.add(FoodModel("Food"))
-//            itemView.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
-//            itemView.mCardIngredients.adapter?.notifyDataSetChanged()
-
 
             itemView.mMakeFood.setOnClickListener {
                 val action = PagerFragmentViewDirections.actionPagerFragmentToMakeFragment(dataModel)
@@ -105,8 +97,8 @@ class CardAdapter(
                 itemView.findNavController().navigate(action)
             }
             itemView.mPostName.setOnClickListener {
-                val action = PagerFragmentViewDirections.actionPagerFragmentToProfileFragment()
-                itemView.findNavController().navigate(action)
+//                val action = PagerFragmentViewDirections.actionPagerFragmentToProfileFragment()
+//                itemView.findNavController().navigate(action)
             }
         }
 

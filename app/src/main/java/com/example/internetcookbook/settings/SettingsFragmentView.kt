@@ -31,6 +31,11 @@ class SettingsFragmentView:BaseView() {
             view.findNavController().navigate(action)
         }
 
+        view.mProfileFragment.setOnClickListener {
+            val action = SettingsFragmentViewDirections.actionSettingsFragmentToProfileFragment()
+            view.findNavController().navigate(action)
+        }
+
         view.mLogoutButton.setOnClickListener {
             presenter.doLogout()
             val action = SettingsFragmentViewDirections.actionSettingsFragmentToStartFragment()

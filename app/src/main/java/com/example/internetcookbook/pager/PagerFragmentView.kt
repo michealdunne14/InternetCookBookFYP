@@ -90,6 +90,8 @@ class PagerFragmentView : BaseView(), AnkoLogger {
         }
     }
 
+
+
     private fun initTabLayout(view: View) {
         pagerAdapter = TabsPagerAdapter(activity!!.supportFragmentManager)
         val viewPager = view.view_pager

@@ -19,6 +19,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var userMaster = UserMasterModel()
     var imageArrayList = ArrayList<Bitmap>()
     var postData = ArrayList<DataModel>()
+    var userPostData = ArrayList<DataModel>()
     var cupboardData = ArrayList<FoodMasterModel>()
     var basketData = ArrayList<FoodMasterModel>()
     var basket = ArrayList<FoodMasterModel>()
@@ -46,32 +47,6 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val jsonString = read(context, JSON_FILE)
         userLocalStore = Gson().fromJson(jsonString, listType)
     }
-
-//    fun emailSearch(userModel: UserModel) {
-//        val request = Request.Builder()
-//            .url("http://52.51.34.156:3000/user/email/${userModel.email}")
-//            .build()
-//
-//        client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                e.printStackTrace()
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                response.use {
-//                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-//
-//                    val body = response.body!!.string()
-//                    val gsonBuilder = GsonBuilder()
-//                    val gson = gsonBuilder.create()
-//
-//                    val emailSearch: Array<UserModel> =
-//                        gson.fromJson<Array<UserModel>>(body, Array<UserModel>::class.java)
-//                    emailSearchArray = emailSearch
-//                }
-//            }
-//        })
-//    }
 
     fun findEmail(userModel: UserModel): UserMasterModel? {
         if (internetConnection) {
@@ -200,6 +175,33 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    fun getUserPostData() {
+        userPostData.clear()
+        lateinit var dataArray: DataModel
+        if (internetConnection) {
+            for (post in userMaster.user.posts) {
+                val request = Request.Builder()
+                    .url("http://52.51.34.156:3000/post/id/${post?.postoid}")
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+
+                    val body = response.body!!.string()
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    dataArray = gson.fromJson(body, DataModel::class.java)
+                    userPostData.add(dataArray)
+                }
+            }
+        }
+    }
+
+    fun getProfileUserData(): ArrayList<DataModel> {
+        return userPostData
+    }
+
     fun findItem(item: String): FoodMasterModel? {
         val request = Request.Builder()
             .url("http://52.51.34.156:3000/food/name/${item}")
@@ -222,6 +224,16 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
     fun getHomeData(): ArrayList<DataModel> {
         return postData
+    }
+
+    fun putHeart(id: String) {
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/post/heart/${id}")
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+        }
     }
 
     fun getPostData(){

@@ -3,7 +3,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.ProfileFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".profile.ProfileFragmentView">
 
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/mProfileRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintFragmentSettings"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/colorWhite"
+                android:fitsSystemWindows="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                <ImageButton
+                    android:id="@+id/mProfileReturnButton"
+                    android:layout_width="@dimen/dimension50"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:background="@null"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/baseline_arrow_back_black_36" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/mProfilePicture"
+                android:layout_width="match_parent"
+                android:layout_height="255dp"
+                android:src="@drawable/baseline_comment_black_18" />
+
+            <TextView
+                android:id="@+id/mProfileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dimension20sp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/mProfileEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dimension20sp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/mProfileUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dimension20sp"
+                android:text="TextView" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mProfileRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,7 +39,7 @@ class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 //        showImagePicker(fragment,IMAGE_REQUEST)
         var images = ""
         doAsync {
-            infoStore!!.getPostData()!!
+            infoStore!!.getPostData()
             onComplete {
 //                listofImages.add(images)
 //                view.addImages(listofImages)
