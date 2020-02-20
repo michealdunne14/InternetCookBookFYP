@@ -10,7 +10,7 @@ import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.ingredients_list.view.*
 import kotlinx.android.synthetic.main.make_items.view.*
 
-class MakeAdapter(private var makeArrayList: ArrayList<PostModel>) : RecyclerView.Adapter<MakeAdapter.MainHolder>() {
+class MakeAdapter(private var makeArrayList: ArrayList<String>) : RecyclerView.Adapter<MakeAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         return MainHolder(
@@ -31,8 +31,8 @@ class MakeAdapter(private var makeArrayList: ArrayList<PostModel>) : RecyclerVie
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bind(postModel: PostModel) {
-            itemView.mMakeMethod.text = "hijksalddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdddddddddddddddddddd"
+        fun bind(value: String) {
+            itemView.mMakeMethod.text = value
         }
     }
 

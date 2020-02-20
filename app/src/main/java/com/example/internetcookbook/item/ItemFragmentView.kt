@@ -43,6 +43,10 @@ class ItemFragmentView : BaseView() {
         presenter = initPresenter(ItemFragmentPresenter(this)) as ItemFragmentPresenter
         itemView = view
 
+        showFollowers(presenter.doFindFollowers())
+        showIngredients(presenter.doFindBasket())
+        showCupboard(presenter.doFindCupboard())
+
         itemView.mSearchCupboardItem.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
 
@@ -86,14 +90,6 @@ class ItemFragmentView : BaseView() {
         val navView: BottomNavigationView = view.findViewById(R.id.itemBottomNav)
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         return view
-    }
-
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        if (isVisibleToUser) {
-            showFollowers(presenter.doFindFollowers())
-            showIngredients(presenter.doFindBasket())
-            showCupboard(presenter.doFindCupboard())
-        }
     }
 
     //  Navigating to the correct selected Item
