@@ -26,13 +26,6 @@ class PagerFragmentView : BaseView(), AnkoLogger {
     lateinit var presenter: PagerFragmentPresenter
     lateinit var pagerAdapter: TabsPagerAdapter
 
-
-
-    interface ViewCreatedListener : Serializable {
-        fun invoke()
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,19 +66,19 @@ class PagerFragmentView : BaseView(), AnkoLogger {
     }
 
     private fun initAdapter() {
-        fragmentManager?.let { fragmentManager ->
-            val callback = object :
-                ViewCreatedListener {
-                override fun invoke() {
-                    startPostponedEnterTransition()
-                }
-            }
-
-            SampleFragmentPagerAdapter(context, fragmentManager, callback).also {
-                view_pager.adapter = it
-                view_pager.currentItem = 1
-            }
-        }
+//        fragmentManager?.let { fragmentManager ->
+////            val callback = object :
+////                ViewCreatedListener {
+////                override fun invoke() {
+//////                    startPostponedEnterTransition()
+////                }
+////            }
+//
+//            SampleFragmentPagerAdapter(context, fragmentManager, callback).also {
+//                view_pager.adapter = it
+//                view_pager.currentItem = 1
+//            }
+//        }
     }
 
 
