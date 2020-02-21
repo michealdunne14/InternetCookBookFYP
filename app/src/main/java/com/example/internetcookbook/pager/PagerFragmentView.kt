@@ -40,7 +40,7 @@ class PagerFragmentView : BaseView(), AnkoLogger {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_pager, container, false)
         presenter = initPresenter(PagerFragmentPresenter(this)) as PagerFragmentPresenter
-        handleTransition()
+//        handleTransition()
         initTabLayout(view)
 
         view.view_pager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener{
@@ -53,11 +53,9 @@ class PagerFragmentView : BaseView(), AnkoLogger {
                 position: Int,
                 positionOffset: Float,
                 positionOffsetPixels: Int
-            ) {
-            }
+            ) {}
 
-            override fun onPageSelected(position: Int) {
-            }
+            override fun onPageSelected(position: Int) {}
 
         })
         return view
@@ -70,8 +68,8 @@ class PagerFragmentView : BaseView(), AnkoLogger {
     }
 
     private fun handleTransition() {
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        postponeEnterTransition()
+//        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+//        postponeEnterTransition()
     }
 
     private fun initAdapter() {

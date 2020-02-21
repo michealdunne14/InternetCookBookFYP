@@ -51,11 +51,12 @@ class PostFragmentView : BaseView(),AnkoLogger {
         view.mPostButton.setOnClickListener {
             postModel.title = view.mPostTitle.text.toString()
             postModel.description = view.mPostDescription.text.toString()
-            presenter.doPostRecipe(postModel)
+            presenter.doPostRecipe(postModel,methodStepsArrayList)
         }
 
         view.mReturnButton.setOnClickListener {
-            !postView.findNavController().navigateUp()
+            val action = PostFragmentViewDirections.actionPostFragment2ToPagerFragment()
+            view.findNavController().navigate(action)
         }
 
         view.mIngredientsButton.setOnClickListener {
@@ -111,13 +112,6 @@ class PostFragmentView : BaseView(),AnkoLogger {
         postView.mPostMethodRecyclerView.adapter = MakeAdapter(listofMethods)
         postView.mPostMethodRecyclerView.adapter?.notifyDataSetChanged()
     }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if(data != null){
-//            presenter.doActivityResult(requestCode,resultCode,data,postView.context)
-//        }
-//    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

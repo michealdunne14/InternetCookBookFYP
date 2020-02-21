@@ -1,5 +1,6 @@
 package com.example.internetcookbook.register
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -70,5 +71,12 @@ class RegisterFragmentView : BaseView() {
 
     override fun setProfileImage(image: Bitmap?){
         registerView.mRegisterProfilePic.setImageBitmap(image)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(data != null){
+            presenter.doActivityResult(requestCode,resultCode,data,registerView.context)
+        }
     }
 }

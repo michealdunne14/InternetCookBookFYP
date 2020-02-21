@@ -21,10 +21,9 @@ class MainView : AppCompatActivity(), LifecycleOwner {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        for (fragment in supportFragmentManager.primaryNavigationFragment!!.childFragmentManager.fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-    }
 }

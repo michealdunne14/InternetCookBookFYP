@@ -227,13 +227,29 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     fun putHeart(id: String) {
+
         val request = Request.Builder()
             .url("http://52.51.34.156:3000/post/heart/${id}")
             .build()
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            val body = response.body!!.string()
         }
+    }
+
+
+    fun putMethod(id: String,step: String): String {
+        val formBody: RequestBody = FormBody.Builder()
+            .add("methodStep", step).build()
+
+        val request: Request = Request.Builder()
+            .url("http://52.51.34.156:3000/post/method/${id}")
+            .post(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response -> return response.body!!.toString() }
     }
 
     fun getPostData(){
@@ -332,7 +348,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         if (internetConnection) {
             for (following in userMaster.user.following) {
                 val request = Request.Builder()
-                    .url("http://52.51.34.156:3000/user/id/${following?.followingoid}")
+                    .url("http://52.51.34.156:3000/user/id/${following.followingoid}")
                     .build()
 
                 client.newCall(request).execute().use { response ->
