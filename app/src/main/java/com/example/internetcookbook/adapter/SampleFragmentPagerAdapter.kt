@@ -12,13 +12,13 @@ import com.example.internetcookbook.pager.PagerFragmentView
 
 class SampleFragmentPagerAdapter(
     private val context: Context?,
-    fragmentManager: FragmentManager,
-    callback: PagerFragmentView.ViewCreatedListener
+    fragmentManager: FragmentManager
+//    callback: PagerFragmentView.ViewCreatedListener
 ) : FragmentStatePagerAdapter(fragmentManager) {
 
     private val fragmentList = listOf(
         CameraFragmentView(),
-        HomeFragmentView.newInstance(callback),
+//        HomeFragmentView.newInstance(callback),
         ItemFragmentView()
     )
 

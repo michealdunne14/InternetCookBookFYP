@@ -85,7 +85,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
 
 
         view.mAddImage.setOnClickListener {
-            presenter.doSelectImage(this)
+            presenter.doSelectImage()
         }
 
         return view
@@ -116,14 +116,8 @@ class PostFragmentView : BaseView(),AnkoLogger {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
-            try {
-                val bundle = data!!.extras
-                val bitmap = bundle!!.getParcelable<Bitmap>("data")
-//                img_user.setImageBitmap(bitmap)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        if(data != null){
+            presenter.doActivityResult(requestCode,resultCode,data,postView.context)
         }
     }
 

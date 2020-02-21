@@ -209,7 +209,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         homeView.mScanBarcodeButton.setOnClickListener {
 //            mScanBarCode(viewFinder.bitmap)
-            presenter.doSelectImage(this)
+            presenter.doSelectImage()
         }
 
         // Setup image analysis pipeline that computes average pixel luminance

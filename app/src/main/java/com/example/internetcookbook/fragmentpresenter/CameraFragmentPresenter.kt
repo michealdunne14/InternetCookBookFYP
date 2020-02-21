@@ -21,8 +21,8 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         infoStore = app.informationStore as InformationStore
     }
 
-    fun doSelectImage(fragment: BaseView) {
-        showImagePicker(fragment,IMAGE_REQUEST)
+    fun doSelectImage() {
+        showImagePicker(view,IMAGE_REQUEST)
     }
 
     override fun doActivityResult(requestCode: Int, resultCode: Int, data: Intent?, context: Context) {

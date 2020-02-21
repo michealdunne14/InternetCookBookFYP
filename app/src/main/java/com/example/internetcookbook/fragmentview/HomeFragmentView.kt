@@ -38,14 +38,14 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
         private const val CALLBACK_FUNC = "callback"
 
-        fun newInstance(callback: PagerFragmentView.ViewCreatedListener): HomeFragmentView {
-            return HomeFragmentView().apply {
-                arguments = bundleOf(CALLBACK_FUNC to callback)
-            }
-        }
+//        fun newInstance(callback: PagerFragmentView.ViewCreatedListener): HomeFragmentView {
+//            return HomeFragmentView().apply {
+//                arguments = bundleOf(CALLBACK_FUNC to callback)
+//            }
+//        }
     }
 
-    private lateinit var callback: PagerFragmentView.ViewCreatedListener
+//    private lateinit var callback: PagerFragmentView.ViewCreatedListener
     private var show = false
     private var time = false
     private var item = false
@@ -55,9 +55,9 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.getSerializable(CALLBACK_FUNC)?.let {
-            callback = it as PagerFragmentView.ViewCreatedListener
-        }
+//        arguments?.getSerializable(CALLBACK_FUNC)?.let {
+//            callback = it as PagerFragmentView.ViewCreatedListener
+//        }
     }
 
 
@@ -74,7 +74,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)
 
-        callback.invoke()
+//        callback.invoke()
         view.mListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
         swipeRefreshLayout.setOnRefreshListener(this)
