@@ -22,15 +22,28 @@ class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         infoStore = app.informationStore as InformationStore
     }
 
-    fun doPostRecipe(postModel: PostModel) {
-//        postModel.data = listofImages
+    fun doPostRecipe(
+        postModel: PostModel,
+        methodStepsArrayList: ArrayList<String>
+    ) {
         doAsync {
             infoStore!!.createPost(postModel)!!
             onComplete {
                 doAsync {
                     infoStore!!.uploadImages(oid,listofImages)
                 }
+                for(methodSteps in methodStepsArrayList) {
+                    doAsync {
+                        infoStore!!.putMethod(oid, methodSteps)
+                    }
+                }
             }
+        }
+    }
+
+    fun doPutMethod(methodSteps: String, _id: String) {
+        doAsync {
+            infoStore!!.putMethod(_id,methodSteps)
         }
     }
 
