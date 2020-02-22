@@ -78,11 +78,11 @@ class MakeFragmentView : BaseView() {
 
 //        foodModelArrayList.add(FoodModel("Food"))
 //        foodModelArrayList.add(FoodModel("Food"))
-////
-//
+
+
 //        view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
 //        view.mCardIngredients.adapter?.notifyDataSetChanged()
-
+        postModel.method.reverse()
         view.mMakeList.adapter = MakeAdapterWithModel(postModel.method)
         view.mMakeList.adapter?.notifyDataSetChanged()
 

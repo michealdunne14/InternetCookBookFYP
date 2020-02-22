@@ -19,6 +19,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.create
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -231,19 +232,23 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     fun getHomeData(): ArrayList<DataModel> {
+        postData.reverse()
         return postData
     }
 
     fun putHeart(id: String) {
 
+        val formBody: RequestBody = FormBody.Builder().build()
+
         val request = Request.Builder()
             .url("http://52.51.34.156:3000/post/heart/${id}")
+            .put(formBody)
             .build()
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-            val body = response.body!!.string()
+           print(response.body!!.string())
         }
     }
 
@@ -254,7 +259,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
         val request: Request = Request.Builder()
             .url("http://52.51.34.156:3000/post/method/${id}")
-            .post(formBody)
+            .put(formBody)
             .build()
 
         client.newCall(request).execute().use { response -> print(response.body!!.toString()) }
