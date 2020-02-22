@@ -1,9 +1,12 @@
 package com.example.internetcookbook.network
 
+import android.R
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.example.internetcookbook.helper.exists
 import com.example.internetcookbook.helper.read
+import com.example.internetcookbook.helper.readImageFromPath
 import com.example.internetcookbook.helper.write
 import com.example.internetcookbook.models.*
 import com.google.gson.Gson
@@ -12,6 +15,11 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import okio.IOException
 import kotlin.collections.ArrayList
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.create
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.util.concurrent.TimeUnit
 
 
 class InformationStore(val context: Context, val internetConnection: Boolean) {
@@ -409,41 +417,57 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         return searchedPosts
     }
 
-    fun uploadImages(oid: String, listofImages: ArrayList<String>) {
-        //        val file = File(listofImages[0])
-//        val requestBody: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-//            .addFormDataPart("imageFiles", listofImages[0], RequestBody.create(MEDIA_TYPE_PNG, file))
-//            .build()
-//
-//        val request = Request.Builder()
-//            .url(" http://52.51.34.156:3000/post/upload/${oid}")
-//            .post(requestBody)
-//            .build()
-//
-//        client.newCall(request).execute().use { response ->
-//            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-//
-//            println(response.body!!.string())
-//        }
+    private val MEDIA_TYPE_PNG = "image/png".toMediaType()
 
+    fun uploadImages(oid: String, listofImages: ArrayList<String>) {
+        val file = File(listofImages[0])
+
+        for(i in listofImages) {
+            val bitmap = readImageFromPath(context, i)
+            val stream = ByteArrayOutputStream()
+            bitmap!!.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val byteArray: ByteArray = stream.toByteArray()
+
+            val requestBody: RequestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("imageFiles", "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())}.png", create(MEDIA_TYPE_PNG, byteArray))
+                .build()
+
+            val request = Request.Builder()
+                .url("http://52.51.34.156:3000/post/upload/${oid}")
+                .post(requestBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                println(response.body!!.string())
+            }
+        }
     }
 
 
-    fun createPost(postModel: PostModel): String? {
+    fun createPost(postModel: PostModel): PostModel? {
         val formBody: RequestBody = FormBody.Builder()
             .add("title", postModel.title)
-            .add("description", postModel.description)
-            .add("useroid", userMaster.user.oid).build()
+            .add("description", postModel.description).build()
 
         val request: Request = Request.Builder()
-            .url("http://52.51.34.156:3000/post/create")
+            .url("http://52.51.34.156:3000/post/create/${userMaster.user.oid}")
             .post(formBody)
             .build()
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-            return response.body!!.string()
+
+            val body = response.body!!.string()
+            val gsonBuilder = GsonBuilder()
+            val gson = gsonBuilder.create()
+
+            val data = gson.fromJson(body, PostModel::class.java)
+            return data
+
         }
     }
 
