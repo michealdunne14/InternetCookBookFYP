@@ -27,4 +27,5 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun showFollowers(listofFollowers: ArrayList<UserMasterModel>){}
     open fun showCupboard(listofCupboard: ArrayList<FoodMasterModel>){}
     open fun showInformation(homeData: ArrayList<DataModel>) {}
+    open fun returnToPager(){}
 }

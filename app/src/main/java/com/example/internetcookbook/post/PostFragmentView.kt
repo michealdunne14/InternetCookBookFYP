@@ -3,6 +3,7 @@ package com.example.internetcookbook.post
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,8 @@ import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_ingredients.view.*
 import kotlinx.android.synthetic.main.fragment_post.view.*
 import org.jetbrains.anko.AnkoLogger
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 class PostFragmentView : BaseView(),AnkoLogger {
 
@@ -55,8 +58,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
         }
 
         view.mReturnButton.setOnClickListener {
-            val action = PostFragmentViewDirections.actionPostFragment2ToPagerFragment()
-            view.findNavController().navigate(action)
+            returnToPager()
         }
 
         view.mIngredientsButton.setOnClickListener {
@@ -119,6 +121,11 @@ class PostFragmentView : BaseView(),AnkoLogger {
         if(data != null){
             presenter.doActivityResult(requestCode,resultCode,data,postView.context)
         }
+    }
+
+    override fun returnToPager(){
+        val action = PostFragmentViewDirections.actionPostFragment2ToPagerFragment()
+        postView.findNavController().navigate(action)
     }
 
 

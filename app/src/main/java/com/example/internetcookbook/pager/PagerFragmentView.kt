@@ -33,7 +33,6 @@ class PagerFragmentView : BaseView(), AnkoLogger {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_pager, container, false)
         presenter = initPresenter(PagerFragmentPresenter(this)) as PagerFragmentPresenter
-//        handleTransition()
         initTabLayout(view)
 
         view.view_pager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener{
