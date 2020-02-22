@@ -49,23 +49,8 @@ class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
-    fun doPutMethod(methodSteps: String, _id: String) {
-        doAsync {
-            infoStore!!.putMethod(_id,methodSteps)
-        }
-    }
-
-
     fun doSelectImage() {
         showImagePicker(view,IMAGE_REQUEST)
-//        var images = ""
-//        doAsync {
-//            infoStore!!.getPostData()
-//            onComplete {
-////                listofImages.add(images)
-////                view.addImages(listofImages)
-//            }
-//        }
     }
 
     //  When a result comes back

@@ -248,7 +248,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
 
-    fun putMethod(id: String,step: String): String {
+    fun putMethod(id: String,step: String) {
         val formBody: RequestBody = FormBody.Builder()
             .add("methodStep", step).build()
 
@@ -257,7 +257,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .post(formBody)
             .build()
 
-        client.newCall(request).execute().use { response -> return response.body!!.toString() }
+        client.newCall(request).execute().use { response -> print(response.body!!.toString()) }
     }
 
     fun getPostData(){
