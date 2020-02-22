@@ -16,8 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
-import com.example.internetcookbook.adapter.IngredientsAdapter
-import com.example.internetcookbook.adapter.MakeAdapter
+import com.example.internetcookbook.adapter.MakeAdapterWithModel
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.FoodModel
@@ -84,9 +83,7 @@ class MakeFragmentView : BaseView() {
 //        view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
 //        view.mCardIngredients.adapter?.notifyDataSetChanged()
 
-//        for (post in postModelArrayList){
-//            view.mMakeList.adapter = MakeAdapter(post.method)
-//        }
+        view.mMakeList.adapter = MakeAdapterWithModel(postModel.method)
         view.mMakeList.adapter?.notifyDataSetChanged()
 
 // Create an ArrayAdapter using the string array and a default spinner layout
