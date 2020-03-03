@@ -54,7 +54,7 @@
         android:layout_alignParentBottom="true"
         android:ems="10"
         android:fontFamily="@font/quicksand"
-        android:hint="Note"
+        android:hint="Comment"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/mCardIngredients"
         app:layout_constraintEnd_toStartOf="@+id/mCardSendButton"

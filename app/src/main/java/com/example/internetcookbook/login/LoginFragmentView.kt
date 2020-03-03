@@ -2,25 +2,15 @@ package com.example.internetcookbook.login
 
 import android.os.Bundle
 import android.transition.TransitionInflater
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
-import androidx.transition.ChangeBounds
 import com.example.internetcookbook.R
-import com.example.internetcookbook.adapter.SampleFragmentPagerAdapter
 import com.example.internetcookbook.base.BaseView
-import com.example.internetcookbook.fragmentview.HomeFragmentView
 import com.example.internetcookbook.models.UserModel
-import com.example.internetcookbook.pager.PagerFragmentView
-import com.example.internetcookbook.register.RegisterFragmentPresenter
-import com.example.internetcookbook.register.RegisterFragmentViewDirections
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login.view.*
-import kotlinx.android.synthetic.main.fragment_pager.*
 import java.io.Serializable
 
 class LoginFragmentView : BaseView() {
@@ -55,7 +45,7 @@ class LoginFragmentView : BaseView() {
             }
         }
 
-        view.mRegisterReturnButton.setOnClickListener {
+        view.mLoginReturnButton.setOnClickListener {
             val action = LoginFragmentViewDirections.actionLoginFragmentViewToStartFragment()
             view.findNavController().navigate(action)
         }

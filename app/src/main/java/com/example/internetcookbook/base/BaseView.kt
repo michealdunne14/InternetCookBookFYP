@@ -24,7 +24,7 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun addImageToCamera(stringData: String) {}
     open fun setProfileImage(image: Bitmap?){}
     open fun showIngredients(listofIngredients: ArrayList<FoodMasterModel>){}
-    open fun showFollowers(listofFollowers: ArrayList<UserMasterModel>){}
+    open fun showFollowers(userMasterModel: ArrayList<UserMasterModel>){}
     open fun showCupboard(listofCupboard: ArrayList<FoodMasterModel>){}
     open fun showInformation(homeData: ArrayList<DataModel>) {}
     open fun returnToPager(){}

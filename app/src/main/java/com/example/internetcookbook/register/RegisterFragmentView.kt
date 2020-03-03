@@ -13,7 +13,7 @@ import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.UserModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_register.view.*
-import kotlinx.android.synthetic.main.fragment_register.view.mRegisterReturnButton
+import kotlinx.android.synthetic.main.fragment_register.view.mLoginReturnButton
 import java.util.*
 
 class RegisterFragmentView : BaseView() {
@@ -62,7 +62,7 @@ class RegisterFragmentView : BaseView() {
             }
         }
 
-        view.mRegisterReturnButton.setOnClickListener {
+        view.mLoginReturnButton.setOnClickListener {
             val action = RegisterFragmentViewDirections.actionRegisterFragmentToStartFragment()
             view.findNavController().navigate(action)
         }

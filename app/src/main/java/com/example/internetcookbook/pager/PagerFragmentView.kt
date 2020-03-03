@@ -53,35 +53,6 @@ class PagerFragmentView : BaseView(), AnkoLogger {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initAdapter()
-    }
-
-    private fun handleTransition() {
-//        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-//        postponeEnterTransition()
-    }
-
-    private fun initAdapter() {
-//        fragmentManager?.let { fragmentManager ->
-////            val callback = object :
-////                ViewCreatedListener {
-////                override fun invoke() {
-//////                    startPostponedEnterTransition()
-////                }
-////            }
-//
-//            SampleFragmentPagerAdapter(context, fragmentManager, callback).also {
-//                view_pager.adapter = it
-//                view_pager.currentItem = 1
-//            }
-//        }
-    }
-
-
-
     private fun initTabLayout(view: View) {
         pagerAdapter = TabsPagerAdapter(activity!!.supportFragmentManager)
         val viewPager = view.view_pager
