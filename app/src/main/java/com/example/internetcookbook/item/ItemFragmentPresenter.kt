@@ -3,6 +3,7 @@ package com.example.internetcookbook.item
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.models.FollowListModel
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.network.InformationStore

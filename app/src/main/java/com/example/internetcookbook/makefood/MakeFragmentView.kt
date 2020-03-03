@@ -66,9 +66,9 @@ class MakeFragmentView : BaseView() {
         val images = MakeFragmentViewArgs.fromBundle(arguments!!).dataModel
 
         val layoutManager = LinearLayoutManager(context)
-        view.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        view.mCardIngredients.layoutManager = layoutManager
         val makeLayoutManager = LinearLayoutManager(context)
-        view.mMakeList.layoutManager = makeLayoutManager as RecyclerView.LayoutManager?
+        view.mMakeList.layoutManager = makeLayoutManager
         makeView = view
         makeView.mMakeName.text = postModel.title
         makeView.mMakeDescription.text = postModel.description
@@ -82,6 +82,7 @@ class MakeFragmentView : BaseView() {
 
 //        view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
 //        view.mCardIngredients.adapter?.notifyDataSetChanged()
+
         postModel.method.reverse()
         view.mMakeList.adapter = MakeAdapterWithModel(postModel.method)
         view.mMakeList.adapter?.notifyDataSetChanged()

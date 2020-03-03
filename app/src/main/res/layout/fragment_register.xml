@@ -38,14 +38,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sign_up"
-        app:layout_constraintBottom_toTopOf="@+id/mRegisterReturnButton"
+        app:layout_constraintBottom_toTopOf="@+id/mLoginReturnButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mRegisterProfilePic" />
 
     <Button
-        android:id="@+id/mRegisterReturnButton"
+        android:id="@+id/mLoginReturnButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/return_string"

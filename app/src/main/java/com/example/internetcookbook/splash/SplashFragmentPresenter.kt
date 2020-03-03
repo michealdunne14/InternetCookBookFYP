@@ -9,6 +9,7 @@ import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
+import org.jetbrains.anko.uiThread
 
 class SplashFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app: MainApp = view.activity?.application as MainApp
@@ -29,24 +30,21 @@ class SplashFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                 onComplete {
                     doAsync {
                         infoStore!!.getFollowingData()
-                        onComplete {
-                            doAsync {
-                                infoStore!!.getPostData()
-                                onComplete {
-                                    val action = SplashFragmentViewDirections.actionSplashFragmentToPagerFragment()
-                                    view.findNavController().navigate(action)
-                                }
-                            }
-                        }
                     }
+
                     doAsync {
                         infoStore!!.getCupboardData()
                     }
                     doAsync {
                         infoStore!!.getBasketData()
                     }
+
                     doAsync {
-                        infoStore!!.getUserPostData()
+                        infoStore!!.getPostData()
+                        uiThread {
+                            val action = SplashFragmentViewDirections.actionSplashFragmentToPagerFragment()
+                            view.findNavController().navigate(action)
+                        }
                     }
                 }
             }

@@ -11,6 +11,7 @@ import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.FollowerAdapter
 import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.models.FollowListModel
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.UserMasterModel
@@ -132,10 +133,10 @@ class ItemFragmentView : BaseView() {
         itemView.mCupboardRecyclerView.adapter?.notifyDataSetChanged()
     }
 
-    override fun showFollowers(listofFollowers: ArrayList<UserMasterModel>){
+    override fun showFollowers(userMasterModel: ArrayList<UserMasterModel>){
         val layoutManager = LinearLayoutManager(context)
         itemView.mFollowerRecyclerView.layoutManager = layoutManager
-        itemView.mFollowerRecyclerView.adapter = FollowerAdapter(listofFollowers)
+        itemView.mFollowerRecyclerView.adapter = FollowerAdapter(userMasterModel)
         itemView.mFollowerRecyclerView.adapter?.notifyDataSetChanged()
     }
 

@@ -6,11 +6,6 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.example.internetcookbook.fragmentview.CameraFragmentView
 import com.example.internetcookbook.models.FoodModel
-import kotlinx.android.synthetic.main.activity_custom.*
-import kotlinx.android.synthetic.main.camera_show.*
-import kotlinx.android.synthetic.main.camera_show.view.*
-import kotlinx.android.synthetic.main.fragment_camera.*
-import kotlinx.android.synthetic.main.fragment_camera.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 

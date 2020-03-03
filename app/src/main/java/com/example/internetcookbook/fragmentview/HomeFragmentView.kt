@@ -20,6 +20,7 @@ import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
 import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
+import kotlinx.android.synthetic.main.card_list.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
@@ -34,16 +35,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
 
     lateinit var homeView: View
-    companion object {
-
-        private const val CALLBACK_FUNC = "callback"
-
-//        fun newInstance(callback: PagerFragmentView.ViewCreatedListener): HomeFragmentView {
-//            return HomeFragmentView().apply {
-//                arguments = bundleOf(CALLBACK_FUNC to callback)
-//            }
-//        }
-    }
 
 //    private lateinit var callback: PagerFragmentView.ViewCreatedListener
     private var show = false
@@ -52,13 +43,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     private var top = false
     private var difficulty = false
     private var basket = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        arguments?.getSerializable(CALLBACK_FUNC)?.let {
-//            callback = it as PagerFragmentView.ViewCreatedListener
-//        }
-    }
 
 
     override fun onCreateView(
@@ -74,7 +58,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)
 
-//        callback.invoke()
         view.mListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
         swipeRefreshLayout.setOnRefreshListener(this)
