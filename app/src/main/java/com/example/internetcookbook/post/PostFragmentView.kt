@@ -124,8 +124,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
     }
 
     override fun returnToPager(){
-        val action = PostFragmentViewDirections.actionPostFragment2ToPagerFragment()
-        postView.findNavController().navigate(action)
+        postView.findNavController().navigateUp()
     }
 
 

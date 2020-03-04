@@ -64,6 +64,10 @@ class CardAdapter(
             dataModel: DataModel,
             presenter: BasePresenter
         ) {
+
+            val bitmapImages = readBit64ImageArrayList(dataModel)
+            doFindImages(bitmapImages)
+
             itemView.mCardName.text = dataModel.post.title
             itemView.mCardDescription.text = dataModel.post.description
 
@@ -85,9 +89,6 @@ class CardAdapter(
 
                 }
             }
-
-            val bitmapImages = readBit64ImageArrayList(dataModel)
-            doFindImages(bitmapImages)
 
             itemView.mShowRecipeDetails.setOnClickListener {
                 if(showDetails) {
