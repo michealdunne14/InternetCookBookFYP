@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import com.example.internetcookbook.MainView
 import com.example.internetcookbook.R
-import com.example.internetcookbook.SignInActivity
+import com.example.internetcookbook.activities.SignInActivity
 import com.example.internetcookbook.base.BaseView
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 

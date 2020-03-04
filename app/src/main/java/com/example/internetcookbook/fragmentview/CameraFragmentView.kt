@@ -13,8 +13,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.internetcookbook.Bounce
-import com.example.internetcookbook.CustomDialog
+import com.example.internetcookbook.animations.Bounce
+import com.example.internetcookbook.dialog.CustomDialog
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ReceiptListAdapter
 import com.example.internetcookbook.base.BaseView
@@ -137,13 +137,15 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             torch = !torch
             if (torch) {
                 val myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce)
-                val interpolator = Bounce(0.2, 20.0)
+                val interpolator =
+                    Bounce(0.2, 20.0)
                 myAnim.interpolator = interpolator
                 homeView.mCameraFlashButton.startAnimation(myAnim)
                 homeView.mCameraFlashButton.setImageResource(R.drawable.flashon)
             }else{
                 val myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce)
-                val interpolator = Bounce(0.2, 20.0)
+                val interpolator =
+                    Bounce(0.2, 20.0)
                 myAnim.interpolator = interpolator
                 homeView.mCameraFlashButton.startAnimation(myAnim)
                 homeView.mCameraFlashButton.setImageResource(R.drawable.baseline_flash_off_white_36)
@@ -176,7 +178,8 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
 
         homeView.mButtonFindText.setOnClickListener {
-            customDialog = CustomDialog(activity!!)
+            customDialog =
+                CustomDialog(activity!!)
 
             customDialog.show()
             customDialog.setCanceledOnTouchOutside(false)

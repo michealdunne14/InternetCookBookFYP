@@ -1,12 +1,12 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.fragment.findNavController
+import com.example.internetcookbook.MainApp
+import com.example.internetcookbook.R
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.onComplete
 import org.jetbrains.anko.uiThread
 
 class SplashActivity : AppCompatActivity() {

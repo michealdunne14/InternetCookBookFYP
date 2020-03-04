@@ -13,17 +13,15 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.example.internetcookbook.Bounce
+import com.example.internetcookbook.animations.Bounce
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
 import com.example.internetcookbook.base.BasePresenter
-import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.camera_show.view.*
 import kotlinx.android.synthetic.main.card_list.view.*
 
 interface PostListener {
@@ -75,14 +73,16 @@ class CardAdapter(
                 heart = !heart
                 if (heart) {
                     val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
-                    val interpolator = Bounce(0.2, 20.0)
+                    val interpolator =
+                        Bounce(0.2, 20.0)
                     myAnim.interpolator = interpolator
                     itemView.mHeartButton.startAnimation(myAnim)
                     itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_black_36)
                     presenter.doHeartData(dataModel.post._id)
                 }else{
                     val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
-                    val interpolator = Bounce(0.2, 20.0)
+                    val interpolator =
+                        Bounce(0.2, 20.0)
                     myAnim.interpolator = interpolator
                     itemView.mHeartButton.startAnimation(myAnim)
                     itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_border_black_36)

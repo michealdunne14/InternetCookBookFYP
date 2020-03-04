@@ -15,8 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".SplashActivity" >
+        <activity android:name=".activities.SignInActivity" />
+        <activity android:name=".activities.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +31,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".MainView" />
+        <activity android:name=".activities.MainView" />
     </application>
 
 </manifest>

@@ -1,7 +1,8 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.internetcookbook.R
 
 class SignInActivity : AppCompatActivity() {
 

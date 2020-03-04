@@ -1,4 +1,4 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.animations
 
 class Bounce(amplitude: Double, frequency: Double) : android.view.animation.Interpolator {
     private var mAmplitude = 1.0

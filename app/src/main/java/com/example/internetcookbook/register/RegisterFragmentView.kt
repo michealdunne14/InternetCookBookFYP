@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import com.example.internetcookbook.MainView
+import com.example.internetcookbook.activities.MainView
 
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
