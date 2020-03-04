@@ -1,11 +1,13 @@
 package com.example.internetcookbook.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import com.example.internetcookbook.MainView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.UserModel
@@ -46,8 +48,7 @@ class LoginFragmentView : BaseView() {
         }
 
         view.mLoginReturnButton.setOnClickListener {
-            val action = LoginFragmentViewDirections.actionLoginFragmentViewToStartFragment()
-            view.findNavController().navigate(action)
+            view.findNavController().navigateUp()
         }
 
         startPostponedEnterTransition()
@@ -60,8 +61,8 @@ class LoginFragmentView : BaseView() {
     }
 
     override fun getMainPageFromLoginPage(){
-        val action = LoginFragmentViewDirections.actionLoginFragmentViewToPagerFragment()
-        loginView.findNavController().navigate(action)
+        startActivity(Intent(context, MainView::class.java))
+        activity!!.finish()
     }
 
     override fun showProgress(){

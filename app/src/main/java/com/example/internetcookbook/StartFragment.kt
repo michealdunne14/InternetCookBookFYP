@@ -24,7 +24,7 @@ class StartFragment : Fragment() {
 
     private fun initButtons(view: View) {
         view.mStartLogin.setOnClickListener {
-            val action = StartFragmentDirections.actionStartFragmentToLoginFragmentView()
+            val action = StartFragmentDirections.actionStartFragment2ToLoginFragmentView()
             val extras = FragmentNavigatorExtras(
                 mLogo to getString(R.string.logo_transition)
             )
@@ -32,7 +32,7 @@ class StartFragment : Fragment() {
             view.findNavController().navigate(action,extras)
         }
         view.mStartRegister.setOnClickListener {
-            val action = StartFragmentDirections.actionStartFragmentToRegisterFragment()
+            val action = StartFragmentDirections.actionStartFragment2ToRegisterFragmentView()
             view.findNavController().navigate(action)
         }
     }
