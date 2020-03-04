@@ -47,8 +47,7 @@ class ProfileFragmentView : BaseView() {
         view.mProfileRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
         view.mProfileReturnButton.setOnClickListener {
-            val action = ProfileFragmentViewDirections.actionProfileFragmentToSettingsFragment()
-            view.findNavController().navigate(action)
+            view.findNavController().navigateUp()
         }
 
         profileView.mProfileRecyclerView.adapter = CardAdapter(presenter.doGetPosts(), presenter)

@@ -30,8 +30,7 @@ class SettingsFragmentView:BaseView() {
 
 
         view.mReturnButton.setOnClickListener {
-            val action = SettingsFragmentViewDirections.actionSettingsFragmentToPagerFragment()
-            view.findNavController().navigate(action)
+            view.findNavController().navigateUp()
         }
 
         view.mProfileFragment.setOnClickListener {

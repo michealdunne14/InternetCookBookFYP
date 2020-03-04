@@ -4,14 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-
-import androidx.viewpager.widget.ViewPager
-import com.example.internetcookbook.adapter.TabsPagerAdapter
 import com.example.internetcookbook.network.InformationStore
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.main_layout.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 

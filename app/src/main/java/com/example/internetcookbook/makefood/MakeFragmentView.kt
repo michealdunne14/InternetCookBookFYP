@@ -148,8 +148,7 @@ class MakeFragmentView : BaseView() {
 
     fun hideAndShowToolbarButtons(){
         makeView.mReturnButton.setOnClickListener {
-            val action = MakeFragmentViewDirections.actionMakeFragmentToPagerFragment()
-            makeView.findNavController().navigate(action)
+            makeView.findNavController().navigateUp()
         }
         makeView.mRemoveName.setOnClickListener {
                 if (makeView.mMakeName.visibility == View.GONE){
