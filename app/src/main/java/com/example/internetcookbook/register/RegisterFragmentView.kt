@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import com.example.internetcookbook.MainView
 
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
@@ -52,8 +53,8 @@ class RegisterFragmentView : BaseView() {
                     )
                 )
                 if (createUser != null) {
-                    val action = RegisterFragmentViewDirections.actionRegisterFragmentToPagerFragment()
-                    view.findNavController().navigate(action)
+                    startActivity(Intent(context, MainView::class.java))
+                    activity!!.finish()
                 }else{
                     Snackbar.make(view,"Email is already registered", Snackbar.LENGTH_SHORT).show()
                 }
@@ -63,8 +64,7 @@ class RegisterFragmentView : BaseView() {
         }
 
         view.mLoginReturnButton.setOnClickListener {
-            val action = RegisterFragmentViewDirections.actionRegisterFragmentToStartFragment()
-            view.findNavController().navigate(action)
+            view.findNavController().navigateUp()
         }
         return view
     }
