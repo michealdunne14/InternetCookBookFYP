@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -13,28 +14,28 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.internetcookbook.animations.Bounce
-import com.example.internetcookbook.dialog.CustomDialog
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ReceiptListAdapter
+import com.example.internetcookbook.animations.Bounce
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.dialog.CustomDialog
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
 import com.example.internetcookbook.helper.readImageFromPath
+import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
-import kotlinx.android.synthetic.main.activity_custom.*
 import kotlinx.android.synthetic.main.camera_show.view.*
 import kotlinx.android.synthetic.main.fragment_camera.view.*
-import kotlinx.android.synthetic.main.listitems.*
 import kotlinx.android.synthetic.main.listitems.view.*
 import org.jetbrains.anko.*
 import java.nio.ByteBuffer
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+
 
 class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
@@ -47,6 +48,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     var captureCheck = false
     var torch = false
     lateinit var customDialog: CustomDialog
+    val validFoodItems = ArrayList<FoodMasterModel>()
 
 
     lateinit var presenter: CameraFragmentPresenter
@@ -177,36 +179,38 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             }
         }
 
+        homeView.mAddCupboard.setOnClickListener {
+            presenter.doAddCupboard(validFoodItems)
+        }
+
         homeView.mButtonFindText.setOnClickListener {
-            customDialog =
-                CustomDialog(activity!!)
+//            customDialog =
+//                CustomDialog(activity!!)
+//
+//            customDialog.show()
+//            customDialog.setCanceledOnTouchOutside(false)
+//            customDialog.mRetake.setOnClickListener {
+//                storedFood.clear()
+//                homeView.mListItems.visibility = View.GONE
+//                homeView.mCameraShow.visibility = View.VISIBLE
+//                captureCheck = false
+//                homeView.view_finder.visibility = View.VISIBLE
+//                homeView.mCapturedImage.setImageBitmap(null)
+//                customDialog.cancel()
+//            }
 
-            customDialog.show()
-            customDialog.setCanceledOnTouchOutside(false)
-            customDialog.mRetake.setOnClickListener {
-                storedFood.clear()
-                homeView.mListItems.visibility = View.GONE
-                homeView.mCameraShow.visibility = View.VISIBLE
-                captureCheck = false
-                homeView.view_finder.visibility = View.VISIBLE
-                homeView.mCapturedImage.setImageBitmap(null)
-                customDialog.cancel()
-            }
-
-            var shop: String?
-            customDialog.mConfirm.setOnClickListener {
+            homeView.mCameraShow.visibility = View.INVISIBLE
+            var shop: String = "Tesco"
+//            customDialog.mConfirm.setOnClickListener {
                 doAsync {
-                    shop = presenter.searchShop(customDialog.mDialogSearch.text.toString())
+                    shop = presenter.searchShop(shop)!!
                     onComplete {
-                        if(shop != null){
-                            homeView.mShoppedAt.text = shop
-                            customDialog.cancel()
-                            mChangeImageToText(viewFinder.bitmap, shop!!)
-                        }else{
-                            Snackbar.make(homeView,"Not Known Shop", Snackbar.LENGTH_SHORT).show()
-                        }
+                        homeView.mShoppedAt.text = shop
+//                            customDialog.cancel()
+                        val bitmap = (homeView.mCapturedImage.drawable as BitmapDrawable).bitmap
+                        mChangeImageToText(bitmap, shop)
                     }
-                }
+//                }
             }
         }
 
@@ -306,12 +310,12 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         resultText: FirebaseVisionText,
         shop: String
     ) {
-        if (resultText.textBlocks.size == 0) {
-            Snackbar.make(homeView,"No Text Found", Snackbar.LENGTH_SHORT).show()
-            return
-        }else{
-            homeView.mCameraShow.visibility = View.GONE
-        }
+//        if (resultText.textBlocks.size == 0) {
+//            Snackbar.make(homeView,"No Text Found", Snackbar.LENGTH_SHORT).show()
+//            return
+//        }else{
+//            homeView.mCameraShow.visibility = View.GONE
+//        }
         info { "Select Country Started" }
         doAsync {
             for (block in resultText.textBlocks) {
@@ -326,8 +330,8 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                 }
             }
             uiThread {
-                mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood,presenter)
-                mFoodListRecyclerView.adapter?.notifyDataSetChanged()
+                homeView.mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood,presenter,validFoodItems)
+                homeView.mFoodListRecyclerView.adapter?.notifyDataSetChanged()
             }
         }
         homeView.mCapturedImage.visibility = View.INVISIBLE

@@ -22,15 +22,17 @@ class RegisterFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger
         infoStore = app.informationStore as InformationStore
     }
 
-    fun doRegister(userModel: UserModel): String? {
-        var usercreated: String? = String()
+    fun doRegister(userModel: UserModel) {
+        var usercreated: Boolean
         doAsync {
-            usercreated = infoStore!!.createUser(userModel)
+            usercreated = infoStore!!.createUser(userModel,profilePicture)
             onComplete {
-                infoStore!!.userCreated()
+                if (usercreated){
+                    infoStore!!.userCreated()
+                }
+                view.setRegisterResponse(usercreated)
             }
         }
-        return usercreated
     }
 
     fun doSelectImage() {
@@ -42,6 +44,7 @@ class RegisterFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger
             IMAGE_REQUEST -> {
                 if (data != null){
                     val bitmap = readImageFromPath(context,data.data.toString())
+                    profilePicture = data.data.toString()
                     view.setProfileImage(bitmap)
                 }
             }

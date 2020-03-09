@@ -21,7 +21,7 @@ class LoginFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     }
 
     fun doSignIn(userModel: UserModel){
-        var signIn = UserMasterModel()
+        lateinit var signIn: UserMasterModel
         doAsync {
             signIn = infoStore!!.findEmail(userModel)!!
             uiThread {

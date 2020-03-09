@@ -26,6 +26,8 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun showIngredients(listofIngredients: ArrayList<FoodMasterModel>){}
     open fun showFollowers(userMasterModel: ArrayList<UserMasterModel>){}
     open fun showCupboard(listofCupboard: ArrayList<FoodMasterModel>){}
-    open fun showInformation(homeData: ArrayList<DataModel>) {}
+    open fun showInformation(homeData: ArrayList<DataModel?>) {}
     open fun returnToPager(){}
+    open fun removeLoading(findData: ArrayList<DataModel?>) {}
+    open fun setRegisterResponse(usercreated: Boolean) {}
 }

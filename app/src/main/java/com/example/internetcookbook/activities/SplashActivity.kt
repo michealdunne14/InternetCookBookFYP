@@ -7,6 +7,7 @@ import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.R
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.onComplete
 import org.jetbrains.anko.uiThread
 
 class SplashActivity : AppCompatActivity() {
@@ -24,29 +25,35 @@ class SplashActivity : AppCompatActivity() {
     }
 
 
-    fun doLoadData(){
+    fun doLoadData() {
+//        infoStore!!.clearCurrentUser()
         val currentUser = infoStore!!.getCurrentUser()
-        if(!currentUser.user.loggedIn){
+        if (!currentUser.user.loggedIn) {
             startActivity(Intent(baseContext, SignInActivity::class.java))
+            infoStore!!.logoutUser()
             finish()
-        }else{
+        } else {
             doAsync {
-                infoStore!!.getPostData()
-                uiThread {
-                    startActivity(Intent(baseContext, MainView::class.java))
-                    finish()
+                infoStore!!.updateUserInfo(currentUser.user)
+                onComplete {
+//                    doAsync {
+//                        infoStore!!.getPostData()
+                    uiThread {
+                        startActivity(Intent(baseContext, MainView::class.java))
+                        finish()
+                    }
+
+                    doAsync {
+                        infoStore!!.getFollowingData()
+                    }
+
+                    doAsync {
+                        infoStore!!.getCupboardData()
+                    }
+                    doAsync {
+                        infoStore!!.getBasketData()
+                    }
                 }
-            }
-
-            doAsync {
-                infoStore!!.getFollowingData()
-            }
-
-            doAsync {
-                infoStore!!.getCupboardData()
-            }
-            doAsync {
-                infoStore!!.getBasketData()
             }
         }
     }

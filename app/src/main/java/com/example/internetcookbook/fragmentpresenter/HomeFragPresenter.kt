@@ -4,6 +4,7 @@ import android.view.View
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.network.InformationStore
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -33,6 +34,20 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                 view.swipeToRefresh.isRefreshing = false
             }
         }
+    }
+
+    fun loadMoreData() {
+        findData().add(DataModel())
+        doAsync {
+            infoStore!!.getMoreData()
+            onComplete {
+                view.removeLoading(findData())
+            }
+        }
+    }
+
+    fun findData(): ArrayList<DataModel?> {
+        return infoStore!!.getHomeData()
     }
 
     fun doFindHomeData(){

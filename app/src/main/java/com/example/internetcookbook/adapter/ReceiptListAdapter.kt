@@ -1,6 +1,5 @@
 package com.example.internetcookbook.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +7,16 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
+import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
 import kotlinx.android.synthetic.main.listeachitem.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
-import org.jetbrains.anko.uiThread
 
 class ReceiptListAdapter(
     private var foodItems: List<FoodModel>,
-    private var presenter: CameraFragmentPresenter
+    private var presenter: CameraFragmentPresenter,
+    private var validFoodItems: ArrayList<FoodMasterModel>
 ): RecyclerView.Adapter<ReceiptListAdapter.MainHolder>() {
 
 
@@ -34,20 +34,23 @@ class ReceiptListAdapter(
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val food = foodItems[holder.adapterPosition]
-        holder.bind(food,presenter)
+        holder.bind(food,presenter,foodItems,validFoodItems)
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(
             foodModel: FoodModel,
-            presenter: CameraFragmentPresenter
+            presenter: CameraFragmentPresenter,
+            foodItems: List<FoodModel>,
+            validFoodItems: ArrayList<FoodMasterModel>
         ){
             itemView.mFoodItemText.setText(foodModel.name)
             doAsync {
                 val result = presenter.searchItems(foodModel.name)
                 onComplete {
-                    if(result != null) {
+                    if(result!!.food.name.isNotEmpty()) {
                         itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
+                        validFoodItems.add(result)
                     }else{
                         itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
                     }
@@ -55,17 +58,18 @@ class ReceiptListAdapter(
             }
             itemView.mFoodItemButton.setOnClickListener {
                 val text= itemView.mFoodItemText.text.toString()
+                foodItems[position].name = text
                 doAsync { 
                     val result = presenter.searchItems(text)
                     onComplete {
-                        if(result != null) {
+                        if(result!!.food.name.isNotEmpty()) {
                             itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
+                            validFoodItems.add(result)
                         }else{
                             itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
                         }
                     }
                 }
-//                presenter.doAddFoodItem(foodModel)
             }
         }
     }
