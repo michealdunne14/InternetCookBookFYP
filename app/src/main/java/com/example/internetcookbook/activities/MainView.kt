@@ -20,10 +20,6 @@ class MainView : AppCompatActivity(), LifecycleOwner,AnkoLogger {
         setContentView(R.layout.activity_main)
         app = application as MainApp
         infoStore = app.informationStore as InformationStore
-        doAsync {
-            val currentUser = infoStore!!.getCurrentUser()
-            infoStore!!.updateUserInfo(currentUser.user)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

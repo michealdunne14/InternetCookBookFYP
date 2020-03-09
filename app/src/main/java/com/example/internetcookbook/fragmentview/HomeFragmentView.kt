@@ -6,21 +6,19 @@ import android.transition.TransitionManager
 import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.os.bundleOf
+import androidx.core.view.size
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.archaeologicalfieldwork.adapter.CardAdapter
 import com.example.archaeologicalfieldwork.adapter.PostListener
-import com.example.internetcookbook.pager.PagerFragmentView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
 import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
-import kotlinx.android.synthetic.main.card_list.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
@@ -35,14 +33,13 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
 
     lateinit var homeView: View
-
-//    private lateinit var callback: PagerFragmentView.ViewCreatedListener
     private var show = false
     private var time = false
     private var item = false
     private var top = false
     private var difficulty = false
     private var basket = false
+    var isLoading = false
 
 
     override fun onCreateView(
@@ -54,6 +51,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         homeView = view
 
         presenter = initPresenter(HomeFragPresenter(this)) as HomeFragPresenter
+        initScrollListener()
 
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)
@@ -136,11 +134,43 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         return view
     }
 
-    override fun showInformation(homeData: ArrayList<DataModel>) {
+    override fun showInformation(homeData: ArrayList<DataModel?>) {
         homeView.mListRecyclerView.adapter = CardAdapter(homeData, presenter)
         homeView.mListRecyclerView.adapter?.notifyDataSetChanged()
     }
 
+
+    private fun initScrollListener() {
+        homeView.mListRecyclerView.adapter?.notifyItemInserted(presenter.findData().size - 1)
+
+        homeView.mListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == presenter.findData().size - 1) {
+                        isLoading = true
+                        loadMore()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun loadMore() {
+        presenter.loadMoreData()
+    }
+
+    override fun removeLoading(findData: ArrayList<DataModel?>) {
+        homeView.mListRecyclerView.adapter?.notifyItemRemoved(findData.size)
+        homeView.mListRecyclerView.adapter?.notifyItemRangeInserted(homeView.mListRecyclerView.size + 1,findData.size)
+        isLoading = false
+    }
 
     private fun showFilter(){
         show = true
@@ -158,6 +188,8 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             homeView.horizontalScrollBar.visibility = View.VISIBLE
 
             homeView.mHomeScrollBarFirstPosition.text = "Recipes this Week"
+            homeView.mHomeScrollBarSecondPosition.text = "Recipes this Month"
+            homeView.mHomeScrollBarThirdPosition.text = "Recipes this Year"
             homeView.mHomeScrollBarThirdPosition.visibility = View.VISIBLE
             homeView.mHomeScrollBarForthPosition.visibility = View.VISIBLE
             homeView.mHomeScrollBarFifthPosition.visibility = View.VISIBLE

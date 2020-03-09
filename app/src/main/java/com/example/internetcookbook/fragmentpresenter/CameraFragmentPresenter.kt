@@ -48,6 +48,12 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return "10/11/2020"
     }
 
+    fun doAddCupboard(validFoodItems: ArrayList<FoodMasterModel>) {
+        doAsync {
+            infoStore!!.cupboardAdd(validFoodItems)
+        }
+    }
+
     fun doAddFoodItem(foodModel: FoodModel) {
         doAsync {
             infoStore!!.createFood(foodModel)

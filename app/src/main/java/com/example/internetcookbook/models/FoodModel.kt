@@ -6,6 +6,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class FoodModel(
+    @SerializedName("_id")
+    var oid: String = "",
     @SerializedName("name")
     var name: String = "",
     @SerializedName("price")

@@ -8,14 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.AnticipateOvershootInterpolator
+import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.example.internetcookbook.animations.Bounce
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
+import com.example.internetcookbook.animations.Bounce
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.DataModel
@@ -33,27 +34,46 @@ interface PostListener {
 private var heart = false
 
 class CardAdapter(
-    private var posts: ArrayList<DataModel>,
+    private var posts: ArrayList<DataModel?>,
     private val presenter: BasePresenter
-) : RecyclerView.Adapter<CardAdapter.MainHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val VIEW_TYPE_ITEM = 0
+    private val VIEW_TYPE_LOADING = 1
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
-        return MainHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.card_list,
-                parent,
-                false
-            )
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType == VIEW_TYPE_ITEM) {
+            return MainHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_list, parent, false))
+        } else {
+            return LoadingViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.loading, parent, false))
+        }
     }
 
     //  Item Count
     override fun getItemCount(): Int = posts.size
 
-    override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val postModel = posts[holder.adapterPosition]
-        holder.bind(postModel,presenter)
+    override fun getItemViewType(position: Int): Int {
+        return if (posts[position] == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
+    }
+
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is MainHolder) {
+            val postModel = posts[holder.adapterPosition]
+            holder.bind(postModel!!,presenter)
+        } else if (holder is LoadingViewHolder) {
+            showLoadingView(holder, position)
+        }
+    }
+
+    private class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        var progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
+    }
+
+    private fun showLoadingView(viewHolder: LoadingViewHolder, position: Int) {
+        //ProgressBar would be displayed
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){

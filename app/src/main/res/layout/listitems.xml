@@ -21,7 +21,7 @@
             android:layout_height="0dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageButton3"
+            app:layout_constraintStart_toEndOf="@+id/mAddCupboard"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -44,7 +44,7 @@
             app:srcCompat="@drawable/baseline_arrow_back_black_36" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/mAddCupboard"
             android:layout_width="50dp"
             android:layout_height="0dp"
             android:background="@null"

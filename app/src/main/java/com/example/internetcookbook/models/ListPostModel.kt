@@ -5,5 +5,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ListPostModel (
-    val postArray: MutableList<DataModel> = mutableListOf()
+    var postArray: MutableList<DataModel?> = mutableListOf()
 ): Parcelable

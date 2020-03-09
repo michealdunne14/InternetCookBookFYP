@@ -6,5 +6,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class UserMasterModel(
     val image: String = "",
-    val user: UserModel = UserModel()
+    var user: UserModel = UserModel()
 ) : Parcelable

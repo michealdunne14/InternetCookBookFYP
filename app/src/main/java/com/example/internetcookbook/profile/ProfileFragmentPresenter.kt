@@ -21,7 +21,7 @@ class ProfileFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger 
         return infoStore!!.getCurrentUser()
     }
 
-    fun doGetPosts(): ArrayList<DataModel> {
+    fun doGetPosts(): ArrayList<DataModel?> {
         return infoStore!!.getProfileUserData()
     }
 }

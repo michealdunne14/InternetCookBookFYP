@@ -40,8 +40,9 @@ class RegisterFragmentView : BaseView() {
                 view.mFriendEmail.text.isNotEmpty() &&
                 view.mPasswordRegister.text.isNotEmpty() &&
                 view.mUsernameRegister.text.isNotEmpty()) {
-                val currentTime: Date = Calendar.getInstance().getTime()
-                val createUser = presenter.doRegister(
+                val currentTime: Date = Calendar.getInstance().time
+
+                presenter.doRegister(
                     UserModel(
                         "",
                         view.mRegisterFirstname.text.toString(),
@@ -52,12 +53,6 @@ class RegisterFragmentView : BaseView() {
                         true
                     )
                 )
-                if (createUser != null) {
-                    startActivity(Intent(context, MainView::class.java))
-                    activity!!.finish()
-                }else{
-                    Snackbar.make(view,"Email is already registered", Snackbar.LENGTH_SHORT).show()
-                }
             }else{
                 Snackbar.make(view,"Fill in all fields", Snackbar.LENGTH_SHORT).show()
             }
@@ -67,6 +62,15 @@ class RegisterFragmentView : BaseView() {
             view.findNavController().navigateUp()
         }
         return view
+    }
+
+    override fun setRegisterResponse(usercreated: Boolean) {
+        if (usercreated) {
+            startActivity(Intent(context, MainView::class.java))
+            activity!!.finish()
+        }else{
+            Snackbar.make(registerView,"Email is already registered", Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     override fun setProfileImage(image: Bitmap?){
