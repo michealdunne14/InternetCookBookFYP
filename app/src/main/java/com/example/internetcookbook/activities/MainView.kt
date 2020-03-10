@@ -1,14 +1,15 @@
 package com.example.internetcookbook.activities
 
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
+import com.example.internetcookbook.FoodCreateView
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.R
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
 
 class MainView : AppCompatActivity(), LifecycleOwner,AnkoLogger {
 

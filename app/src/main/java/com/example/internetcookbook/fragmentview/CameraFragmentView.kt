@@ -1,6 +1,7 @@
 package com.example.internetcookbook.fragmentview
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,6 +14,7 @@ import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.ReceiptListAdapter
@@ -32,6 +34,7 @@ import kotlinx.android.synthetic.main.camera_show.view.*
 import kotlinx.android.synthetic.main.fragment_camera.view.*
 import kotlinx.android.synthetic.main.listitems.view.*
 import org.jetbrains.anko.*
+import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -49,6 +52,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     var torch = false
     lateinit var customDialog: CustomDialog
     val validFoodItems = ArrayList<FoodMasterModel>()
+    var foodCreateCheck = false
 
 
     lateinit var presenter: CameraFragmentPresenter
@@ -64,6 +68,15 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         val layoutManager = LinearLayoutManager(context)
         presenter = initPresenter(CameraFragmentPresenter(this)) as CameraFragmentPresenter
 
+        if (arguments != null) {
+            val images = CameraFragmentViewArgs.fromBundle(arguments!!).foodcreate
+            if (images == "food_create") {
+                foodCreateCheck = true
+                homeView.mButtonFindText.visibility = View.INVISIBLE
+                homeView.mScanBarcodeButton.visibility = View.INVISIBLE
+//                homeView.mScanBarcodeButton.setImageResource(R.drawable.cor)
+            }
+        }
 
         view.mFoodListRecyclerView.layoutManager = layoutManager
         view.mRetakePicture.setOnClickListener {
@@ -169,13 +182,23 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                     uiThread {
                         captureCheck = true
                         setImageBitmap()
-                        homeView.mButtonFindText.visibility = View.VISIBLE
+                        if (!foodCreateCheck) {
+                            homeView.mButtonFindText.visibility = View.VISIBLE
+                        }
                     }
+                }
+                if (foodCreateCheck){
+                    homeView.mScanBarcodeButton.visibility = View.VISIBLE
                 }
             }else{
                 captureCheck = false
                 clearImageBitmap()
-                homeView.mButtonFindText.visibility = View.INVISIBLE
+                if (!foodCreateCheck) {
+                    homeView.mButtonFindText.visibility = View.INVISIBLE
+                }
+                if (foodCreateCheck){
+                    homeView.mScanBarcodeButton.visibility = View.INVISIBLE
+                }
             }
         }
 
@@ -184,20 +207,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
 
         homeView.mButtonFindText.setOnClickListener {
-//            customDialog =
-//                CustomDialog(activity!!)
-//
-//            customDialog.show()
-//            customDialog.setCanceledOnTouchOutside(false)
-//            customDialog.mRetake.setOnClickListener {
-//                storedFood.clear()
-//                homeView.mListItems.visibility = View.GONE
-//                homeView.mCameraShow.visibility = View.VISIBLE
-//                captureCheck = false
-//                homeView.view_finder.visibility = View.VISIBLE
-//                homeView.mCapturedImage.setImageBitmap(null)
-//                customDialog.cancel()
-//            }
 
             homeView.mCameraShow.visibility = View.INVISIBLE
             var shop: String = "Tesco"
@@ -206,9 +215,24 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                     shop = presenter.searchShop(shop)!!
                     onComplete {
                         homeView.mShoppedAt.text = shop
-//                            customDialog.cancel()
                         val bitmap = (homeView.mCapturedImage.drawable as BitmapDrawable).bitmap
-                        mChangeImageToText(bitmap, shop)
+//                        if(shop == getString(R.string.huh_no_shop)){
+//                            customDialog = CustomDialog(activity!!)
+//
+//                            customDialog.show()
+//                            customDialog.setCanceledOnTouchOutside(false)
+//                            customDialog.mRetake.setOnClickListener {
+//                                storedFood.clear()
+//                                homeView.mListItems.visibility = View.GONE
+//                                homeView.mCameraShow.visibility = View.VISIBLE
+//                                captureCheck = false
+//                                homeView.view_finder.visibility = View.VISIBLE
+//                                homeView.mCapturedImage.setImageBitmap(null)
+//                                customDialog.cancel()
+//                            }
+//                        }else {
+                            mChangeImageToText(bitmap, shop)
+//                        }
                     }
 //                }
             }
@@ -216,8 +240,16 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         homeView.mScanBarcodeButton.setOnClickListener {
 //            mScanBarCode(viewFinder.bitmap)
-            presenter.doSelectImage()
+            if (foodCreateCheck){
+                val bitmap = (homeView.mCapturedImage.drawable as BitmapDrawable).bitmap
+                presenter.storeImage(bitmap)
+                homeView.findNavController().navigateUp()
+            }else {
+                presenter.doSelectImage()
+            }
         }
+
+
 
         // Setup image analysis pipeline that computes average pixel luminance
         val analyzerConfig = ImageAnalysisConfig.Builder().apply {

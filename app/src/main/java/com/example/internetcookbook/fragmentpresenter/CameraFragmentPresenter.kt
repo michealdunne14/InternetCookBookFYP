@@ -2,6 +2,7 @@ package com.example.internetcookbook.fragmentpresenter
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
@@ -40,6 +41,11 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return infoStore!!.findShop(element)
     }
 
+
+    fun storeImage(bitmap: Bitmap){
+        return infoStore!!.storeImage(bitmap)
+    }
+
     fun searchItems(element: String): FoodMasterModel? {
         return infoStore!!.findItem(element)
     }
@@ -51,12 +57,6 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     fun doAddCupboard(validFoodItems: ArrayList<FoodMasterModel>) {
         doAsync {
             infoStore!!.cupboardAdd(validFoodItems)
-        }
-    }
-
-    fun doAddFoodItem(foodModel: FoodModel) {
-        doAsync {
-            infoStore!!.createFood(foodModel)
         }
     }
 }

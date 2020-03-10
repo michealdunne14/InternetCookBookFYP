@@ -35,6 +35,7 @@ class PagerFragmentView : BaseView(), AnkoLogger {
         presenter = initPresenter(PagerFragmentPresenter(this)) as PagerFragmentPresenter
         initTabLayout(view)
 
+
         view.view_pager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {
                 val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?

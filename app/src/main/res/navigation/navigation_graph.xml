@@ -34,6 +34,13 @@
         <action
             android:id="@+id/action_pagerFragment_to_friendFragmentView"
             app:destination="@id/friendFragmentView" />
+        <action
+            android:id="@+id/action_pagerFragment_to_foodCreateView"
+            app:destination="@id/foodCreateView" >
+            <argument
+                android:name="fooditem"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/postFragment2"
@@ -81,4 +88,29 @@
         android:name="com.example.internetcookbook.profile.ProfileFragmentView"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/foodCreateView"
+        android:name="com.example.internetcookbook.FoodCreateView"
+        android:label="fragment_food_create"
+        tools:layout="@layout/fragment_food_create" >
+        <argument
+            android:name="fooditem"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_foodCreateView_to_cameraFragmentView"
+            app:destination="@id/cameraFragmentView" >
+            <argument
+                android:name="foodcreate"
+                app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragmentView"
+        android:name="com.example.internetcookbook.fragmentview.CameraFragmentView"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" >
+        <argument
+            android:name="foodcreate"
+            app:argType="string" />
+    </fragment>
 </navigation>
