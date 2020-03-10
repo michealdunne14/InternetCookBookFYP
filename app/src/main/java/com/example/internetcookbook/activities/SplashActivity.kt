@@ -42,17 +42,6 @@ class SplashActivity : AppCompatActivity() {
                         startActivity(Intent(baseContext, MainView::class.java))
                         finish()
                     }
-
-                    doAsync {
-                        infoStore!!.getFollowingData()
-                    }
-
-                    doAsync {
-                        infoStore!!.getCupboardData()
-                    }
-                    doAsync {
-                        infoStore!!.getBasketData()
-                    }
                 }
             }
         }

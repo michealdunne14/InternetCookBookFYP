@@ -30,4 +30,5 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun returnToPager(){}
     open fun removeLoading(findData: ArrayList<DataModel?>) {}
     open fun setRegisterResponse(usercreated: Boolean) {}
+    open fun naviateUp(){}
 }

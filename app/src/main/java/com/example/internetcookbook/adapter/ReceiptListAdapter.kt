@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
+import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.listeachitem.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
@@ -67,6 +69,8 @@ class ReceiptListAdapter(
                             validFoodItems.add(result)
                         }else{
                             itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
+                            val action = PagerFragmentViewDirections.actionPagerFragmentToFoodCreateView(text)
+                            itemView.findNavController().navigate(action)
                         }
                     }
                 }

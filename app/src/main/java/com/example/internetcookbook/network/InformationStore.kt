@@ -2,6 +2,7 @@ package com.example.internetcookbook.network
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.example.internetcookbook.R
 import com.example.internetcookbook.helper.exists
 import com.example.internetcookbook.helper.read
 import com.example.internetcookbook.helper.readImageFromPath
@@ -35,6 +36,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var followingData = FollowListModel()
     var userLocalStore = mutableListOf<UserMasterModel>()
     lateinit var emailSearchArray: Array<UserModel>
+    var storedImage: Bitmap? = null
 
 
     val JSON_FILE = "InformationStore.json"
@@ -173,7 +175,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-    fun createFood(foodModel: FoodModel): String {
+    fun createFood(foodModel: FoodModel): Boolean {
         val formBody: RequestBody = FormBody.Builder()
             .add("name", foodModel.name)
             .add("price", foodModel.price.toString())
@@ -184,7 +186,16 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .post(formBody)
             .build()
 
-        client.newCall(request).execute().use { response -> return response.body!!.toString() }
+        client.newCall(request).execute().use { response ->
+
+            val body = response.body!!.string()
+            val gsonBuilder = GsonBuilder()
+            val gson = gsonBuilder.create()
+            val food = gson.fromJson(body,FoodModel::class.java)
+
+
+            return uploadImagesFood(food.oid)
+        }
     }
 
     fun findShop(shop: String): String? {
@@ -197,15 +208,19 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
             val body = response.body!!.string()
-            val gsonBuilder = GsonBuilder()
-            val gson = gsonBuilder.create()
+            if(body == "[]"){
+                return context.getString(R.string.huh_no_shop)
+            }else {
+                val gsonBuilder = GsonBuilder()
+                val gson = gsonBuilder.create()
 
-            foodModel = gson.fromJson<Array<FoodModel>>(body, Array<FoodModel>::class.java)
+                foodModel = gson.fromJson<Array<FoodModel>>(body, Array<FoodModel>::class.java)
+            }
         }
         return if (foodModel.isNotEmpty()) {
             foodModel[0].shop
         } else {
-            null
+            context.getString(R.string.huh_no_shop)
         }
     }
 
@@ -564,6 +579,33 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    fun uploadImagesFood(oid: String): Boolean {
+        val stream = ByteArrayOutputStream()
+        storedImage!!.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val byteArray: ByteArray = stream.toByteArray()
+
+        val requestBody: RequestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("foodPic", "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())}.png", create(MEDIA_TYPE_PNG, byteArray))
+            .build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/upload/${oid}")
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            val body = response.body!!.string()
+
+            val gsonBuilder = GsonBuilder()
+            val gson = gsonBuilder.create()
+//            val food = gson.fromJson(body,FoodMasterModel::class.java)
+            return true
+        }
+    }
+
 
     fun createPost(postModel: PostModel): PostModel? {
         val formBody: RequestBody = FormBody.Builder()
@@ -608,5 +650,13 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     fun logoutUser() {
         userLocalStore.clear()
         serialize()
+    }
+
+    fun storeImage(bitmap: Bitmap) {
+        storedImage = bitmap
+    }
+
+    fun getImage(): Bitmap? {
+        return storedImage
     }
 }

@@ -37,6 +37,12 @@
     <string name="search_cupboard">Search Cupboard</string>
     <string name="search_followers">Search Followers</string>
     <string name="search_basket">Search Basket</string>
+    <string name="huh_no_shop">!Huh No Shop</string>
+    <string name="name">Name</string>
+    <string name="shop">Shop</string>
+    <string name="price">Price</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="add">Add</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>
