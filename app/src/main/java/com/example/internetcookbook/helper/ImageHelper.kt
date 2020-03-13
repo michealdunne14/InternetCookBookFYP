@@ -11,7 +11,6 @@ import android.util.Base64
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.DataModel
-import com.example.internetcookbook.models.UserMasterModel
 import java.io.IOException
 
 
@@ -47,9 +46,9 @@ fun readBit64ImageArrayList(dataModel: DataModel): ArrayList<Bitmap> {
     return imageArrayList
 }
 
-fun readBit64ImageSingle(string: String): Bitmap{
-    val decodedString: ByteArray = Base64.decode(string, Base64.DEFAULT)
-    return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+fun readBit64ImageSingle(mutableList: MutableList<String?>): Bitmap{
+    val byteArray = ByteArray(mutableList.size)
+    return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 }
 
 //Reads Image from path

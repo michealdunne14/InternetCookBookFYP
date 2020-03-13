@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.helper.readBit64ImageSingle
 import com.example.internetcookbook.models.FoodMasterModel
-import com.example.internetcookbook.models.FoodModel
-import kotlinx.android.synthetic.main.following_list.view.*
 import kotlinx.android.synthetic.main.ingredients_list.view.*
 
 class IngredientsAdapter(private var food: ArrayList<FoodMasterModel>) : RecyclerView.Adapter<IngredientsAdapter.MainHolder>() {
@@ -35,8 +33,8 @@ class IngredientsAdapter(private var food: ArrayList<FoodMasterModel>) : Recycle
         class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
             fun bind(foodModel: FoodMasterModel) {
                 itemView.mIngredientsName.text = foodModel.food.name
-                val bitmapImage = readBit64ImageSingle(foodModel.image)
-                itemView.mFoodPicture.setImageBitmap(bitmapImage)
+//                val bitmapImage = readBit64ImageSingle(foodModel.image.data)
+//                itemView.mFoodPicture.setImageBitmap(bitmapImage)
                 itemView.mSelectedIngredient.setOnClickListener {
                     
                 }

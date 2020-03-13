@@ -29,6 +29,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var userMaster = UserMasterModel()
     var imageArrayList = ArrayList<Bitmap>()
     var postData = ArrayList<DataModel?>()
+    var listFoodArray = ArrayList<FoodMasterModel>()
     var listDataModel = ListPostModel()
     var userPostData = ArrayList<DataModel?>()
     var cupboardData = ArrayList<FoodMasterModel>()
@@ -38,6 +39,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     lateinit var emailSearchArray: Array<UserModel>
     var storedImage: Bitmap? = null
 
+    val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
 
     val JSON_FILE = "InformationStore.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
@@ -198,6 +200,20 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    var returnBackCheck = false
+
+    fun returningBack(){
+        returnBackCheck = true
+    }
+
+    fun notReturningBack(){
+        returnBackCheck = false
+    }
+
+    fun findReturnBack(): Boolean {
+        return returnBackCheck
+    }
+
     fun findShop(shop: String): String? {
         lateinit var foodModel: Array<FoodModel>
         val request = Request.Builder()
@@ -279,15 +295,16 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     fun cupboardAdd(validFoodItems: ArrayList<FoodMasterModel>) {
         val addingNewItemsToCupboard: MutableList<CupboardOidModel> = mutableListOf()
         for (item in validFoodItems){
-            addingNewItemsToCupboard.add(CupboardOidModel(item.food.oid,1))
+            addingNewItemsToCupboard.add(CupboardOidModel(item.food.oid,item.food.itemsCounter))
         }
         if (addingNewItemsToCupboard.isNotEmpty()){
-            val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
-
             val json = JSONObject()
             val jsonArray = JSONArray()
             for (item in addingNewItemsToCupboard) {
-                jsonArray.put(CupboardOidModel(item.cupboardoid,item.foodPurchasedCounter))
+                val jsonObj = JSONObject()
+                jsonObj.put("cupboardoid", item.cupboardoid)
+                jsonObj.put("foodPurchasedCounter", item.foodPurchasedCounter)
+                jsonArray.put(jsonObj)
             }
             json.put("cupboard", jsonArray)
 
@@ -405,26 +422,26 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
     fun getCupboardData(){
 //        cupboardData.clear()
-//        lateinit var dataArray: FoodMasterModel
-//        if (internetConnection) {
-//            for (cupboard in userMaster.user.cupboard) {
-//                val request = Request.Builder()
-//                    .url("http://52.51.34.156:3000/food/foodId/${cupboard.cupboardoid}")
-//                    .build()
-//
-//                client.newCall(request).execute().use { response ->
-//                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-//
-//
-//                    val body = response.body!!.string()
-//                    val gsonBuilder = GsonBuilder()
-//                    val gson = gsonBuilder.create()
-//
-//                    dataArray = gson.fromJson(body, FoodMasterModel::class.java)
-//                    cupboardData.add(dataArray)
-//                }
-//            }
-//        }
+        lateinit var dataArray: FoodMasterModel
+        if (internetConnection) {
+            for (cupboard in userMaster.user.cupboard) {
+                val request = Request.Builder()
+                    .url("http://52.51.34.156:3000/food/foodId/${cupboard.cupboardoid}")
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+
+                    val body = response.body!!.string()
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+
+                    dataArray = gson.fromJson(body, FoodMasterModel::class.java)
+                    cupboardData.add(dataArray)
+                }
+            }
+        }
     }
 
 
@@ -520,7 +537,87 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         return searchedPosts
     }
 
-    private val MEDIA_TYPE_PNG = "image/png".toMediaType()
+    fun searchItemsInitial(storedFood: ArrayList<FoodMasterModel>) {
+        lateinit var listFoodModel: ListFoodModel
+        if (internetConnection) {
+
+            val json = JSONObject()
+            val jsonArray = JSONArray()
+            for (item in storedFood) {
+                val jsonObj = JSONObject()
+                jsonObj.put("name", item.food.name)
+                jsonArray.put(jsonObj)
+            }
+            json.put("foodArray", jsonArray)
+
+            val jsonString = json.toString()
+            val body = create(JSON, jsonString)
+
+            val request: Request = Request.Builder()
+                .url("http://52.51.34.156:3000/food/foodLoad")
+                .post(body)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val responseBody = response.body!!.string()
+                if (responseBody == "No items found") {
+                    print("No items found")
+                } else {
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    listFoodModel = gson.fromJson(responseBody, ListFoodModel::class.java)
+                    for (food in listFoodModel.listArray) {
+                        listFoodArray.add(food)
+                    }
+                }
+            }
+        }
+    }
+
+    fun searchShop(textArrayList: ArrayList<String>): FoodModel? {
+        lateinit var listFoodModel: ListFoodModel
+        if (internetConnection) {
+            val json = JSONObject()
+            val jsonArray = JSONArray()
+            for (item in textArrayList) {
+                val jsonObj = JSONObject()
+                jsonObj.put("shop", item)
+                jsonArray.put(jsonObj)
+            }
+            json.put("shopArray", jsonArray)
+
+            val jsonString = json.toString()
+            val body = create(JSON, jsonString)
+
+            val request: Request = Request.Builder()
+                .url("http://52.51.34.156:3000/food/shop")
+                .post(body)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val responseBody = response.body!!.string()
+                if (responseBody == "No Shops Found") {
+                    print("No Posts Found")
+                } else {
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    val foodModel = gson.fromJson(responseBody, FoodModel::class.java)
+                    return foodModel
+                }
+            }
+        }
+        return null
+    }
+
+    fun listOfFoodArray(): ArrayList<FoodMasterModel> {
+        return listFoodArray
+    }
+
+    private val MEDIA_TYPE_JPEG = "image/jpeg".toMediaType()
 
     fun uploadImagesPost(oid: String, listofImages: ArrayList<String>) {
         val file = File(listofImages[0])
@@ -528,12 +625,12 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         for(i in listofImages) {
             val bitmap = readImageFromPath(context, i)
             val stream = ByteArrayOutputStream()
-            bitmap!!.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            bitmap!!.compress(Bitmap.CompressFormat.JPEG, 80, stream)
             val byteArray: ByteArray = stream.toByteArray()
 
             val requestBody: RequestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("imageFiles", "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())}.png", create(MEDIA_TYPE_PNG, byteArray))
+                .addFormDataPart("imageFiles", "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())}.jpeg", create(MEDIA_TYPE_JPEG, byteArray))
                 .build()
 
             val request = Request.Builder()
@@ -552,12 +649,12 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     fun uploadImagesUser(oid: String, image: String): Boolean {
         val bitmap = readImageFromPath(context, image)
         val stream = ByteArrayOutputStream()
-        bitmap!!.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, stream)
         val byteArray: ByteArray = stream.toByteArray()
 
         val requestBody: RequestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("profilePic", "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())}.png", create(MEDIA_TYPE_PNG, byteArray))
+            .addFormDataPart("profilePic", "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())}.jpeg", create(MEDIA_TYPE_JPEG, byteArray))
             .build()
 
         val request = Request.Builder()
@@ -581,12 +678,12 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
     fun uploadImagesFood(oid: String): Boolean {
         val stream = ByteArrayOutputStream()
-        storedImage!!.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        storedImage!!.compress(Bitmap.CompressFormat.JPEG, 80, stream)
         val byteArray: ByteArray = stream.toByteArray()
 
         val requestBody: RequestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("foodPic", "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())}.png", create(MEDIA_TYPE_PNG, byteArray))
+            .addFormDataPart("foodPic", "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())}.jpeg", create(MEDIA_TYPE_JPEG, byteArray))
             .build()
 
         val request = Request.Builder()
@@ -601,9 +698,19 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
             val gsonBuilder = GsonBuilder()
             val gson = gsonBuilder.create()
-//            val food = gson.fromJson(body,FoodMasterModel::class.java)
+            val food = gson.fromJson(body,FoodMasterModel::class.java)
+            newFood(food)
             return true
         }
+    }
+    var newFoodData = FoodMasterModel()
+
+    fun newFood(food: FoodMasterModel) {
+        newFoodData = food
+    }
+
+    fun newFoodData(): FoodMasterModel {
+        return newFoodData
     }
 
 

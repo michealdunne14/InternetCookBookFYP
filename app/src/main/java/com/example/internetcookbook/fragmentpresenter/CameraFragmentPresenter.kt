@@ -12,6 +12,7 @@ import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.onComplete
 
 class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app : MainApp = view.activity?.application as MainApp
@@ -50,6 +51,14 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return infoStore!!.findItem(element)
     }
 
+    fun searchItemsInitial(storedFood: ArrayList<FoodMasterModel>) {
+        return infoStore!!.searchItemsInitial(storedFood)
+    }
+
+    fun findShop(textArrayList: ArrayList<String>): FoodModel? {
+        return infoStore!!.searchShop(textArrayList)
+    }
+
     fun searchDate(element: String): String {
         return "10/11/2020"
     }
@@ -57,6 +66,25 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     fun doAddCupboard(validFoodItems: ArrayList<FoodMasterModel>) {
         doAsync {
             infoStore!!.cupboardAdd(validFoodItems)
+            onComplete {
+
+            }
         }
+    }
+
+    fun doGetReturnBack(): Boolean {
+        return infoStore!!.findReturnBack()
+    }
+
+    fun itemsInDatabase(): ArrayList<FoodMasterModel> {
+        return infoStore!!.listOfFoodArray()
+    }
+
+    fun findNewData(): FoodMasterModel {
+        return infoStore!!.newFoodData()
+    }
+
+    fun doSetReturnBack(){
+       infoStore!!.notReturningBack()
     }
 }
