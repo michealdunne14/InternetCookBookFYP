@@ -9,16 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
 import com.example.internetcookbook.models.FoodMasterModel
-import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.listeachitem.view.*
+import kotlinx.android.synthetic.main.listitems.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 
 class ReceiptListAdapter(
-    private var foodItems: List<FoodModel>,
+    private var foodItems: ArrayList<FoodMasterModel>,
     private var presenter: CameraFragmentPresenter,
-    private var validFoodItems: ArrayList<FoodMasterModel>
+    private var validFoodItems: ArrayList<FoodMasterModel>,
+    private var homeView: View
 ): RecyclerView.Adapter<ReceiptListAdapter.MainHolder>() {
 
 
@@ -36,42 +37,62 @@ class ReceiptListAdapter(
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val food = foodItems[holder.adapterPosition]
-        holder.bind(food,presenter,foodItems,validFoodItems)
+        holder.bind(food,presenter,foodItems,validFoodItems,homeView)
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(
-            foodModel: FoodModel,
+            foodModel: FoodMasterModel,
             presenter: CameraFragmentPresenter,
-            foodItems: List<FoodModel>,
-            validFoodItems: ArrayList<FoodMasterModel>
+            foodItems: ArrayList<FoodMasterModel>,
+            validFoodItems: ArrayList<FoodMasterModel>,
+            homeView: View
         ){
-            itemView.mFoodItemText.setText(foodModel.name)
-            doAsync {
-                val result = presenter.searchItems(foodModel.name)
-                onComplete {
-                    if(result!!.food.name.isNotEmpty()) {
-                        itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
-                        validFoodItems.add(result)
-                    }else{
-                        itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
-                    }
-                }
+            itemView.mFoodItemText.setText(foodModel.food.name)
+
+            if(foodModel.food.foundItem) {
+                itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
+            }else{
+                itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
             }
+
             itemView.mFoodItemButton.setOnClickListener {
                 val text= itemView.mFoodItemText.text.toString()
-                foodItems[position].name = text
-                doAsync { 
-                    val result = presenter.searchItems(text)
-                    onComplete {
-                        if(result!!.food.name.isNotEmpty()) {
-                            itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
-                            validFoodItems.add(result)
-                        }else{
-                            itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
-                            val action = PagerFragmentViewDirections.actionPagerFragmentToFoodCreateView(text)
-                            itemView.findNavController().navigate(action)
+                foodItems[position].food.name = text
+                var foodAlreadyPresent = false
+                if (validFoodItems.isNotEmpty()) {
+                    for (validFood in validFoodItems) {
+                        if (validFood.food.name == foodItems[position].food.name) {
+                            foodItems.removeAt(position)
+                            homeView.mFoodListRecyclerView.removeViewAt(position);
+                            homeView.mFoodListRecyclerView.adapter?.notifyItemRemoved(position);
+                            homeView.mFoodListRecyclerView.adapter?.notifyItemRangeChanged(position, foodItems.size);
+                            validFood.food.itemsCounter++
+//                            validFoodItems.update
+                            foodAlreadyPresent = true
+                            break
                         }
+                    }
+                }
+                if (!foodAlreadyPresent) {
+                    addNewValidItem(text, presenter, foodModel, validFoodItems)
+                }
+            }
+        }
+        fun addNewValidItem(text: String, presenter: CameraFragmentPresenter, foodModel: FoodMasterModel, validFoodItems: ArrayList<FoodMasterModel>) {
+            doAsync {
+//                  If food item is not in valid foodItems
+                val result = presenter.searchItems(text)
+                onComplete {
+                    if (result!!.food.name.isNotEmpty()) {
+                        itemView.setBackgroundColor(getColor(itemView.context, R.color.colorGreen))
+                        result.food.foundItem = true
+                        foodModel.food.foundItem = true
+                        validFoodItems.add(result)
+                    } else {
+                        itemView.setBackgroundColor(getColor(itemView.context, R.color.colorRed))
+                        val action = PagerFragmentViewDirections.actionPagerFragmentToFoodCreateView(text)
+                        itemView.findNavController().navigate(action)
                     }
                 }
             }

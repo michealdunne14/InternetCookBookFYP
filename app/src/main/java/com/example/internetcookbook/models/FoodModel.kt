@@ -25,5 +25,7 @@ data class FoodModel(
     @SerializedName("imagePath")
     var imagePath: String = "",
     @SerializedName("imagePathReliability")
-    var imagePathReliability: String = ""
+    var imagePathReliability: String = "",
+    var foundItem: Boolean = false,
+    var itemsCounter: Int = 1
 ): Parcelable

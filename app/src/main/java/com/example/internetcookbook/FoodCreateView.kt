@@ -55,6 +55,7 @@ class FoodCreateView : BaseView(){
     }
 
     override fun naviateUp(){
+
         foodCreateView.findNavController().navigateUp()
     }
 

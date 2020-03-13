@@ -1,7 +1,6 @@
 package com.example.internetcookbook.fragmentview
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -24,20 +23,22 @@ import com.example.internetcookbook.dialog.CustomDialog
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
 import com.example.internetcookbook.helper.readImageFromPath
 import com.example.internetcookbook.models.FoodMasterModel
-import com.example.internetcookbook.models.FoodModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
+import kotlinx.android.synthetic.main.activity_custom.*
 import kotlinx.android.synthetic.main.camera_show.view.*
 import kotlinx.android.synthetic.main.fragment_camera.view.*
 import kotlinx.android.synthetic.main.listitems.view.*
 import org.jetbrains.anko.*
-import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+
+val storedFood: ArrayList<FoodMasterModel> = ArrayList()
+val validFoodItems = ArrayList<FoodMasterModel>()
 
 
 class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
@@ -46,12 +47,10 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
     // This is an array of all the permission specified in the manifest.
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-    lateinit var homeView: View
-    var storedFood = ArrayList<FoodModel>()
+    lateinit var cameraView: View
     var captureCheck = false
     var torch = false
     lateinit var customDialog: CustomDialog
-    val validFoodItems = ArrayList<FoodMasterModel>()
     var foodCreateCheck = false
 
 
@@ -63,17 +62,26 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_camera, container, false)
-        homeView = view
+        cameraView = view
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)
         presenter = initPresenter(CameraFragmentPresenter(this)) as CameraFragmentPresenter
+
+
+        if (presenter.doGetReturnBack()){
+            cameraView.mListItems.visibility = View.VISIBLE
+            cameraView.mListItems.bringToFront()
+            cameraView.view_finder.visibility = View.INVISIBLE
+            cameraView.mCameraShow.visibility = View.GONE
+            presenter.doSetReturnBack()
+        }
 
         if (arguments != null) {
             val images = CameraFragmentViewArgs.fromBundle(arguments!!).foodcreate
             if (images == "food_create") {
                 foodCreateCheck = true
-                homeView.mButtonFindText.visibility = View.INVISIBLE
-                homeView.mScanBarcodeButton.visibility = View.INVISIBLE
+                cameraView.mButtonFindText.visibility = View.INVISIBLE
+                cameraView.mScanBarcodeButton.visibility = View.INVISIBLE
 //                homeView.mScanBarcodeButton.setImageResource(R.drawable.cor)
             }
         }
@@ -82,12 +90,27 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         view.mRetakePicture.setOnClickListener {
             storedFood.clear()
             view.mListItems.visibility = View.GONE
-            homeView.mCameraShow.visibility = View.VISIBLE
+            cameraView.mButtonFindText.visibility = View.INVISIBLE
+            cameraView.mCameraShow.visibility = View.VISIBLE
             captureCheck = false
             clearImageBitmap()
         }
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (presenter.findNewData().food.name.isNotEmpty()){
+            validFoodItems.add(presenter.findNewData())
+        }
+        cameraView.mFoodListRecyclerView.adapter = ReceiptListAdapter(
+            storedFood,
+            presenter,
+            validFoodItems,
+            cameraView
+        )
+        cameraView.mFoodListRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun onStart() {
@@ -148,26 +171,26 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 //            homeView.findNavController().navigate(action,extras)
 //        }
 
-        homeView.mCameraFlashButton.setOnClickListener {
+        cameraView.mCameraFlashButton.setOnClickListener {
             torch = !torch
             if (torch) {
                 val myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce)
                 val interpolator =
                     Bounce(0.2, 20.0)
                 myAnim.interpolator = interpolator
-                homeView.mCameraFlashButton.startAnimation(myAnim)
-                homeView.mCameraFlashButton.setImageResource(R.drawable.flashon)
+                cameraView.mCameraFlashButton.startAnimation(myAnim)
+                cameraView.mCameraFlashButton.setImageResource(R.drawable.flashon)
             }else{
                 val myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce)
                 val interpolator =
                     Bounce(0.2, 20.0)
                 myAnim.interpolator = interpolator
-                homeView.mCameraFlashButton.startAnimation(myAnim)
-                homeView.mCameraFlashButton.setImageResource(R.drawable.baseline_flash_off_white_36)
+                cameraView.mCameraFlashButton.startAnimation(myAnim)
+                cameraView.mCameraFlashButton.setImageResource(R.drawable.baseline_flash_off_white_36)
             }
         }
 
-        homeView.mCameraCaptureButton.setOnClickListener {
+        cameraView.mCameraCaptureButton.setOnClickListener {
             if(!captureCheck) {
                 doAsync {
                     try {
@@ -183,67 +206,42 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                         captureCheck = true
                         setImageBitmap()
                         if (!foodCreateCheck) {
-                            homeView.mButtonFindText.visibility = View.VISIBLE
+                            cameraView.mButtonFindText.visibility = View.VISIBLE
                         }
                     }
                 }
                 if (foodCreateCheck){
-                    homeView.mScanBarcodeButton.visibility = View.VISIBLE
+                    cameraView.mScanBarcodeButton.visibility = View.VISIBLE
                 }
             }else{
                 captureCheck = false
                 clearImageBitmap()
                 if (!foodCreateCheck) {
-                    homeView.mButtonFindText.visibility = View.INVISIBLE
+                    cameraView.mButtonFindText.visibility = View.INVISIBLE
                 }
                 if (foodCreateCheck){
-                    homeView.mScanBarcodeButton.visibility = View.INVISIBLE
+                    cameraView.mScanBarcodeButton.visibility = View.INVISIBLE
                 }
             }
         }
 
-        homeView.mAddCupboard.setOnClickListener {
+        cameraView.mAddCupboard.setOnClickListener {
             presenter.doAddCupboard(validFoodItems)
         }
 
-        homeView.mButtonFindText.setOnClickListener {
+        cameraView.mButtonFindText.setOnClickListener {
 
-            homeView.mCameraShow.visibility = View.INVISIBLE
-            var shop: String = "Tesco"
-//            customDialog.mConfirm.setOnClickListener {
-                doAsync {
-                    shop = presenter.searchShop(shop)!!
-                    onComplete {
-                        homeView.mShoppedAt.text = shop
-                        val bitmap = (homeView.mCapturedImage.drawable as BitmapDrawable).bitmap
-//                        if(shop == getString(R.string.huh_no_shop)){
-//                            customDialog = CustomDialog(activity!!)
-//
-//                            customDialog.show()
-//                            customDialog.setCanceledOnTouchOutside(false)
-//                            customDialog.mRetake.setOnClickListener {
-//                                storedFood.clear()
-//                                homeView.mListItems.visibility = View.GONE
-//                                homeView.mCameraShow.visibility = View.VISIBLE
-//                                captureCheck = false
-//                                homeView.view_finder.visibility = View.VISIBLE
-//                                homeView.mCapturedImage.setImageBitmap(null)
-//                                customDialog.cancel()
-//                            }
-//                        }else {
-                            mChangeImageToText(bitmap, shop)
-//                        }
-                    }
-//                }
-            }
+            cameraView.mCameraShow.visibility = View.INVISIBLE
+            val bitmap = (cameraView.mCapturedImage.drawable as BitmapDrawable).bitmap
+            mChangeImageToText(bitmap)
         }
 
-        homeView.mScanBarcodeButton.setOnClickListener {
+        cameraView.mScanBarcodeButton.setOnClickListener {
 //            mScanBarCode(viewFinder.bitmap)
             if (foodCreateCheck){
-                val bitmap = (homeView.mCapturedImage.drawable as BitmapDrawable).bitmap
+                val bitmap = (cameraView.mCapturedImage.drawable as BitmapDrawable).bitmap
                 presenter.storeImage(bitmap)
-                homeView.findNavController().navigateUp()
+                cameraView.findNavController().navigateUp()
             }else {
                 presenter.doSelectImage()
             }
@@ -298,26 +296,26 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                     }
                 }
                 .addOnFailureListener {
-                    Snackbar.make(homeView,"No Barcode Found Found", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(cameraView,"No Barcode Found Found", Snackbar.LENGTH_SHORT).show()
                 }
         }else{
-            Snackbar.make(homeView,"No Barcode Found Found", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(cameraView,"No Barcode Found Found", Snackbar.LENGTH_SHORT).show()
         }
     }
 
     private fun clearImageBitmap() {
-        homeView.view_finder.visibility = View.VISIBLE
-        homeView.mCapturedImage.setImageBitmap(null)
+        cameraView.view_finder.visibility = View.VISIBLE
+        cameraView.mCapturedImage.setImageBitmap(null)
     }
 
 
 
-    fun mChangeImageToText(bitmap: Bitmap, shop: String) {
+    fun mChangeImageToText(bitmap: Bitmap) {
             val image = FirebaseVisionImage.fromBitmap(bitmap)
             val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
 
             detector.processImage(image).addOnSuccessListener { firebaseVisionText ->
-                    processResultText(firebaseVisionText,shop)
+                    processResultText(firebaseVisionText)
                 }
                 .addOnFailureListener {
                 }
@@ -338,10 +336,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 //    }
 
 
-    private fun processResultText(
-        resultText: FirebaseVisionText,
-        shop: String
-    ) {
+    private fun processResultText(resultText: FirebaseVisionText) {
 //        if (resultText.textBlocks.size == 0) {
 //            Snackbar.make(homeView,"No Text Found", Snackbar.LENGTH_SHORT).show()
 //            return
@@ -349,39 +344,101 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 //            homeView.mCameraShow.visibility = View.GONE
 //        }
         info { "Select Country Started" }
+        val elementArrayList = ArrayList<String>()
+        val lineArrayList = ArrayList<String>()
         doAsync {
             for (block in resultText.textBlocks) {
                 for (line in block.lines) {
+                    lineArrayList.add(line.text)
                     for (element in line.elements) {
-                        val foodModel = FoodModel()
-                        foodModel.name = element.text
-                        foodModel.price = 6
-                        foodModel.shop = shop
-                        storedFood.add(foodModel)
+                        elementArrayList.add(element.text)
                     }
                 }
             }
-            uiThread {
-                homeView.mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood,presenter,validFoodItems)
-                homeView.mFoodListRecyclerView.adapter?.notifyDataSetChanged()
+            onComplete {
+                doAsync {
+                    val foundFood = presenter.findShop(elementArrayList)
+                    onComplete {
+                        var foodModel = FoodMasterModel()
+                        if(foundFood?.shop != null) {
+                            for (foodItem in lineArrayList) {
+                                foodModel = FoodMasterModel()
+                                foodModel.food.name = foodItem
+                                foodModel.food.shop = foundFood.shop
+                                if (!storedFood.contains(foodModel)) {
+                                    storedFood.add(foodModel)
+                                }
+                            }
+                            findFoodItems()
+                        }else{
+                            customDialog = CustomDialog(activity!!)
+                            customDialog.show()
+                            customDialog.setCanceledOnTouchOutside(false)
+                            customDialog.mConfirm.setOnClickListener {
+                                customDialog.cancel()
+                                for (foodItem in lineArrayList) {
+                                    foodModel = FoodMasterModel()
+                                    foodModel.food.name = foodItem
+                                    foodModel.food.shop = customDialog.mDialogSearch.text.toString()
+                                    if (!storedFood.contains(foodModel)) {
+                                        storedFood.add(foodModel)
+                                    }
+                                }
+                                findFoodItems()
+                                cameraView.mShoppedAt.text = customDialog.mDialogSearch.text
+                            }
+                            customDialog.mRetake.setOnClickListener {
+                                storedFood.clear()
+                                cameraView.mListItems.visibility = View.GONE
+                                cameraView.mCameraShow.visibility = View.VISIBLE
+                                captureCheck = false
+                                cameraView.view_finder.visibility = View.VISIBLE
+                                cameraView.mCapturedImage.setImageBitmap(null)
+                                customDialog.cancel()
+                            }
+                        }
+                    }
+                }
             }
         }
-        homeView.mCapturedImage.visibility = View.INVISIBLE
-        homeView.mFoodListRecyclerView.visibility = View.VISIBLE
-        homeView.mListItems.visibility = View.VISIBLE
+        cameraView.mCapturedImage.visibility = View.INVISIBLE
+        cameraView.mFoodListRecyclerView.visibility = View.VISIBLE
+        cameraView.mListItems.visibility = View.VISIBLE
+    }
+
+
+    private fun findFoodItems(){
+        doAsync {
+            presenter.searchItemsInitial(storedFood)
+            onComplete {
+                if(presenter.itemsInDatabase().isNotEmpty()) {
+                    for (foundFoodInDatabase in presenter.itemsInDatabase()) {
+                        val search: FoodMasterModel? = storedFood.find { p -> p.food.name == foundFoodInDatabase.food.name }
+                        if (search != null) {
+                            if (search.food.name.isNotEmpty()) {
+                                validFoodItems.add(search)
+                                search.food.foundItem = true
+                            }
+                        }
+                    }
+                }
+                cameraView.mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood,presenter,validFoodItems,cameraView)
+                cameraView.mFoodListRecyclerView.adapter?.notifyDataSetChanged()
+            }
+        }
     }
 
     private fun setImageBitmap() {
-        homeView.view_finder.visibility = View.INVISIBLE
-        homeView.mCapturedImage.setImageBitmap(viewFinder.bitmap)
-        homeView.mCapturedImage.visibility = View.VISIBLE
+        cameraView.view_finder.visibility = View.INVISIBLE
+        cameraView.mCapturedImage.setImageBitmap(viewFinder.bitmap)
+        cameraView.mCapturedImage.visibility = View.VISIBLE
     }
 
     override fun addImageToCamera(stringData: String) {
-        val bitmap = readImageFromPath(homeView.context,stringData)
-        homeView.view_finder.visibility = View.INVISIBLE
-        homeView.mCapturedImage.setImageBitmap(bitmap)
-        homeView.mCapturedImage.visibility = View.VISIBLE
+        val bitmap = readImageFromPath(cameraView.context,stringData)
+        cameraView.view_finder.visibility = View.INVISIBLE
+        cameraView.mCapturedImage.setImageBitmap(bitmap)
+        cameraView.mCapturedImage.visibility = View.VISIBLE
     }
 
     private fun updateTransform() {
@@ -418,7 +475,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             if (allPermissionsGranted()) {
                 viewFinder.post { startCamera() }
             } else {
-                Snackbar.make(homeView,"Permissions not granted by the user.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(cameraView,"Permissions not granted by the user.", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -426,7 +483,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(data != null){
-            presenter.doActivityResult(requestCode,resultCode,data,homeView.context)
+            presenter.doActivityResult(requestCode,resultCode,data,cameraView.context)
         }
     }
 
@@ -434,7 +491,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
      * Check if all permission specified in the manifest have been granted
      */
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(homeView.context, it) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(cameraView.context, it) == PackageManager.PERMISSION_GRANTED
     }
 
 //    private fun runTextRecognition() {
