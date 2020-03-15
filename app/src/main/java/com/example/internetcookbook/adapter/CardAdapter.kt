@@ -126,6 +126,10 @@ class CardAdapter(
             // Inflate the layout for this fragment
             val layoutManager = LinearLayoutManager(itemView.context)
 
+            itemView.mSendComment.setOnClickListener {
+                presenter.doSendComment(itemView.mCardComment.text.toString().trim(),dataModel)
+            }
+
             itemView.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
             itemView.mMakeFood.setOnClickListener {

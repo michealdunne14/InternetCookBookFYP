@@ -78,9 +78,13 @@
     </fragment>
     <fragment
         android:id="@+id/commentsFragment"
-        android:name="com.example.internetcookbook.comments.CommentsFragment"
+        android:name="com.example.internetcookbook.comments.CommentsFragmentView"
         android:label="fragment_comments"
-        tools:layout="@layout/fragment_comments" />
+        tools:layout="@layout/fragment_comments" >
+        <argument
+            android:name="dataModel"
+            app:argType="com.example.internetcookbook.models.DataModel"/>
+    </fragment>
     <fragment
         android:id="@+id/friendFragmentView"
         android:name="com.example.internetcookbook.fragmentview.FriendFragmentView"

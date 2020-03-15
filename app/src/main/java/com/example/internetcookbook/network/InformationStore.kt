@@ -621,6 +621,28 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    fun sendComment(
+        comment: String,
+        dataModel: DataModel
+    ) {
+        val formBody: RequestBody = FormBody.Builder()
+            .add("commentString", comment)
+            .add("userOid", userMaster.user.oid).build()
+
+        dataModel.post.comments.add(CommentModel(comment,userMaster.user.oid))
+
+        val request: Request = Request.Builder()
+            .url("http://52.51.34.156:3000/post/comment/${dataModel.post._id}")
+            .post(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            println(response.body!!.string())
+        }
+    }
+
     fun searchShop(textArrayList: ArrayList<String>): FoodModel? {
         lateinit var listFoodModel: ListFoodModel
         if (internetConnection) {

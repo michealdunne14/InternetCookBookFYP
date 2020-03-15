@@ -11,5 +11,6 @@ data class PostModel(
     var _id: String = "",
     var imagePath: String = "",
     var useroid: String = "",
+    var comments: MutableList<CommentModel?> = mutableListOf(),
     val method: MutableList<PostMethodOidModel> = mutableListOf()
 ) : Parcelable
