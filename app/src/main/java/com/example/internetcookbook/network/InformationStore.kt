@@ -102,6 +102,33 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    fun searchForFollowing(userSearch: String): UserMasterModel?{
+        if (internetConnection) {
+            val formBody: RequestBody = FormBody.Builder()
+                .add("username", userSearch).build()
+
+            val request = Request.Builder()
+                .url("http://52.51.34.156:3000/user/email")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                if (body == "No User found"){
+                    return null
+                }else{
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    return gson.fromJson(body,UserMasterModel::class.java)
+                }
+            }
+        } else {
+            return null
+        }
+    }
+
     fun getCurrentUser(): UserMasterModel {
         if (userLocalStore.isNotEmpty()) {
             userMaster = userLocalStore[0]

@@ -56,7 +56,7 @@
         android:hint="Comment"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/mCardIngredients"
-        app:layout_constraintEnd_toStartOf="@+id/mCardSendButton"
+        app:layout_constraintEnd_toStartOf="@+id/mSearchUsername"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -70,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/mCardSendButton"
+        android:id="@+id/mSearchUsername"
         android:layout_width="@dimen/dimension50"
         android:layout_height="0dp"
         android:layout_alignParentBottom="true"

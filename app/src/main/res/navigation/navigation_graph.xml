@@ -93,7 +93,7 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/foodCreateView"
-        android:name="com.example.internetcookbook.FoodCreateView"
+        android:name="com.example.internetcookbook.foodcreate.FoodCreateView"
         android:label="fragment_food_create"
         tools:layout="@layout/fragment_food_create" >
         <argument
