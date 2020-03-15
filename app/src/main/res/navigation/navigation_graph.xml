@@ -40,6 +40,9 @@
             <argument
                 android:name="fooditem"
                 app:argType="string" />
+            <argument
+                android:name="foodshop"
+                app:argType="string" />
         </action>
     </fragment>
     <fragment
@@ -96,6 +99,9 @@
         <argument
             android:name="fooditem"
             app:argType="string"/>
+        <argument
+            android:name="foodshop"
+            app:argType="string" />
         <action
             android:id="@+id/action_foodCreateView_to_cameraFragmentView"
             app:destination="@id/cameraFragmentView" >

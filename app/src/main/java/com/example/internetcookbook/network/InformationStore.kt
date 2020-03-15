@@ -272,8 +272,14 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         if (basketSearch == null){
             val cupboardSearch: FoodMasterModel? = cupboardData.find { p -> p.food.name == item }
             if (cupboardSearch == null){
+
+                val formBody: RequestBody = FormBody.Builder()
+                    .add("name", item)
+                    .build()
+
                 val request = Request.Builder()
-                    .url("http://52.51.34.156:3000/food/name/${item}")
+                    .url("http://52.51.34.156:3000/food/name")
+                    .post(formBody)
                     .build()
 
                 client.newCall(request).execute().use { response ->
@@ -562,7 +568,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
                 val responseBody = response.body!!.string()
-                if (responseBody == "No items found") {
+                if (responseBody.toLowerCase() == "no items found") {
                     print("No items found")
                 } else {
                     val gsonBuilder = GsonBuilder()
@@ -600,13 +606,14 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
                 val responseBody = response.body!!.string()
-                if (responseBody == "No Shops Found") {
-                    print("No Posts Found")
+                return if (responseBody == "No Shops Found") {
+                    print("No Shops Found")
+                    null
                 } else {
                     val gsonBuilder = GsonBuilder()
                     val gson = gsonBuilder.create()
                     val foodModel = gson.fromJson(responseBody, FoodModel::class.java)
-                    return foodModel
+                    foodModel
                 }
             }
         }
