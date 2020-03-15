@@ -61,6 +61,11 @@ class ItemFragmentView : BaseView() {
 
         })
 
+
+        itemView.mFollowerFind.setOnClickListener {
+
+        }
+
         itemView.mSearchBasketItem.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
 

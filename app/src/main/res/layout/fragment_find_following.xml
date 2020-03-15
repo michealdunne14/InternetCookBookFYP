@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".findfollowing.FindFollowingView">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutSearch"
+        android:id="@+id/constraintLayoutFind"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/colorWhite"
@@ -18,35 +19,37 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <EditText
-            android:id="@+id/mSearchFollowerItem"
+            android:id="@+id/mFindFollowerItem"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:hint="@string/search_followers"
+            android:hint="@string/search_username"
             android:textColor="@color/colorBlack"
             android:textColorHint="@color/colorBlack"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/mFollowerFind"
+            app:layout_constraintEnd_toStartOf="@+id/mSearchUsername"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/mFollowerFind"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/mSearchUsername"
+            android:layout_width="@dimen/dimension50"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/outline_person_black_36" />
+            app:srcCompat="@android:drawable/ic_menu_send" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mFollowerRecyclerView"
+        android:id="@+id/mFindFollowerRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayoutSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayoutFind" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

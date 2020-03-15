@@ -43,6 +43,7 @@
     <string name="price">Price</string>
     <string name="expiration_date">Expiration Date</string>
     <string name="add">Add</string>
+    <string name="search_username">Search Username</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>

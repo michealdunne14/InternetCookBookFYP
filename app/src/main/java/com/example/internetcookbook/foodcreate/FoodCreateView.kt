@@ -1,10 +1,11 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.foodcreate
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.FoodModel
 import com.google.android.material.snackbar.Snackbar
@@ -21,14 +22,22 @@ class FoodCreateView : BaseView(){
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        presenter = initPresenter(FoodCreatePresenter(this)) as FoodCreatePresenter
+        presenter = initPresenter(
+            FoodCreatePresenter(
+                this
+            )
+        ) as FoodCreatePresenter
         val view=  inflater.inflate(R.layout.fragment_food_create, container, false)
         foodCreateView = view
 
         if (arguments != null) {
             if (arguments!!.containsKey("fooditem")){
-                val foodItem = FoodCreateViewArgs.fromBundle(arguments!!).fooditem
-                val foodShop = FoodCreateViewArgs.fromBundle(arguments!!).foodshop
+                val foodItem = FoodCreateViewArgs.fromBundle(
+                    arguments!!
+                ).fooditem
+                val foodShop = FoodCreateViewArgs.fromBundle(
+                    arguments!!
+                ).foodshop
                 foodCreateView.mFoodCreateName.setText(foodItem)
                 foodCreateView.mFoodCreateShop.text = foodShop
             }
@@ -39,7 +48,10 @@ class FoodCreateView : BaseView(){
         }
 
         foodCreateView.mFoodCreateImage.setOnClickListener {
-            val action = FoodCreateViewDirections.actionFoodCreateViewToCameraFragmentView("food_create")
+            val action =
+                FoodCreateViewDirections.actionFoodCreateViewToCameraFragmentView(
+                    "food_create"
+                )
             view.findNavController().navigate(action)
         }
 

@@ -1,6 +1,7 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.foodcreate
 
 import android.graphics.Bitmap
+import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.FoodModel
