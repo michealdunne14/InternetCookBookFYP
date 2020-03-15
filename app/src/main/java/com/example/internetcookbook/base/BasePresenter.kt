@@ -3,7 +3,7 @@ package com.example.internetcookbook.base
 import android.content.Context
 import android.content.Intent
 import com.example.internetcookbook.MainApp
-import com.example.internetcookbook.models.UserModel
+import com.example.internetcookbook.models.DataModel
 
 open class BasePresenter(var view: BaseView) {
     open var app:MainApp = view.activity!!.application as MainApp
@@ -19,6 +19,10 @@ open class BasePresenter(var view: BaseView) {
     }
 
     open fun doHeartData(id: String){}
+    open fun doSendComment(
+        comment: String,
+        dataModel: DataModel
+    ) {}
 
 //    open fun doCreateNote(fireStore: HillfortFireStore?, note: String, hillfort: HillFortModel){}
 }

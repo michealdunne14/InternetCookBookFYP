@@ -4,6 +4,7 @@ import android.view.View
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.models.CommentModel
 import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.network.InformationStore
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -23,6 +24,15 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
             onComplete {
                 doFindHomeData()
             }
+        }
+    }
+
+    override fun doSendComment(
+        comment: String,
+        dataModel: DataModel
+    ) {
+        doAsync {
+            infoStore!!.sendComment(comment, dataModel)
         }
     }
 
