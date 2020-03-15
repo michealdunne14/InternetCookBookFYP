@@ -28,7 +28,9 @@ class FoodCreateView : BaseView(){
         if (arguments != null) {
             if (arguments!!.containsKey("fooditem")){
                 val foodItem = FoodCreateViewArgs.fromBundle(arguments!!).fooditem
+                val foodShop = FoodCreateViewArgs.fromBundle(arguments!!).foodshop
                 foodCreateView.mFoodCreateName.setText(foodItem)
+                foodCreateView.mFoodCreateShop.text = foodShop
             }
         }
 
@@ -42,10 +44,13 @@ class FoodCreateView : BaseView(){
         }
 
         foodCreateView.mFoodCreateAdd.setOnClickListener {
-            presenter.doAddFood(FoodModel("",foodCreateView.mFoodCreateName.text.toString(),foodCreateView.mFoodCreatePrice.text.toString().toDouble(),"Tesco"/*foodCreateView.mFoodCreateShop.text.toString()*/,0,
+            presenter.doAddFood(FoodModel("",foodCreateView.mFoodCreateName.text.toString(),foodCreateView.mFoodCreatePrice.text.toString().toDouble(),foodCreateView.mFoodCreateShop.text.toString(),0,
             0,0,0,"",""))
         }
 
+        foodCreateView.mReturnButton.setOnClickListener {
+            naviateUp()
+        }
 
         return view
     }
@@ -55,7 +60,6 @@ class FoodCreateView : BaseView(){
     }
 
     override fun naviateUp(){
-
         foodCreateView.findNavController().navigateUp()
     }
 

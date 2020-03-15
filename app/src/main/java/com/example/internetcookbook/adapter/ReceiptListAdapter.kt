@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
+import com.example.internetcookbook.helper.capitalize
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.listeachitem.view.*
@@ -56,18 +57,20 @@ class ReceiptListAdapter(
                 itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
             }
 
-            itemView.mFoodItemButton.setOnClickListener {
+            itemView.mFoodRemoveButton.setOnClickListener {
+                removeItem(foodItems, homeView, position)
+            }
+
+            itemView.mFoodUpdateButton.setOnClickListener {
                 val text= itemView.mFoodItemText.text.toString()
-                foodItems[position].food.name = text
+                foodItems[position].food.name = capitalize(text)
                 var foodAlreadyPresent = false
                 if (validFoodItems.isNotEmpty()) {
                     for (validFood in validFoodItems) {
                         if (validFood.food.name == foodItems[position].food.name) {
-                            foodItems.removeAt(position)
-                            homeView.mFoodListRecyclerView.removeViewAt(position);
-                            homeView.mFoodListRecyclerView.adapter?.notifyItemRemoved(position);
-                            homeView.mFoodListRecyclerView.adapter?.notifyItemRangeChanged(position, foodItems.size);
+                            removeItem(foodItems,homeView,position)
                             validFood.food.itemsCounter++
+                            itemView.mItemCounter.text = validFood.food.itemsCounter.toString()
 //                            validFoodItems.update
                             foodAlreadyPresent = true
                             break
@@ -91,11 +94,22 @@ class ReceiptListAdapter(
                         validFoodItems.add(result)
                     } else {
                         itemView.setBackgroundColor(getColor(itemView.context, R.color.colorRed))
-                        val action = PagerFragmentViewDirections.actionPagerFragmentToFoodCreateView(text)
+                        val action = PagerFragmentViewDirections.actionPagerFragmentToFoodCreateView(text,foodModel.food.shop)
                         itemView.findNavController().navigate(action)
                     }
                 }
             }
+        }
+
+        fun removeItem(
+            foodItems: ArrayList<FoodMasterModel>,
+            homeView: View,
+            position: Int
+        ) {
+            foodItems.removeAt(position)
+            homeView.mFoodListRecyclerView.removeViewAt(position);
+            homeView.mFoodListRecyclerView.adapter?.notifyItemRemoved(position);
+            homeView.mFoodListRecyclerView.adapter?.notifyItemRangeChanged(position, foodItems.size)
         }
     }
 }

@@ -21,6 +21,7 @@ import com.example.internetcookbook.animations.Bounce
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.dialog.CustomDialog
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
+import com.example.internetcookbook.helper.capitalize
 import com.example.internetcookbook.helper.readImageFromPath
 import com.example.internetcookbook.models.FoodMasterModel
 import com.google.android.material.snackbar.Snackbar
@@ -88,12 +89,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
         view.mFoodListRecyclerView.layoutManager = layoutManager
         view.mRetakePicture.setOnClickListener {
-            storedFood.clear()
-            view.mListItems.visibility = View.GONE
-            cameraView.mButtonFindText.visibility = View.INVISIBLE
-            cameraView.mCameraShow.visibility = View.VISIBLE
-            captureCheck = false
-            clearImageBitmap()
+            resetInformation()
         }
 
         return view
@@ -138,9 +134,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     private lateinit var viewFinder: TextureView
 
     private fun startCamera() {
-//        val metrics = DisplayMetrics().also { viewFinder.display.getRealMetrics(it) }
-//        val screenSize = Size(metrics.widthPixels, metrics.heightPixels)
-
 //        // Create configuration object for the viewfinder use case
         val previewConfig = PreviewConfig.Builder().apply {
             setTargetAspectRatio(AspectRatio.RATIO_16_9)
@@ -162,14 +155,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             viewFinder.surfaceTexture = it.surfaceTexture
             updateTransform()
         }
-
-//        homeView.mPostButton.setOnClickListener {
-//            val action = PagerFragmentDirections.actionPagerFragmentToPostFragment2()
-//            val extras = FragmentNavigatorExtras(
-//                viewFinder to "image"
-//            )
-//            homeView.findNavController().navigate(action,extras)
-//        }
 
         cameraView.mCameraFlashButton.setOnClickListener {
             torch = !torch
@@ -230,14 +215,12 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
 
         cameraView.mButtonFindText.setOnClickListener {
-
             cameraView.mCameraShow.visibility = View.INVISIBLE
             val bitmap = (cameraView.mCapturedImage.drawable as BitmapDrawable).bitmap
             mChangeImageToText(bitmap)
         }
 
         cameraView.mScanBarcodeButton.setOnClickListener {
-//            mScanBarCode(viewFinder.bitmap)
             if (foodCreateCheck){
                 val bitmap = (cameraView.mCapturedImage.drawable as BitmapDrawable).bitmap
                 presenter.storeImage(bitmap)
@@ -346,29 +329,66 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         info { "Select Country Started" }
         val elementArrayList = ArrayList<String>()
         val lineArrayList = ArrayList<String>()
+        val filteredArrayList = ArrayList<String>()
         doAsync {
             for (block in resultText.textBlocks) {
                 for (line in block.lines) {
-                    lineArrayList.add(line.text)
+                    lineArrayList.add(line.text.trim())
                     for (element in line.elements) {
-                        elementArrayList.add(element.text)
+                        elementArrayList.add(capitalize(element.text.trim()))
                     }
                 }
             }
             onComplete {
+                val foundDate = presenter.findDate(elementArrayList)
+                if (foundDate != null){
+                    cameraView.mFoodDate.text = foundDate
+                }else{
+//                    Dialog for purchase Date
+                }
+                for (line in lineArrayList){
+                    val wordArrayList = ArrayList<String>()
+                    val wordList = line.split(" ")
+                    val removingWords = ArrayList<String>()
+                    wordArrayList.addAll(wordList)
+                    wordArrayList.forEachIndexed { index, word ->
+                        val chars: CharArray = word.toCharArray()
+                        for (c in chars) {
+                            if (Character.isDigit(c)) {
+                                removingWords.add(word)
+                                break
+                            }
+                        }
+                    }
+                    for (remove in removingWords){
+                        wordArrayList.remove(remove)
+                    }
+                    var foodItem = String()
+                    wordArrayList.forEachIndexed { index, word ->
+                        val capWord = capitalize(word)
+                        if(index == 0){
+                            foodItem += capWord
+                        }else {
+                            foodItem += " $capWord"
+                        }
+                    }
+
+                    filteredArrayList.add(foodItem)
+                }
                 doAsync {
-                    val foundFood = presenter.findShop(elementArrayList)
+                    val foundShop = presenter.findShop(elementArrayList)
                     onComplete {
                         var foodModel = FoodMasterModel()
-                        if(foundFood?.shop != null) {
-                            for (foodItem in lineArrayList) {
+                        if(foundShop != null) {
+                            for (foodItem in filteredArrayList) {
                                 foodModel = FoodMasterModel()
                                 foodModel.food.name = foodItem
-                                foodModel.food.shop = foundFood.shop
+                                foodModel.food.shop = foundShop.shop
                                 if (!storedFood.contains(foodModel)) {
                                     storedFood.add(foodModel)
                                 }
                             }
+                            cameraView.mShoppedAt.text = foundShop.shop
                             findFoodItems()
                         }else{
                             customDialog = CustomDialog(activity!!)
@@ -376,7 +396,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                             customDialog.setCanceledOnTouchOutside(false)
                             customDialog.mConfirm.setOnClickListener {
                                 customDialog.cancel()
-                                for (foodItem in lineArrayList) {
+                                for (foodItem in filteredArrayList) {
                                     foodModel = FoodMasterModel()
                                     foodModel.food.name = foodItem
                                     foodModel.food.shop = customDialog.mDialogSearch.text.toString()
@@ -406,6 +426,15 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         cameraView.mListItems.visibility = View.VISIBLE
     }
 
+
+    override fun resetInformation(){
+        storedFood.clear()
+        cameraView.mListItems.visibility = View.GONE
+        cameraView.mButtonFindText.visibility = View.INVISIBLE
+        cameraView.mCameraShow.visibility = View.VISIBLE
+        captureCheck = false
+        clearImageBitmap()
+    }
 
     private fun findFoodItems(){
         doAsync {

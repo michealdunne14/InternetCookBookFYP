@@ -1,5 +1,6 @@
 package com.example.internetcookbook.fragmentpresenter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,6 +14,11 @@ import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app : MainApp = view.activity?.application as MainApp
@@ -59,15 +65,34 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return infoStore!!.searchShop(textArrayList)
     }
 
-    fun searchDate(element: String): String {
-        return "10/11/2020"
+    @SuppressLint("SimpleDateFormat")
+    fun findDate(elementArrayList: ArrayList<String>): String? {
+        var date: Date? = Date()
+        var finalDate = String()
+        for (element in elementArrayList){
+            val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yy")
+            dateFormat.isLenient = false
+            try {
+                date = dateFormat.parse(element)
+                finalDate = dateFormat.format(date!!).toString()
+                break
+            } catch (ex: ParseException) {
+                print("Invalid Data keep searching ...")
+            }
+
+        }
+        if (date != null){
+            return finalDate
+        }else{
+            return null
+        }
     }
 
     fun doAddCupboard(validFoodItems: ArrayList<FoodMasterModel>) {
         doAsync {
             infoStore!!.cupboardAdd(validFoodItems)
             onComplete {
-
+                view.resetInformation()
             }
         }
     }
