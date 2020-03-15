@@ -97,8 +97,13 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
-    fun doGetReturnBack(): Boolean {
-        return infoStore!!.findReturnBack()
+    fun doFoodCreatePage(): Boolean {
+        return infoStore!!.foodCreatePage()
+    }
+
+
+    fun doFoodCreatePageUpdate(){
+        infoStore!!.foodCreatePageUpdate()
     }
 
     fun itemsInDatabase(): ArrayList<FoodMasterModel> {
@@ -107,9 +112,5 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     fun findNewData(): FoodMasterModel {
         return infoStore!!.newFoodData()
-    }
-
-    fun doSetReturnBack(){
-       infoStore!!.notReturningBack()
     }
 }

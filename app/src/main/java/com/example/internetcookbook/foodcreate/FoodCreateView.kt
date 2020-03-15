@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
@@ -72,6 +73,7 @@ class FoodCreateView : BaseView(){
     }
 
     override fun naviateUp(){
+        presenter.doFoodCreatePageUpdate()
         foodCreateView.findNavController().navigateUp()
     }
 
