@@ -390,7 +390,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                     val gson = gsonBuilder.create()
                     dataArray = gson.fromJson(body, ListPostModel::class.java)
                     listDataModel = dataArray
-                    for (posts in listDataModel.postArray) {
+                    for (posts in dataArray.postArray) {
                         postData.add(posts!!)
                     }
                 }
@@ -427,24 +427,30 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     fun getCupboardData(){
-//        cupboardData.clear()
-        lateinit var dataArray: FoodMasterModel
+        lateinit var dataArray: ListFoodModel
         if (internetConnection) {
-            for (cupboard in userMaster.user.cupboard) {
-                val request = Request.Builder()
-                    .url("http://52.51.34.156:3000/food/foodId/${cupboard.cupboardoid}")
-                    .build()
 
-                client.newCall(request).execute().use { response ->
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            val formBody: RequestBody = FormBody.Builder()
+                .add("id", userMaster.user.oid).build()
 
+            val request = Request.Builder()
+                .url("http://52.51.34.156:3000/food/byIdLoad")
+                .post(formBody)
+                .build()
 
-                    val body = response.body!!.string()
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                val body = response.body!!.string()
+                if (body == "no cupboard data"){
+                    print("no cupboard data")
+                }else {
                     val gsonBuilder = GsonBuilder()
                     val gson = gsonBuilder.create()
 
-                    dataArray = gson.fromJson(body, FoodMasterModel::class.java)
-                    cupboardData.add(dataArray)
+                    dataArray = gson.fromJson(body, ListFoodModel::class.java)
+                    for (food in dataArray.foodArray) {
+                        cupboardData.add(food)
+                    }
                 }
             }
         }
@@ -452,26 +458,34 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
 
     fun getBasketData(){
-//        basketData.clear()
-//        lateinit var dataArray: FoodMasterModel
-//        if (internetConnection) {
-//            for (basket in userMaster.user.basket) {
-//                val request = Request.Builder()
-//                    .url("http://52.51.34.156:3000/food/foodId/${basket.basketoid}")
-//                    .build()
-//
-//                client.newCall(request).execute().use { response ->
-//                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-//
-//                    val body = response.body!!.string()
-//                    val gsonBuilder = GsonBuilder()
-//                    val gson = gsonBuilder.create()
-//
-//                    dataArray = gson.fromJson(body, FoodMasterModel::class.java)
-//                    basketData.add(dataArray)
-//                }
-//            }
-//        }
+        lateinit var dataArray: ListFoodModel
+        if (internetConnection) {
+
+            val formBody: RequestBody = FormBody.Builder()
+                .add("id", userMaster.user.oid).build()
+
+            val request = Request.Builder()
+                .url("http://52.51.34.156:3000/food/byIdLoadBasket")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                if (body == "no basket data"){
+                    print("No Basket Data")
+                }else {
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+
+                    dataArray = gson.fromJson(body, ListFoodModel::class.java)
+                    for (food in dataArray.foodArray) {
+                        basketData.add(food)
+                    }
+                }
+            }
+        }
     }
 
     fun getFollowingData(){
@@ -574,7 +588,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                     val gsonBuilder = GsonBuilder()
                     val gson = gsonBuilder.create()
                     listFoodModel = gson.fromJson(responseBody, ListFoodModel::class.java)
-                    for (food in listFoodModel.listArray) {
+                    for (food in listFoodModel.foodArray) {
                         listFoodArray.add(food)
                     }
                 }

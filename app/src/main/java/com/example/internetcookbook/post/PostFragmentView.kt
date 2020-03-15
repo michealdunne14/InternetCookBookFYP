@@ -1,9 +1,6 @@
 package com.example.internetcookbook.post
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,8 +19,6 @@ import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_ingredients.view.*
 import kotlinx.android.synthetic.main.fragment_post.view.*
 import org.jetbrains.anko.AnkoLogger
-import java.io.ByteArrayOutputStream
-import java.io.File
 
 class PostFragmentView : BaseView(),AnkoLogger {
 
@@ -46,7 +41,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
 
 
         if(foodModelArrayList.size > 0){
-            showIngredients(foodModelArrayList)
+            showBasket(foodModelArrayList)
         }else{
             view.mPostIngredientRecyclerView.visibility = View.GONE
         }
@@ -101,10 +96,10 @@ class PostFragmentView : BaseView(),AnkoLogger {
         viewPager.adapter = adapter
     }
 
-    override fun showIngredients(listofIngredients: ArrayList<FoodMasterModel>){
+    override fun showBasket(listofBasket: ArrayList<FoodMasterModel>){
         val layoutManager = LinearLayoutManager(context)
         postView.mIngredientsRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
-        postView.mIngredientsRecyclerView.adapter = IngredientsAdapter(listofIngredients)
+        postView.mIngredientsRecyclerView.adapter = IngredientsAdapter(listofBasket)
         postView.mIngredientsRecyclerView.adapter?.notifyDataSetChanged()
     }
 
