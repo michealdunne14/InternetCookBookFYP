@@ -38,6 +38,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var userLocalStore = mutableListOf<UserMasterModel>()
     lateinit var emailSearchArray: Array<UserModel>
     var storedImage: Bitmap? = null
+    var foodCreatePage = false
 
     val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
 
@@ -141,6 +142,15 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         serialize()
     }
 
+    fun foodCreatePageUpdate(){
+        foodCreatePage = !foodCreatePage
+    }
+
+    fun foodCreatePage(): Boolean {
+        return foodCreatePage
+    }
+
+
     fun createUser(
         userModel: UserModel,
         profilePicture: String
@@ -169,6 +179,8 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
         return uploadImagesUser(user.oid,profilePicture)
     }
+
+
 
     fun updateUserInfo(userModel: UserModel): UserMasterModel? {
         if (internetConnection) {
@@ -225,20 +237,6 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
             return uploadImagesFood(food.oid)
         }
-    }
-
-    var returnBackCheck = false
-
-    fun returningBack(){
-        returnBackCheck = true
-    }
-
-    fun notReturningBack(){
-        returnBackCheck = false
-    }
-
-    fun findReturnBack(): Boolean {
-        return returnBackCheck
     }
 
     fun findShop(shop: String): String? {

@@ -28,14 +28,16 @@ class FoodCreatePresenter(view: BaseView): BasePresenter(view), AnkoLogger {
             pass = infoStore!!.createFood(foodModel)
             onComplete {
                 if (pass){
-                    infoStore!!.returningBack()
                     view.naviateUp()
                 }else{
                     view.detailsIncorrect()
                 }
             }
         }
+    }
 
+    fun doFoodCreatePageUpdate(){
+        infoStore!!.foodCreatePageUpdate()
     }
 
 

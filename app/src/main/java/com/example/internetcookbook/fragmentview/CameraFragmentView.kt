@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils
 import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,12 +36,14 @@ import kotlinx.android.synthetic.main.fragment_camera.view.*
 import kotlinx.android.synthetic.main.listitems.view.*
 import org.jetbrains.anko.*
 import java.nio.ByteBuffer
+import java.nio.channels.Selector
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 val storedFood: ArrayList<FoodMasterModel> = ArrayList()
 val validFoodItems = ArrayList<FoodMasterModel>()
-
+var saveShop = ""
+var saveDate = ""
 
 class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
@@ -68,15 +71,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         val layoutManager = LinearLayoutManager(context)
         presenter = initPresenter(CameraFragmentPresenter(this)) as CameraFragmentPresenter
 
-
-        if (presenter.doGetReturnBack()){
-            cameraView.mListItems.visibility = View.VISIBLE
-            cameraView.mListItems.bringToFront()
-            cameraView.view_finder.visibility = View.INVISIBLE
-            cameraView.mCameraShow.visibility = View.GONE
-            presenter.doSetReturnBack()
-        }
-
         if (arguments != null) {
             val images = CameraFragmentViewArgs.fromBundle(arguments!!).foodcreate
             if (images == "food_create") {
@@ -100,6 +94,16 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         if (presenter.findNewData().food.name.isNotEmpty()){
             validFoodItems.add(presenter.findNewData())
         }
+        if (presenter.doFoodCreatePage()){
+            cameraView.mListItems.visibility = View.VISIBLE
+            cameraView.mListItems.bringToFront()
+            cameraView.view_finder.visibility = View.INVISIBLE
+            cameraView.mCameraShow.visibility = View.GONE
+            presenter.doFoodCreatePageUpdate()
+            cameraView.mShoppedAt.text = saveShop
+            cameraView.mFoodDate.text = saveDate
+        }
+
         cameraView.mFoodListRecyclerView.adapter = ReceiptListAdapter(
             storedFood,
             presenter,
@@ -217,6 +221,11 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         cameraView.mButtonFindText.setOnClickListener {
             cameraView.mCameraShow.visibility = View.INVISIBLE
             val bitmap = (cameraView.mCapturedImage.drawable as BitmapDrawable).bitmap
+//            Resets data
+            storedFood.clear()
+            validFoodItems.clear()
+            saveDate = ""
+            saveShop = ""
             mChangeImageToText(bitmap)
         }
 
@@ -342,7 +351,9 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             onComplete {
                 val foundDate = presenter.findDate(elementArrayList)
                 if (foundDate != null){
-                    cameraView.mFoodDate.text = foundDate
+                    if (saveDate.isEmpty()) {
+                        cameraView.mFoodDate.text = foundDate
+                    }
                 }else{
 //                    Dialog for purchase Date
                 }
@@ -388,7 +399,11 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                                     storedFood.add(foodModel)
                                 }
                             }
-                            cameraView.mShoppedAt.text = foundShop.shop
+                            if (saveShop.isEmpty()) {
+                                cameraView.mShoppedAt.text = foundShop.shop
+                            }
+                            saveShop = foundShop.shop
+                            saveDate = foundDate!!
                             findFoodItems()
                         }else{
                             customDialog = CustomDialog(activity!!)
@@ -522,42 +537,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(cameraView.context, it) == PackageManager.PERMISSION_GRANTED
     }
-
-//    private fun runTextRecognition() {
-//        val image = FirebaseVisionImage.fromBitmap(mSelectedImage)
-//        val recognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
-//        mTextButton.setEnabled(false)
-//        recognizer.processImage(image)
-//            .addOnSuccessListener { texts ->
-////                mTextButton.setEnabled(true)
-//                processTextRecognitionResult(texts!!)
-//            }
-//            .addOnFailureListener { e ->
-//                // Task failed with an exception
-////                mTextButton.setEnabled(true)
-//                e.printStackTrace()
-//            }
-//    }
-//
-//    private fun processTextRecognitionResult(texts: FirebaseVisionText) {
-//        val blocks = texts.textBlocks
-//        if (blocks.size == 0) {
-////            showToast("No text found")
-//            return
-//        }
-//        mGraphicOverlay.clear()
-//        for (i in blocks.indices) {
-//            val lines = blocks[i].lines
-//            for (j in lines.indices) {
-//                val elements =
-//                    lines[j].elements
-//                for (k in elements.indices) {
-//                    val textGraphic: Graphic = TextGraphic(mGraphicOverlay, elements[k])
-//                    mGraphicOverlay.add(textGraphic)
-//                }
-//            }
-//        }
-//    }
 }
 
 
