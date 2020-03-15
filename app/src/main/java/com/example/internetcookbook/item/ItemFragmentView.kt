@@ -11,7 +11,6 @@ import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.FollowerAdapter
 import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.base.BaseView
-import com.example.internetcookbook.models.FollowListModel
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.UserMasterModel
@@ -45,7 +44,7 @@ class ItemFragmentView : BaseView() {
         itemView = view
 
         showFollowers(presenter.doFindFollowers())
-        showIngredients(presenter.doFindBasket())
+        showBasket(presenter.doFindBasket())
         showCupboard(presenter.doFindCupboard())
 
         itemView.mSearchCupboardItem.addTextChangedListener(object : TextWatcher {
@@ -119,10 +118,10 @@ class ItemFragmentView : BaseView() {
     }
 
 
-    override fun showIngredients(listofIngredients: ArrayList<FoodMasterModel>){
+    override fun showBasket(listofBasket: ArrayList<FoodMasterModel>){
         val layoutManager = LinearLayoutManager(context)
         itemView.mBasketRecyclerView.layoutManager = layoutManager
-        itemView.mBasketRecyclerView.adapter = IngredientsAdapter(listofIngredients)
+        itemView.mBasketRecyclerView.adapter = IngredientsAdapter(listofBasket)
         itemView.mBasketRecyclerView.adapter?.notifyDataSetChanged()
     }
 
