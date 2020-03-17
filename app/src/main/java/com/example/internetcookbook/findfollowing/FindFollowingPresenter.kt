@@ -18,13 +18,24 @@ class FindFollowingPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     }
 
 
-    fun doFindUser(userSearch: String) {
-        var searchFollowing: UserMasterModel?
+    fun doFindUser(userSearch: CharSequence) {
+        var searchFollowing: ArrayList<UserMasterModel>
         doAsync {
-            searchFollowing =  infoStore!!.searchForFollowing(userSearch)
+            searchFollowing = infoStore!!.searchForFollowing(userSearch)!!
             onComplete {
-                
+                view.showFollowList(searchFollowing)
             }
+        }
+    }
+
+    fun searchUsers(characterSearch: CharSequence) {
+        val searched=  infoStore!!.searchFollowingSearched(characterSearch)
+        view.showFollowList(searched)
+    }
+
+    fun followUser(userMasterModel: UserMasterModel) {
+        doAsync {
+            infoStore!!.followUser(userMasterModel)
         }
     }
 }

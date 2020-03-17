@@ -55,7 +55,9 @@ class ReceiptListAdapter(
             if(foodModel.food.foundItem) {
                 itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
                 itemView.mFoodImage.setImageBitmap(readBit64ImageSingle(foodModel.image))
+                itemView.mFoodImage.visibility == View.VISIBLE
             }else{
+                itemView.mFoodImage.visibility == View.GONE
                 itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
             }
 
@@ -95,6 +97,7 @@ class ReceiptListAdapter(
                         result.food.foundItem = true
                         foodModel.food.foundItem = true
                         validFoodItems.add(result)
+                        itemView.mFoodImage.visibility == View.VISIBLE
                     } else {
                         itemView.setBackgroundColor(getColor(itemView.context, R.color.colorRed))
                         val action = PagerFragmentViewDirections.actionPagerFragmentToFoodCreateView(text,foodModel.food.shop)

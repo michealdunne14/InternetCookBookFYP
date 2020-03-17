@@ -32,4 +32,6 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun setRegisterResponse(usercreated: Boolean) {}
     open fun naviateUp(){}
     open fun resetInformation(){}
+    open fun showFollowList(searchFollowing: ArrayList<UserMasterModel>) {}
+    open fun ingredientsRecyclerView(searchedIngredients: ArrayList<FoodMasterModel>) {}
 }

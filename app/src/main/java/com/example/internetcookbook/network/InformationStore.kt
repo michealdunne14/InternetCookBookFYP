@@ -36,6 +36,9 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var basketData = ArrayList<FoodMasterModel>()
     var followingData = FollowListModel()
     var userLocalStore = mutableListOf<UserMasterModel>()
+    var searchingFollow = ArrayList<UserMasterModel>()
+    var searchingIngredients = ArrayList<FoodMasterModel>()
+    var ingredientsArrayList = ArrayList<FoodMasterModel>()
     lateinit var emailSearchArray: Array<UserModel>
     var storedImage: Bitmap? = null
     var foodCreatePage = false
@@ -103,13 +106,13 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-    fun searchForFollowing(userSearch: String): UserMasterModel?{
+    fun searchForFollowing(userSearch: CharSequence): ArrayList<UserMasterModel>? {
         if (internetConnection) {
             val formBody: RequestBody = FormBody.Builder()
-                .add("username", userSearch).build()
+                .add("username", userSearch.toString()).build()
 
             val request = Request.Builder()
-                .url("http://52.51.34.156:3000/user/email")
+                .url("http://52.51.34.156:3000/user/username")
                 .post(formBody)
                 .build()
 
@@ -122,11 +125,41 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 }else{
                     val gsonBuilder = GsonBuilder()
                     val gson = gsonBuilder.create()
-                    return gson.fromJson(body,UserMasterModel::class.java)
+                    val listUserModel =  gson.fromJson(body,ListUserModel::class.java)
+                    for (user in listUserModel.userArray){
+                        searchingFollow.add(user)
+                    }
+                    return searchingFollow
                 }
             }
         } else {
             return null
+        }
+    }
+
+    fun searchFollowingSearched(characterSearch: CharSequence): ArrayList<UserMasterModel> {
+        val searchedPosts = ArrayList<UserMasterModel>()
+        for(searchedFollower in searchingFollow){
+            if (searchedFollower.user.username.contains(characterSearch)){
+                searchedPosts.add(searchedFollower)
+            }
+        }
+        return searchedPosts
+    }
+
+    fun followUser(userMasterModel: UserMasterModel) {
+        val formBody: RequestBody = FormBody.Builder()
+            .add("followingoid", userMasterModel.user.oid).build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/user/follow/${userMaster.user.oid}")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
         }
     }
 
@@ -292,6 +325,55 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         return userPostData
     }
 
+    fun findFoodIngredients(searchedItem: String): ArrayList<FoodMasterModel>? {
+        searchingIngredients.clear()
+        if (internetConnection) {
+            val formBody: RequestBody = FormBody.Builder()
+                .add("name", searchedItem).build()
+
+            val request = Request.Builder()
+                .url("http://52.51.34.156:3000/food/partialTextSearch")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                val gsonBuilder = GsonBuilder()
+                val gson = gsonBuilder.create()
+                val listUserModel =  gson.fromJson(body,ListFoodModel::class.java)
+                for (food in listUserModel.foodArray){
+                    searchingIngredients.add(food)
+                }
+                return searchingIngredients
+            }
+        } else{
+            return null
+        }
+    }
+
+    fun searchIngredients(searchedItem: String): ArrayList<FoodMasterModel> {
+        val searchedPosts = ArrayList<FoodMasterModel>()
+        for(searchedFollower in searchingIngredients){
+            if (searchedFollower.food.name.contains(searchedItem)){
+                searchedPosts.add(searchedFollower)
+            }
+        }
+        return searchedPosts
+    }
+
+    fun defaultIngredients(): ArrayList<FoodMasterModel> {
+        val foodArrayList = ArrayList<FoodMasterModel>()
+        foodArrayList.addAll(cupboardData)
+        foodArrayList.addAll(basketData)
+        return foodArrayList
+    }
+
+    fun ingredientsAddedToRecipe(): ArrayList<FoodMasterModel> {
+       return ingredientsArrayList
+    }
+
     fun findItem(item: String): FoodMasterModel? {
         val basketSearch: FoodMasterModel? = basketData.find { p -> p.food.name == item }
         if (basketSearch == null){
@@ -379,17 +461,17 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
 
-    fun putMethod(id: String,step: String) {
-        val formBody: RequestBody = FormBody.Builder()
-            .add("methodStep", step).build()
-
-        val request: Request = Request.Builder()
-            .url("http://52.51.34.156:3000/post/method/${id}")
-            .put(formBody)
-            .build()
-
-        client.newCall(request).execute().use { response -> print(response.body!!.toString()) }
-    }
+//    fun putMethod(id: String,step: String) {
+//        val formBody: RequestBody = FormBody.Builder()
+//            .add("methodStep", step).build()
+//
+//        val request: Request = Request.Builder()
+//            .url("http://52.51.34.156:3000/post/method/${id}")
+//            .put(formBody)
+//            .build()
+//
+//        client.newCall(request).execute().use { response -> print(response.body!!.toString()) }
+//    }
 
     fun getPostData(){
         postData.clear()
@@ -514,29 +596,29 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     fun getFollowingData(){
-//        lateinit var dataArray: FollowListModel
-//        if (internetConnection) {
-//
-//            val formBody: RequestBody = FormBody.Builder()
-//                .add("id", userMaster.user.oid).build()
-//
-//            val request = Request.Builder()
-//                .url("http://52.51.34.156:3000/user/following")
-//                .post(formBody)
-//                .build()
-//
-//            client.newCall(request).execute().use { response ->
-//                if (!response.isSuccessful) throw IOException("Unexpected code $response")
-//
-//
-//                val body = response.body!!.string()
-//                val gsonBuilder = GsonBuilder()
-//                val gson = gsonBuilder.create()
-//
-//                dataArray = gson.fromJson(body, FollowListModel::class.java)
-//                followingData = dataArray
-//            }
-//        }
+        lateinit var dataArray: FollowListModel
+        if (internetConnection) {
+
+            val formBody: RequestBody = FormBody.Builder()
+                .add("id", userMaster.user.oid).build()
+
+            val request = Request.Builder()
+                .url("http://52.51.34.156:3000/user/following")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+
+                val body = response.body!!.string()
+                val gsonBuilder = GsonBuilder()
+                val gson = gsonBuilder.create()
+
+                dataArray = gson.fromJson(body, FollowListModel::class.java)
+                followingData = dataArray
+            }
+        }
     }
 
     fun findFollowingData(): ArrayList<UserMasterModel> {
@@ -688,10 +770,8 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     private val MEDIA_TYPE_JPEG = "image/jpeg".toMediaType()
 
     fun uploadImagesPost(oid: String, listofImages: ArrayList<String>) {
-        val file = File(listofImages[0])
-
-        for(i in listofImages) {
-            val bitmap = readImageFromPath(context, i)
+        for(image in listofImages) {
+            val bitmap = readImageFromPath(context, image)
             val stream = ByteArrayOutputStream()
             bitmap!!.compress(Bitmap.CompressFormat.JPEG, 80, stream)
             val byteArray: ByteArray = stream.toByteArray()
@@ -709,7 +789,12 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                println(response.body!!.string())
+
+                val body = response.body!!.string()
+                val gsonBuilder = GsonBuilder()
+                val gson = gsonBuilder.create()
+                val post = gson.fromJson(body,DataModel::class.java)
+                userPostData.add(post)
             }
         }
     }
@@ -782,27 +867,47 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
 
-    fun createPost(postModel: PostModel): PostModel? {
-        val formBody: RequestBody = FormBody.Builder()
-            .add("title", postModel.title)
-            .add("description", postModel.description).build()
+    fun createPost(
+        postModel: PostModel,
+        listofImages: ArrayList<String>
+    ) {
+        val jsonArray = JSONArray()
+        for (methodstep in postModel.method) {
+            val jsonObj = JSONObject()
+            jsonObj.put("methodStep", methodstep)
+            jsonArray.put(jsonObj)
+        }
+        val jsonArrayIngre = JSONArray()
+        for (methodstep in postModel.ingredients) {
+            val jsonObj = JSONObject()
+            jsonObj.put("ingredientoid", methodstep.food.oid)
+            jsonArrayIngre.put(jsonObj)
+        }
+
+        val postModelJson = JSONObject()
+        postModelJson.put("title",postModel.title)
+        postModelJson.put("description",postModel.description)
+        postModelJson.put("method", jsonArray)
+        postModelJson.put("ingredients",jsonArrayIngre)
+
+        val jsonString = postModelJson.toString()
+        val body = create(JSON, jsonString)
 
         val request: Request = Request.Builder()
             .url("http://52.51.34.156:3000/post/create/${userMaster.user.oid}")
-            .post(formBody)
+            .post(body)
             .build()
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
 
-            val body = response.body!!.string()
-            val gsonBuilder = GsonBuilder()
-            val gson = gsonBuilder.create()
-
-            val data = gson.fromJson(body, PostModel::class.java)
-            return data
-
+            val bodyResponse = response.body!!.string()
+            if(bodyResponse.contains("PostOid")){
+                print("Success Upload now uploading images ...")
+                val wordList = bodyResponse.split(" ")
+                uploadImagesPost(wordList[1],listofImages)
+            }
         }
     }
 

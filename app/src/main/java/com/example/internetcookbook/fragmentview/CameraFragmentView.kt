@@ -313,28 +313,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                 }
     }
 
-//    private fun setUpTapToFocus() {
-//        homeView.view_finder.setOnTouchListener { _, event ->
-//            if (event.action != MotionEvent.ACTION_UP) {
-//                return@setOnTouchListener false
-//            }
-//
-//            val factory = TextureViewMeteringPointFactory(textureView)
-//            val point = factory.createPoint(event.x, event.y)
-//            val action = FocusMeteringAction.Builder.from(point).build()
-//            cameraControl.startFocusAndMetering(action)
-//            return@setOnTouchListener true
-//        }
-//    }
-
-
     private fun processResultText(resultText: FirebaseVisionText) {
-//        if (resultText.textBlocks.size == 0) {
-//            Snackbar.make(homeView,"No Text Found", Snackbar.LENGTH_SHORT).show()
-//            return
-//        }else{
-//            homeView.mCameraShow.visibility = View.GONE
-//        }
         info { "Select Country Started" }
         val elementArrayList = ArrayList<String>()
         val lineArrayList = ArrayList<String>()

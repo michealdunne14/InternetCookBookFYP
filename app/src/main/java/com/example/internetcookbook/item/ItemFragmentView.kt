@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.FollowerAdapter
@@ -14,6 +15,7 @@ import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.models.UserMasterModel
+import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_basket.view.*
 import kotlinx.android.synthetic.main.fragment_cart.view.*
@@ -63,7 +65,8 @@ class ItemFragmentView : BaseView() {
 
 
         itemView.mFollowerFind.setOnClickListener {
-
+            val action = PagerFragmentViewDirections.actionPagerFragmentToFindFollowingView()
+            view.findNavController().navigate(action)
         }
 
         itemView.mSearchBasketItem.addTextChangedListener(object : TextWatcher {

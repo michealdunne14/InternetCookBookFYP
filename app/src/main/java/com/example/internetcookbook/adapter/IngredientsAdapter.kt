@@ -33,8 +33,8 @@ class IngredientsAdapter(private var food: ArrayList<FoodMasterModel>) : Recycle
         class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
             fun bind(foodModel: FoodMasterModel) {
                 itemView.mIngredientsName.text = foodModel.food.name
-//                val bitmapImage = readBit64ImageSingle(foodModel.image.data)
-//                itemView.mFoodPicture.setImageBitmap(bitmapImage)
+                val bitmapImage = readBit64ImageSingle(foodModel.image)
+                itemView.mFoodPicture.setImageBitmap(bitmapImage)
                 itemView.mSelectedIngredient.setOnClickListener {
                     
                 }
