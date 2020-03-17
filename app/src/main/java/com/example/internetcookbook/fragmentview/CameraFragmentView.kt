@@ -456,12 +456,13 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             presenter.searchItemsInitial(storedFood)
             onComplete {
                 if(presenter.itemsInDatabase().isNotEmpty()) {
-                    for (foundFoodInDatabase in presenter.itemsInDatabase()) {
-                        val search: FoodMasterModel? = storedFood.find { p -> p.food.name == foundFoodInDatabase.food.name }
+                    storedFood.forEachIndexed { index, foundFood ->
+                        val search: FoodMasterModel? = presenter.itemsInDatabase().find { p -> p.food.name == foundFood.food.name }
                         if (search != null) {
                             if (search.food.name.isNotEmpty()) {
                                 validFoodItems.add(search)
-                                search.food.foundItem = true
+                                storedFood[index] = search
+                                storedFood[index].food.foundItem = true
                             }
                         }
                     }

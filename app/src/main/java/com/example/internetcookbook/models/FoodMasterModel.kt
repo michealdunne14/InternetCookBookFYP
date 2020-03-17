@@ -5,6 +5,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class FoodMasterModel(
-    val data: String = "",
+    val image: String = "",
     val food: FoodModel = FoodModel()
 ) : Parcelable
