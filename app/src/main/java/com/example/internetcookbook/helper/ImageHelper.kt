@@ -46,9 +46,9 @@ fun readBit64ImageArrayList(dataModel: DataModel): ArrayList<Bitmap> {
     return imageArrayList
 }
 
-fun readBit64ImageSingle(mutableList: MutableList<String?>): Bitmap{
-    val byteArray = ByteArray(mutableList.size)
-    return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+fun readBit64ImageSingle(image: String): Bitmap{
+    val decodedString: ByteArray = Base64.decode(image, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
 }
 
 //Reads Image from path

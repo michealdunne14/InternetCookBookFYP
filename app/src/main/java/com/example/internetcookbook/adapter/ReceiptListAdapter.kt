@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
 import com.example.internetcookbook.helper.capitalize
+import com.example.internetcookbook.helper.readBit64ImageSingle
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.listeachitem.view.*
@@ -53,6 +54,7 @@ class ReceiptListAdapter(
 
             if(foodModel.food.foundItem) {
                 itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
+                itemView.mFoodImage.setImageBitmap(readBit64ImageSingle(foodModel.image))
             }else{
                 itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
             }
@@ -89,6 +91,7 @@ class ReceiptListAdapter(
                 onComplete {
                     if (result!!.food.name.isNotEmpty()) {
                         itemView.setBackgroundColor(getColor(itemView.context, R.color.colorGreen))
+                        itemView.mFoodImage.setImageBitmap(readBit64ImageSingle(result.image))
                         result.food.foundItem = true
                         foodModel.food.foundItem = true
                         validFoodItems.add(result)
