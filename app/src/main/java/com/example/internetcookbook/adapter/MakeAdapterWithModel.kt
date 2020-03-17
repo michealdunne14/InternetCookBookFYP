@@ -5,10 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
-import com.example.internetcookbook.models.PostMethodOidModel
 import kotlinx.android.synthetic.main.make_items.view.*
 
-class MakeAdapterWithModel(private var makeArrayList: MutableList<PostMethodOidModel>) : RecyclerView.Adapter<MakeAdapterWithModel.MainHolder>() {
+class MakeAdapterWithModel(private var makeArrayList: MutableList<String>) : RecyclerView.Adapter<MakeAdapterWithModel.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         return MainHolder(
@@ -25,7 +24,7 @@ class MakeAdapterWithModel(private var makeArrayList: MutableList<PostMethodOidM
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val postModel = makeArrayList[holder.adapterPosition]
-        holder.bind(postModel.methodStep)
+        holder.bind(postModel)
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){

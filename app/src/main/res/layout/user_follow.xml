@@ -1,43 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/mIngredientsName"
+            android:id="@+id/mFollowingName"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="TextView"
-            android:textSize="@dimen/dimension20sp"
+            android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/mSelectedIngredient"
-            app:layout_constraintStart_toEndOf="@+id/mFoodPicture"
+            app:layout_constraintEnd_toStartOf="@+id/mFollowButton"
+            app:layout_constraintStart_toEndOf="@+id/mFollowingPicture"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/mFoodPicture"
+            android:id="@+id/mFollowingPicture"
             android:layout_width="@dimen/dimension80"
             android:layout_height="@dimen/dimension80"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_panorama_fish_eye_24" />
 
-        <ImageButton
-            android:id="@+id/mSelectedIngredient"
-            android:layout_width="@dimen/dimension80"
-            android:layout_height="@dimen/dimension80"
-            android:background="@null"
+        <Button
+            android:id="@+id/mFollowButton"
+            android:layout_width="84dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="19dp"
+            android:text="Follow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/outline_post_add_black_36" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

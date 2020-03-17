@@ -16,7 +16,6 @@ import com.example.internetcookbook.adapter.MakeAdapter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.PostModel
-import kotlinx.android.synthetic.main.fragment_ingredients.view.*
 import kotlinx.android.synthetic.main.fragment_post.view.*
 import org.jetbrains.anko.AnkoLogger
 
@@ -25,7 +24,6 @@ class PostFragmentView : BaseView(),AnkoLogger {
     lateinit var presenter: PostFragmentPresenter
     lateinit var postView: View
     var postModel = PostModel()
-    var foodModelArrayList = ArrayList<FoodMasterModel>()
     var personalPost = false
     var methodStepsArrayList = ArrayList<String>()
 
@@ -39,9 +37,13 @@ class PostFragmentView : BaseView(),AnkoLogger {
         val view = inflater.inflate(R.layout.fragment_post, container, false)
         postView = view
 
+        val layoutManager = LinearLayoutManager(context)
+        view.mPostIngredientRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
-        if(foodModelArrayList.size > 0){
-            showBasket(foodModelArrayList)
+
+        if(presenter.ingredientsAddToRecipe().isNotEmpty()){
+            showBasket(presenter.ingredientsAddToRecipe())
+
         }else{
             view.mPostIngredientRecyclerView.visibility = View.GONE
         }
@@ -49,7 +51,13 @@ class PostFragmentView : BaseView(),AnkoLogger {
         view.mPostButton.setOnClickListener {
             postModel.title = view.mPostTitle.text.toString()
             postModel.description = view.mPostDescription.text.toString()
-            presenter.doPostRecipe(postModel,methodStepsArrayList)
+            for (methodStep in methodStepsArrayList) {
+                postModel.method.add(methodStep)
+            }
+            for (ingredient in presenter.ingredientsAddToRecipe()){
+                postModel.ingredients.add(ingredient)
+            }
+            presenter.doPostRecipe(postModel)
         }
 
         view.mReturnButton.setOnClickListener {
@@ -98,9 +106,9 @@ class PostFragmentView : BaseView(),AnkoLogger {
 
     override fun showBasket(listofBasket: ArrayList<FoodMasterModel>){
         val layoutManager = LinearLayoutManager(context)
-        postView.mIngredientsRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
-        postView.mIngredientsRecyclerView.adapter = IngredientsAdapter(listofBasket)
-        postView.mIngredientsRecyclerView.adapter?.notifyDataSetChanged()
+        postView.mPostIngredientRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        postView.mPostIngredientRecyclerView.adapter = IngredientsAdapter(listofBasket)
+        postView.mPostIngredientRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     fun showMethod(listofMethods: ArrayList<String>){

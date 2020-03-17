@@ -26,20 +26,9 @@
             android:textColor="@color/colorBlack"
             android:textColorHint="@color/colorBlack"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/mSearchUsername"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/mSearchUsername"
-            android:layout_width="@dimen/dimension50"
-            android:layout_height="0dp"
-            android:layout_alignParentBottom="true"
-            android:background="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_send" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

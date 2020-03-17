@@ -32,9 +32,6 @@
                 app:argType="com.example.internetcookbook.models.DataModel"/>
         </action>
         <action
-            android:id="@+id/action_pagerFragment_to_friendFragmentView"
-            app:destination="@id/friendFragmentView" />
-        <action
             android:id="@+id/action_pagerFragment_to_foodCreateView"
             app:destination="@id/foodCreateView" >
             <argument
@@ -44,6 +41,9 @@
                 android:name="foodshop"
                 app:argType="string" />
         </action>
+        <action
+            android:id="@+id/action_pagerFragment_to_findFollowingView"
+            app:destination="@id/findFollowingView" />
     </fragment>
     <fragment
         android:id="@+id/postFragment2"
@@ -86,11 +86,6 @@
             app:argType="com.example.internetcookbook.models.DataModel"/>
     </fragment>
     <fragment
-        android:id="@+id/friendFragmentView"
-        android:name="com.example.internetcookbook.fragmentview.FriendFragmentView"
-        android:label="fragment_friend"
-        tools:layout="@layout/fragment_friend" />
-    <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.internetcookbook.profile.ProfileFragmentView"
         android:label="fragment_profile"
@@ -123,4 +118,9 @@
             android:name="foodcreate"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/findFollowingView"
+        android:name="com.example.internetcookbook.findfollowing.FindFollowingView"
+        android:label="fragment_find_following"
+        tools:layout="@layout/fragment_find_following" />
 </navigation>

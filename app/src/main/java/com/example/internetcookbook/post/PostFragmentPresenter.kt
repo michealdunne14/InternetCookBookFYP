@@ -6,6 +6,7 @@ import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.showImagePicker
+import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
@@ -22,30 +23,21 @@ class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         infoStore = app.informationStore as InformationStore
     }
 
-    fun doPostRecipe(
-        postModel: PostModel,
-        methodStepsArrayList: ArrayList<String>
-    ) {
+    fun doPostRecipe(postModel: PostModel) {
         doAsync {
-            val postData = infoStore!!.createPost(postModel)!!
+            infoStore!!.createPost(postModel,listofImages)
             onComplete {
-                doAsync {
-                    infoStore!!.uploadImagesPost(postData._id,listofImages)
-                    onComplete {
-                        view.returnToPager()
-                    }
-                }
-                for(methodSteps in methodStepsArrayList) {
-                    doAsync {
-                        infoStore!!.putMethod(postData._id, methodSteps)
-                    }
-                }
+                view.returnToPager()
             }
         }
     }
 
     fun doSelectImage() {
         showImagePicker(view,IMAGE_REQUEST)
+    }
+
+    fun ingredientsAddToRecipe(): ArrayList<FoodMasterModel> {
+        return infoStore!!.ingredientsAddedToRecipe()
     }
 
     //  When a result comes back

@@ -26,7 +26,6 @@ class SplashActivity : AppCompatActivity() {
 
 
     fun doLoadData() {
-//        infoStore!!.clearCurrentUser()
         val currentUser = infoStore!!.getCurrentUser()
         if (!currentUser.user.loggedIn) {
             startActivity(Intent(baseContext, SignInActivity::class.java))
@@ -36,13 +35,14 @@ class SplashActivity : AppCompatActivity() {
             doAsync {
                 infoStore!!.updateUserInfo(currentUser.user)
                 onComplete {
-//                    doAsync {
-//                        infoStore!!.getPostData()
                     uiThread {
                         startActivity(Intent(baseContext, MainView::class.java))
                         finish()
                     }
                 }
+            }
+            doAsync {
+                infoStore!!.getCupboardData()
             }
         }
     }

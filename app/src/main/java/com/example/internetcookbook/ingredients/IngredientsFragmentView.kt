@@ -1,17 +1,18 @@
 package com.example.internetcookbook.ingredients
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
-import com.example.internetcookbook.adapter.IngredientsAdapter
+import com.example.internetcookbook.adapter.IngredientsAddAdapter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.models.FoodMasterModel
 import kotlinx.android.synthetic.main.fragment_ingredients.view.*
 import org.jetbrains.anko.info
 
@@ -33,13 +34,16 @@ class IngredientsFragmentView : BaseView() {
         ingredientsView = view
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)
+        view.mIngredientsSearchRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
+        val layoutManagerRecipe = LinearLayoutManager(context)
+        view.mIngredientsListRecyclerView.layoutManager = layoutManagerRecipe as RecyclerView.LayoutManager?
 
-        view.mIngredientsRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        presenter.defaultIngredients()
 
-
-//        foodModelArrayList.add(FoodModel("Food"))
-//        foodModelArrayList.add(FoodModel("Food"))
+        view.mReturnButtonIngredients.setOnClickListener {
+            ingredientsView.findNavController().navigateUp()
+        }
 
         view.mSearchIngredients.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
@@ -47,22 +51,32 @@ class IngredientsFragmentView : BaseView() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
-            @SuppressLint("DefaultLocale")
             override fun onTextChanged(
-                characterSearch: CharSequence?,
+                characterSearch: CharSequence,
                 p1: Int,
                 p2: Int,
                 p3: Int
             ) {
                 info { "Text Changed to $characterSearch"}
-//                val searchedLandmarks = presenter.search(characterSearch.toString().toUpperCase())
-//                view.mIngredientsRecyclerView.adapter = IngredientsAdapter(searchedLandmarks)
-//                view.mIngredientsRecyclerView.adapter?.notifyDataSetChanged()
+                if (characterSearch.length == 3) {
+                    presenter.searchIngredients(characterSearch.toString())
+                }else if (characterSearch.length > 3){
+                    presenter.searchIngredientsResult(characterSearch.toString())
+                }else{
+                    presenter.defaultIngredients()
+                }
             }
 
         })
 
         return view
+    }
+
+    override fun ingredientsRecyclerView(searchedIngredients: ArrayList<FoodMasterModel>) {
+        ingredientsView.mIngredientsSearchRecyclerView.adapter = IngredientsAddAdapter(searchedIngredients,presenter,  true,false,ingredientsView)
+        ingredientsView.mIngredientsSearchRecyclerView.adapter?.notifyDataSetChanged()
+        ingredientsView.mIngredientsListRecyclerView.adapter = IngredientsAddAdapter(presenter.ingredientsAddToRecipe(), presenter, false, true, ingredientsView)
+        ingredientsView.mIngredientsListRecyclerView.adapter?.notifyDataSetChanged()
     }
 
 }
