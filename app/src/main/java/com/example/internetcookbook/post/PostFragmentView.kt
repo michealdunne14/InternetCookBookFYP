@@ -51,13 +51,7 @@ class PostFragmentView : BaseView(),AnkoLogger {
         view.mPostButton.setOnClickListener {
             postModel.title = view.mPostTitle.text.toString()
             postModel.description = view.mPostDescription.text.toString()
-            for (methodStep in methodStepsArrayList) {
-                postModel.method.add(methodStep)
-            }
-            for (ingredient in presenter.ingredientsAddToRecipe()){
-                postModel.ingredients.add(ingredient)
-            }
-            presenter.doPostRecipe(postModel)
+            presenter.doPostRecipe(postModel,methodStepsArrayList)
         }
 
         view.mReturnButton.setOnClickListener {
@@ -130,5 +124,10 @@ class PostFragmentView : BaseView(),AnkoLogger {
         postView.findNavController().navigateUp()
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        addImages(presenter.listofImages())
+    }
 
 }

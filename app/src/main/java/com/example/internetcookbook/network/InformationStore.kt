@@ -3,6 +3,7 @@ package com.example.internetcookbook.network
 import android.content.Context
 import android.graphics.Bitmap
 import com.example.internetcookbook.R
+import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.exists
 import com.example.internetcookbook.helper.read
 import com.example.internetcookbook.helper.readImageFromPath
@@ -17,10 +18,11 @@ import kotlin.collections.ArrayList
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.create
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.onComplete
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.util.concurrent.TimeUnit
 
 
@@ -30,7 +32,6 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var imageArrayList = ArrayList<Bitmap>()
     var postData = ArrayList<DataModel?>()
     var listFoodArray = ArrayList<FoodMasterModel>()
-    var listDataModel = ListPostModel()
     var userPostData = ArrayList<DataModel?>()
     var cupboardData = ArrayList<FoodMasterModel>()
     var basketData = ArrayList<FoodMasterModel>()
@@ -460,19 +461,6 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-
-//    fun putMethod(id: String,step: String) {
-//        val formBody: RequestBody = FormBody.Builder()
-//            .add("methodStep", step).build()
-//
-//        val request: Request = Request.Builder()
-//            .url("http://52.51.34.156:3000/post/method/${id}")
-//            .put(formBody)
-//            .build()
-//
-//        client.newCall(request).execute().use { response -> print(response.body!!.toString()) }
-//    }
-
     fun getPostData(){
         postData.clear()
         lateinit var dataArray: ListPostModel
@@ -496,9 +484,8 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                     val gsonBuilder = GsonBuilder()
                     val gson = gsonBuilder.create()
                     dataArray = gson.fromJson(body, ListPostModel::class.java)
-                    listDataModel = dataArray
                     for (posts in dataArray.postArray) {
-                        postData.add(posts!!)
+                        postData.add(posts)
                     }
                 }
             }
@@ -510,10 +497,11 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         if (internetConnection) {
 
             val formBody: RequestBody = FormBody.Builder()
-                .add("id", userMaster.user.oid).build()
+                .add("id", userMaster.user.oid)
+                .add("posttime", postData[postData.lastIndex - 1]!!.post.posttime).build()
 
             val request: Request = Request.Builder()
-                .url("http://52.51.34.156:3000/post/id")
+                .url("http://52.51.34.156:3000/post/newdata")
                 .post(formBody)
                 .build()
 
@@ -524,10 +512,9 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 val gsonBuilder = GsonBuilder()
                 val gson = gsonBuilder.create()
                 dataArray = gson.fromJson(body, ListPostModel::class.java)
-                listDataModel = dataArray
-                postData.removeAt(postData.size - 1)
-                for (posts in listDataModel.postArray){
-                    postData.add(posts!!)
+                postData.removeAt(postData.lastIndex)
+                for (posts in dataArray.postArray){
+                    postData.add(posts)
                 }
             }
         }
@@ -794,7 +781,9 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 val gsonBuilder = GsonBuilder()
                 val gson = gsonBuilder.create()
                 val post = gson.fromJson(body,DataModel::class.java)
-                userPostData.add(post)
+                if (listofImages.size == listofImages.lastIndex) {
+                    userPostData.add(post)
+                }
             }
         }
     }
@@ -869,18 +858,21 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
     fun createPost(
         postModel: PostModel,
-        listofImages: ArrayList<String>
+        listofImages: ArrayList<String>,
+        methodStepsArrayList: ArrayList<String>,
+        view: BaseView
     ) {
         val jsonArray = JSONArray()
-        for (methodstep in postModel.method) {
+        for (methodstep in methodStepsArrayList) {
             val jsonObj = JSONObject()
             jsonObj.put("methodStep", methodstep)
             jsonArray.put(jsonObj)
         }
+
         val jsonArrayIngre = JSONArray()
-        for (methodstep in postModel.ingredients) {
+        for (ingredient in ingredientsArrayList) {
             val jsonObj = JSONObject()
-            jsonObj.put("ingredientoid", methodstep.food.oid)
+            jsonObj.put("ingredientoid", ingredient)
             jsonArrayIngre.put(jsonObj)
         }
 
@@ -906,7 +898,12 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             if(bodyResponse.contains("PostOid")){
                 print("Success Upload now uploading images ...")
                 val wordList = bodyResponse.split(" ")
-                uploadImagesPost(wordList[1],listofImages)
+                doAsync {
+                    uploadImagesPost(wordList[1], listofImages)
+                    onComplete {
+                        view.returnToPager()
+                    }
+                }
             }
         }
     }

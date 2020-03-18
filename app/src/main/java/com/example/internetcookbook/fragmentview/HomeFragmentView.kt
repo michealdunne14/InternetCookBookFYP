@@ -132,6 +132,8 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             }
         }
 
+        presenter.doFindHomeData()
+
         return view
     }
 
@@ -168,8 +170,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     }
 
     override fun removeLoading(findData: ArrayList<DataModel?>) {
-        homeView.mListRecyclerView.adapter?.notifyItemRemoved(findData.size)
-        homeView.mListRecyclerView.adapter?.notifyItemRangeInserted(homeView.mListRecyclerView.size + 1,findData.size)
+        homeView.mListRecyclerView.adapter?.notifyItemRangeInserted(findData.lastIndex,findData.size)
         isLoading = false
     }
 

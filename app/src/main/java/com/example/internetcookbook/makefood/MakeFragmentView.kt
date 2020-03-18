@@ -83,9 +83,9 @@ class MakeFragmentView : BaseView() {
 //        view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
 //        view.mCardIngredients.adapter?.notifyDataSetChanged()
 
-        postModel.method.reverse()
-        view.mMakeList.adapter = MakeAdapterWithModel(postModel.method)
-        view.mMakeList.adapter?.notifyDataSetChanged()
+//        postModel.method.reverse()
+//        view.mMakeList.adapter = MakeAdapterWithModel(postModel.method)
+//        view.mMakeList.adapter?.notifyDataSetChanged()
 
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
