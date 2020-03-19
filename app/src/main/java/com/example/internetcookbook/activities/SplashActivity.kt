@@ -35,9 +35,12 @@ class SplashActivity : AppCompatActivity() {
             doAsync {
                 infoStore!!.updateUserInfo(currentUser.user)
                 onComplete {
-                    uiThread {
-                        startActivity(Intent(baseContext, MainView::class.java))
-                        finish()
+                    doAsync {
+                        infoStore!!.getPostData()
+                        onComplete {
+                            startActivity(Intent(baseContext, MainView::class.java))
+                            finish()
+                        }
                     }
                 }
             }

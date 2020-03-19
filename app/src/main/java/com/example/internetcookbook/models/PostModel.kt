@@ -12,6 +12,7 @@ data class PostModel(
     var imagePath: String = "",
     var useroid: String = "",
     var comments: MutableList<CommentModel?> = mutableListOf(),
-    var method: MutableList<String> = mutableListOf(),
-    var ingredients: MutableList<FoodMasterModel> = mutableListOf()
+    var method: MutableList<MethodModel> = mutableListOf(),
+    var ingredients: MutableList<String> = mutableListOf(),
+    var posttime: String = ""
 ) : Parcelable

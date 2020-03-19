@@ -19,12 +19,6 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     init {
         infoStore = app.informationStore as InformationStore
-        doAsync {
-        infoStore!!.getPostData()
-            onComplete {
-                doFindHomeData()
-            }
-        }
     }
 
     override fun doSendComment(

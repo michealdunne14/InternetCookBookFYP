@@ -11,24 +11,24 @@ import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.onComplete
+
+var listofImages = ArrayList<String>()
 
 class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app : MainApp = view.activity?.application as MainApp
     var infoStore: InformationStore? = null
     val IMAGE_REQUEST = 1
-    var listofImages = ArrayList<String>()
 
     init {
         infoStore = app.informationStore as InformationStore
     }
 
-    fun doPostRecipe(postModel: PostModel) {
+    fun doPostRecipe(
+        postModel: PostModel,
+        methodStepsArrayList: ArrayList<String>
+    ) {
         doAsync {
-            infoStore!!.createPost(postModel,listofImages)
-            onComplete {
-                view.returnToPager()
-            }
+            infoStore!!.createPost(postModel,listofImages,methodStepsArrayList,view)
         }
     }
 
@@ -38,6 +38,10 @@ class PostFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     fun ingredientsAddToRecipe(): ArrayList<FoodMasterModel> {
         return infoStore!!.ingredientsAddedToRecipe()
+    }
+
+    fun listofImages(): ArrayList<String> {
+        return listofImages
     }
 
     //  When a result comes back
