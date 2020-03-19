@@ -510,7 +510,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-    fun getMoreData(){
+    fun getMoreData(): Boolean {
         lateinit var dataArray: ListPostModel
         if (internetConnection) {
 
@@ -527,15 +527,23 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
                 val body = response.body!!.string()
-                val gsonBuilder = GsonBuilder()
-                val gson = gsonBuilder.create()
-                dataArray = gson.fromJson(body, ListPostModel::class.java)
-                postData.removeAt(postData.lastIndex)
-                for (posts in dataArray.postArray){
-                    postData.add(posts)
+
+                return if(body == "no more posts") {
+                    postData.removeAt(postData.lastIndex)
+                    false
+                }else{
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    dataArray = gson.fromJson(body, ListPostModel::class.java)
+                    postData.removeAt(postData.lastIndex)
+                    for (posts in dataArray.postArray) {
+                        postData.add(posts)
+                    }
+                    true
                 }
             }
         }
+        return false
     }
 
     fun getCupboardData(){

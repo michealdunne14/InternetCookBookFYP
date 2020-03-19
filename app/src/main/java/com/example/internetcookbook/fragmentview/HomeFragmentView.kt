@@ -18,6 +18,7 @@ import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
 import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
@@ -165,6 +166,10 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
     private fun loadMore() {
         presenter.loadMoreData()
+    }
+
+    override fun noDataAvilable(){
+        Snackbar.make(homeView,"No More Data Available", Snackbar.LENGTH_LONG).show()
     }
 
     override fun removeLoading(findData: ArrayList<DataModel?>) {

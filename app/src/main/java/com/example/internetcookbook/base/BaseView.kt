@@ -34,4 +34,5 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun resetInformation(){}
     open fun showFollowList(searchFollowing: ArrayList<UserMasterModel>) {}
     open fun ingredientsRecyclerView(searchedIngredients: ArrayList<FoodMasterModel>) {}
+    open fun noDataAvilable(){}
 }
