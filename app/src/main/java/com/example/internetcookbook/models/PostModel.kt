@@ -14,5 +14,6 @@ data class PostModel(
     var comments: MutableList<CommentModel?> = mutableListOf(),
     var method: MutableList<MethodModel> = mutableListOf(),
     var ingredients: MutableList<String> = mutableListOf(),
+    var userhearts: MutableList<HeartModel> = mutableListOf(),
     var posttime: String = ""
 ) : Parcelable

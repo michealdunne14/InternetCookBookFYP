@@ -6,6 +6,7 @@ import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.CommentModel
 import com.example.internetcookbook.models.DataModel
+import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.network.InformationStore
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -58,9 +59,19 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         view.showInformation(infoStore!!.getHomeData())
     }
 
+    fun doFindCurrentUser(): UserMasterModel {
+        return infoStore!!.getCurrentUser()
+    }
+
     override fun doHeartData(id: String) {
         doAsync {
             infoStore!!.putHeart(id)
+        }
+    }
+
+    fun doRemoveHeart(id: String){
+        doAsync {
+            infoStore!!.removeHeart(id)
         }
     }
 }

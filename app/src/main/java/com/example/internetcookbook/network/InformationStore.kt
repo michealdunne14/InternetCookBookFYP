@@ -446,8 +446,9 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     fun putHeart(id: String) {
-
-        val formBody: RequestBody = FormBody.Builder().build()
+        val formBody: RequestBody = FormBody.Builder()
+            .add("userId", userMaster.user.oid)
+            .build()
 
         val request = Request.Builder()
             .url("http://52.51.34.156:3000/post/heart/${id}")
@@ -458,6 +459,23 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
            print(response.body!!.string())
+        }
+    }
+
+    fun removeHeart(id: String){
+        val formBody: RequestBody = FormBody.Builder()
+            .add("userId", userMaster.user.oid)
+            .build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/post/removeheart/${id}")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
         }
     }
 
@@ -660,6 +678,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             for (item in storedFood) {
                 val jsonObj = JSONObject()
                 jsonObj.put("name", item.food.name)
+                jsonObj.put("shop", item.food.shop)
                 jsonArray.put(jsonObj)
             }
             json.put("foodArray", jsonArray)
