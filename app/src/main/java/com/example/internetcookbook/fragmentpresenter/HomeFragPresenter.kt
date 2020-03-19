@@ -43,10 +43,15 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     fun loadMoreData() {
         findData().add(DataModel())
+        var moreDataAvilable = false
         doAsync {
-            infoStore!!.getMoreData()
+            moreDataAvilable = infoStore!!.getMoreData()
             onComplete {
-                view.removeLoading(findData())
+                if (moreDataAvilable) {
+                    view.removeLoading(findData())
+                }else{
+                    view.noDataAvilable()
+                }
             }
         }
     }
