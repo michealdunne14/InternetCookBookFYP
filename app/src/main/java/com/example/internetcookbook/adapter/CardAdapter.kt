@@ -17,7 +17,7 @@ import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
 import com.example.internetcookbook.animations.Bounce
-import com.example.internetcookbook.base.BasePresenter
+import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.PostModel
@@ -35,7 +35,7 @@ private var heart = false
 
 class CardAdapter(
     private var posts: ArrayList<DataModel?>,
-    private val presenter: BasePresenter
+    private val presenter: HomeFragPresenter?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_ITEM = 0
@@ -80,7 +80,7 @@ class CardAdapter(
         private var showDetails = false
         fun bind(
             dataModel: DataModel,
-            presenter: BasePresenter
+            presenter: HomeFragPresenter?
         ) {
 
             val bitmapImages = readBit64ImageArrayList(dataModel)
@@ -89,25 +89,41 @@ class CardAdapter(
             itemView.mCardName.text = dataModel.post.title
             itemView.mCardDescription.text = dataModel.post.description
 
-            itemView.mHeartButton.setOnClickListener {
-                heart = !heart
-                if (heart) {
-                    val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
-                    val interpolator =
-                        Bounce(0.2, 20.0)
-                    myAnim.interpolator = interpolator
-                    itemView.mHeartButton.startAnimation(myAnim)
-                    itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_black_36)
-                    presenter.doHeartData(dataModel.post._id)
-                }else{
-                    val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
-                    val interpolator =
-                        Bounce(0.2, 20.0)
-                    myAnim.interpolator = interpolator
-                    itemView.mHeartButton.startAnimation(myAnim)
-                    itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_border_black_36)
-
+            if (presenter != null) {
+                for (hearts in dataModel.post.userhearts) {
+                    if (presenter.doFindCurrentUser().user.oid == hearts.userId) {
+                        itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_black_36)
+                        heart = true
+                    }
                 }
+
+                itemView.mHeartButton.setOnClickListener {
+                    heart = !heart
+                    if (heart) {
+                        val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
+                        val interpolator =
+                            Bounce(0.2, 20.0)
+                        myAnim.interpolator = interpolator
+                        itemView.mHeartButton.startAnimation(myAnim)
+                        itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_black_36)
+                        presenter.doHeartData(dataModel.post._id)
+                    } else {
+                        val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
+                        val interpolator =
+                            Bounce(0.2, 20.0)
+                        myAnim.interpolator = interpolator
+                        itemView.mHeartButton.startAnimation(myAnim)
+                        itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_border_black_36)
+                        presenter.doRemoveHeart(dataModel.post._id)
+                    }
+
+                    itemView.mSendComment.setOnClickListener {
+                        presenter.doSendComment(itemView.mCardComment.text.toString().trim(),dataModel)
+                    }
+                }
+            }else{
+                itemView.mSendComment.visibility == View.INVISIBLE
+                itemView.mHeartButton.visibility == View.INVISIBLE
             }
 
             itemView.mShowRecipeDetails.setOnClickListener {
@@ -125,10 +141,6 @@ class CardAdapter(
 
             // Inflate the layout for this fragment
             val layoutManager = LinearLayoutManager(itemView.context)
-
-            itemView.mSendComment.setOnClickListener {
-                presenter.doSendComment(itemView.mCardComment.text.toString().trim(),dataModel)
-            }
 
             itemView.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
 

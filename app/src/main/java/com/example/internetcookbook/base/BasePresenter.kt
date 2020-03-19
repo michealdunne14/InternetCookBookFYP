@@ -19,6 +19,7 @@ open class BasePresenter(var view: BaseView) {
     }
 
     open fun doHeartData(id: String){}
+    open fun doCurrentUser(id: String){}
     open fun doSendComment(
         comment: String,
         dataModel: DataModel
