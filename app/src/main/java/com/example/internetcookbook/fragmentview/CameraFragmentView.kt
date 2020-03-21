@@ -9,10 +9,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
+import android.widget.CalendarView
 import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,29 +21,31 @@ import com.example.internetcookbook.adapter.ReceiptListAdapter
 import com.example.internetcookbook.animations.Bounce
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.dialog.CustomDialog
+import com.example.internetcookbook.dialog.DateDialog
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
-import com.example.internetcookbook.helper.capitalize
+import com.example.internetcookbook.fragmentpresenter.saveDate
+import com.example.internetcookbook.fragmentpresenter.saveShop
 import com.example.internetcookbook.helper.readImageFromPath
 import com.example.internetcookbook.models.FoodMasterModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import kotlinx.android.synthetic.main.activity_custom.*
 import kotlinx.android.synthetic.main.camera_show.view.*
+import kotlinx.android.synthetic.main.date_dialog.*
+import kotlinx.android.synthetic.main.date_dialog.mRetake
 import kotlinx.android.synthetic.main.fragment_camera.view.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.listitems.view.*
+import kotlinx.android.synthetic.main.listitems.view.progressBar
 import org.jetbrains.anko.*
 import java.nio.ByteBuffer
-import java.nio.channels.Selector
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 val storedFood: ArrayList<FoodMasterModel> = ArrayList()
 val validFoodItems = ArrayList<FoodMasterModel>()
-var saveShop = ""
-var saveDate = ""
 
 class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
@@ -55,7 +57,11 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     var captureCheck = false
     var torch = false
     lateinit var customDialog: CustomDialog
+    lateinit var dateDialog: DateDialog
     var foodCreateCheck = false
+    val elementArrayList = ArrayList<String>()
+    val lineArrayList = ArrayList<String>()
+    val filteredArrayList = ArrayList<String>()
 
 
     lateinit var presenter: CameraFragmentPresenter
@@ -71,16 +77,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         val layoutManager = LinearLayoutManager(context)
         presenter = initPresenter(CameraFragmentPresenter(this)) as CameraFragmentPresenter
 
-        if (arguments != null) {
-            val images = CameraFragmentViewArgs.fromBundle(arguments!!).foodcreate
-            if (images == "food_create") {
-                foodCreateCheck = true
-                cameraView.mButtonFindText.visibility = View.INVISIBLE
-                cameraView.mScanBarcodeButton.visibility = View.INVISIBLE
-//                homeView.mScanBarcodeButton.setImageResource(R.drawable.cor)
-            }
-        }
-
         view.mFoodListRecyclerView.layoutManager = layoutManager
         view.mRetakePicture.setOnClickListener {
             resetInformation()
@@ -91,17 +87,23 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
     override fun onResume() {
         super.onResume()
-        if (presenter.findNewData().food.name.isNotEmpty()){
-            validFoodItems.add(presenter.findNewData())
-        }
-        if (presenter.doFoodCreatePage()){
-            cameraView.mListItems.visibility = View.VISIBLE
-            cameraView.mListItems.bringToFront()
-            cameraView.view_finder.visibility = View.INVISIBLE
-            cameraView.mCameraShow.visibility = View.GONE
-            presenter.doFoodCreatePageUpdate()
-            cameraView.mShoppedAt.text = saveShop
-            cameraView.mFoodDate.text = saveDate
+        if (arguments != null) {
+            val images = CameraFragmentViewArgs.fromBundle(arguments!!).foodcreate
+            if (images == "food_create") {
+                foodCreateCheck = true
+                cameraView.mButtonFindText.visibility = View.INVISIBLE
+                cameraView.mScanBarcodeButton.visibility = View.INVISIBLE
+            }
+        }else {
+            if (storedFood.size != 0) {
+                cameraView.mListItems.visibility = View.VISIBLE
+                cameraView.mListItems.bringToFront()
+                cameraView.view_finder.visibility = View.INVISIBLE
+                cameraView.mCameraShow.visibility = View.GONE
+                presenter.doFoodCreatePageUpdate()
+                cameraView.mShoppedAt.text = saveShop
+                cameraView.mFoodDate.text = saveDate
+            }
         }
 
         cameraView.mFoodListRecyclerView.adapter = ReceiptListAdapter(
@@ -260,47 +262,10 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
     }
 
-    private fun mScanBarCode(bitmap: Bitmap?) {
-        if(bitmap != null) {
-            val image = FirebaseVisionImage.fromBitmap(bitmap)
-            val detector = FirebaseVision.getInstance().visionBarcodeDetector
-            val result = detector.detectInImage(image)
-                .addOnSuccessListener { barcodes ->
-                    for (barcode in barcodes) {
-                        val bounds = barcode.boundingBox
-                        val corners = barcode.cornerPoints
-
-                        val rawValue = barcode.rawValue
-
-                        val valueType = barcode.valueType
-                        // See API reference for complete list of supported types
-                        when (valueType) {
-                            FirebaseVisionBarcode.TYPE_WIFI -> {
-                                val ssid = barcode.wifi!!.ssid
-                                val password = barcode.wifi!!.password
-                                val type = barcode.wifi!!.encryptionType
-                            }
-                            FirebaseVisionBarcode.TYPE_URL -> {
-                                val title = barcode.url!!.title
-                                val url = barcode.url!!.url
-                            }
-                        }
-                    }
-                }
-                .addOnFailureListener {
-                    Snackbar.make(cameraView,"No Barcode Found Found", Snackbar.LENGTH_SHORT).show()
-                }
-        }else{
-            Snackbar.make(cameraView,"No Barcode Found Found", Snackbar.LENGTH_SHORT).show()
-        }
-    }
-
     private fun clearImageBitmap() {
         cameraView.view_finder.visibility = View.VISIBLE
         cameraView.mCapturedImage.setImageBitmap(null)
     }
-
-
 
     fun mChangeImageToText(bitmap: Bitmap) {
             val image = FirebaseVisionImage.fromBitmap(bitmap)
@@ -315,106 +280,8 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
     private fun processResultText(resultText: FirebaseVisionText) {
         info { "Select Country Started" }
-        val elementArrayList = ArrayList<String>()
-        val lineArrayList = ArrayList<String>()
-        val filteredArrayList = ArrayList<String>()
-        doAsync {
-            for (block in resultText.textBlocks) {
-                for (line in block.lines) {
-                    lineArrayList.add(line.text.trim())
-                    for (element in line.elements) {
-                        elementArrayList.add(capitalize(element.text.trim()))
-                    }
-                }
-            }
-            onComplete {
-                val foundDate = presenter.findDate(elementArrayList)
-                if (foundDate != null){
-                    if (saveDate.isEmpty()) {
-                        cameraView.mFoodDate.text = foundDate
-                    }
-                }else{
-//                    Dialog for purchase Date
-                }
-                for (line in lineArrayList){
-                    val wordArrayList = ArrayList<String>()
-                    val wordList = line.split(" ")
-                    val removingWords = ArrayList<String>()
-                    wordArrayList.addAll(wordList)
-                    wordArrayList.forEachIndexed { index, word ->
-                        val chars: CharArray = word.toCharArray()
-                        for (c in chars) {
-                            if (Character.isDigit(c)) {
-                                removingWords.add(word)
-                                break
-                            }
-                        }
-                    }
-                    for (remove in removingWords){
-                        wordArrayList.remove(remove)
-                    }
-                    var foodItem = String()
-                    wordArrayList.forEachIndexed { index, word ->
-                        val capWord = capitalize(word)
-                        if(index == 0){
-                            foodItem += capWord
-                        }else {
-                            foodItem += " $capWord"
-                        }
-                    }
-
-                    filteredArrayList.add(foodItem)
-                }
-                doAsync {
-                    val foundShop = presenter.findShop(elementArrayList)
-                    onComplete {
-                        var foodModel = FoodMasterModel()
-                        if(foundShop != null) {
-                            for (foodItem in filteredArrayList) {
-                                foodModel = FoodMasterModel()
-                                foodModel.food.name = foodItem
-                                foodModel.food.shop = foundShop.shop
-                                if (!storedFood.contains(foodModel)) {
-                                    storedFood.add(foodModel)
-                                }
-                            }
-                            if (saveShop.isEmpty()) {
-                                cameraView.mShoppedAt.text = foundShop.shop
-                            }
-                            saveShop = foundShop.shop
-                            saveDate = foundDate!!
-                            findFoodItems()
-                        }else{
-                            customDialog = CustomDialog(activity!!)
-                            customDialog.show()
-                            customDialog.setCanceledOnTouchOutside(false)
-                            customDialog.mConfirm.setOnClickListener {
-                                customDialog.cancel()
-                                for (foodItem in filteredArrayList) {
-                                    foodModel = FoodMasterModel()
-                                    foodModel.food.name = foodItem
-                                    foodModel.food.shop = customDialog.mDialogSearch.text.toString()
-                                    if (!storedFood.contains(foodModel)) {
-                                        storedFood.add(foodModel)
-                                    }
-                                }
-                                findFoodItems()
-                                cameraView.mShoppedAt.text = customDialog.mDialogSearch.text
-                            }
-                            customDialog.mRetake.setOnClickListener {
-                                storedFood.clear()
-                                cameraView.mListItems.visibility = View.GONE
-                                cameraView.mCameraShow.visibility = View.VISIBLE
-                                captureCheck = false
-                                cameraView.view_finder.visibility = View.VISIBLE
-                                cameraView.mCapturedImage.setImageBitmap(null)
-                                customDialog.cancel()
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        showProgress()
+        presenter.cameraSearch(elementArrayList,lineArrayList,filteredArrayList,resultText)
         cameraView.mCapturedImage.visibility = View.INVISIBLE
         cameraView.mFoodListRecyclerView.visibility = View.VISIBLE
         cameraView.mListItems.visibility = View.VISIBLE
@@ -428,28 +295,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         cameraView.mCameraShow.visibility = View.VISIBLE
         captureCheck = false
         clearImageBitmap()
-    }
-
-    private fun findFoodItems(){
-        doAsync {
-            presenter.searchItemsInitial(storedFood)
-            onComplete {
-                if(presenter.itemsInDatabase().isNotEmpty()) {
-                    storedFood.forEachIndexed { index, foundFood ->
-                        val search: FoodMasterModel? = presenter.itemsInDatabase().find { p -> p.food.name == foundFood.food.name }
-                        if (search != null) {
-                            if (search.food.name.isNotEmpty()) {
-                                validFoodItems.add(search)
-                                storedFood[index] = search
-                                storedFood[index].food.foundItem = true
-                            }
-                        }
-                    }
-                }
-                cameraView.mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood,presenter,validFoodItems,cameraView)
-                cameraView.mFoodListRecyclerView.adapter?.notifyDataSetChanged()
-            }
-        }
     }
 
     private fun setImageBitmap() {
@@ -516,6 +361,71 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
      */
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(cameraView.context, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun showShopDialog(){
+        customDialog = CustomDialog(activity!!)
+        customDialog.show()
+        customDialog.setCanceledOnTouchOutside(false)
+        customDialog.mConfirm.setOnClickListener {
+            customDialog.cancel()
+            for (foodItem in filteredArrayList) {
+                val foodModel = FoodMasterModel()
+                foodModel.food.name = foodItem
+                foodModel.food.shop = customDialog.mDialogSearch.text.toString()
+                if (!storedFood.contains(foodModel)) {
+                    storedFood.add(foodModel)
+                }
+            }
+            presenter.findFoodItems()
+            cameraView.mShoppedAt.text = customDialog.mDialogSearch.text
+        }
+        customDialog.mRetake.setOnClickListener {
+            storedFood.clear()
+            cameraView.mListItems.visibility = View.GONE
+            cameraView.mCameraShow.visibility = View.VISIBLE
+            captureCheck = false
+            cameraView.view_finder.visibility = View.VISIBLE
+            cameraView.mCapturedImage.setImageBitmap(null)
+            customDialog.cancel()
+        }
+    }
+
+    override fun showFoodItems(){
+        cameraView.mFoodListRecyclerView.adapter = ReceiptListAdapter(
+            storedFood,presenter,
+            validFoodItems,cameraView)
+        cameraView.mFoodListRecyclerView.adapter?.notifyDataSetChanged()
+        if (saveShop.isNotEmpty()) {
+            cameraView.mShoppedAt.text = saveShop
+        }
+        if (saveDate.isNotEmpty()){
+            cameraView.mFoodDate.text = saveDate
+        }
+        hideProgress()
+    }
+
+    override fun showDateDialog(date: String) {
+        dateDialog = DateDialog(activity!!)
+        dateDialog.show()
+        dateDialog.setCanceledOnTouchOutside(false)
+        dateDialog.mDateConfirm.setOnClickListener {
+            //sets the date of the calender when changed.
+            dateDialog.mDateCalender.setOnDateChangeListener(CalendarView.OnDateChangeListener(){
+                    view, year, month, dayOfMonth ->
+                saveDate = "$dayOfMonth/$month/$year"
+            })
+            dateDialog.cancel()
+            presenter.findShop(elementArrayList, filteredArrayList)
+        }
+    }
+
+    override fun hideProgress() {
+        progressBar.visibility = View.INVISIBLE
+    }
+
+    override fun showProgress(){
+        progressBar.visibility = View.VISIBLE
     }
 }
 
