@@ -7,10 +7,14 @@ import android.graphics.Bitmap
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.fragmentview.storedFood
+import com.example.internetcookbook.fragmentview.validFoodItems
+import com.example.internetcookbook.helper.capitalize
 import com.example.internetcookbook.helper.showImagePicker
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.network.InformationStore
+import com.google.firebase.ml.vision.text.FirebaseVisionText
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
@@ -20,10 +24,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+var saveShop = ""
+var saveDate = ""
+
 class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app : MainApp = view.activity?.application as MainApp
     var infoStore: InformationStore? = null
     val IMAGE_REQUEST = 1
+    var date = String()
 
     init {
         infoStore = app.informationStore as InformationStore
@@ -54,7 +62,7 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     }
 
     fun searchItems(element: String): FoodMasterModel? {
-        return infoStore!!.findItem(element)
+        return infoStore!!.findItem(element,saveShop)
     }
 
     fun searchItemsInitial(storedFood: ArrayList<FoodMasterModel>) {
@@ -101,6 +109,120 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return infoStore!!.foodCreatePage()
     }
 
+    fun cameraSearch(
+        elementArrayList: ArrayList<String>,
+        lineArrayList: ArrayList<String>,
+        filteredArrayList: ArrayList<String>,
+        resultText: FirebaseVisionText
+    ) {
+        doAsync {
+            for (block in resultText.textBlocks) {
+                for (line in block.lines) {
+                    lineArrayList.add(line.text.trim())
+                    for (element in line.elements) {
+                        elementArrayList.add(capitalize(element.text.trim()))
+                    }
+                }
+            }
+            onComplete {
+                val foundDate = findDate(elementArrayList)
+                if (foundDate!!.isNotEmpty()){
+                    if (saveDate.isEmpty()) {
+                        date = foundDate
+                    }
+                    findShop(elementArrayList,filteredArrayList)
+                }else{
+                    view.showDateDialog(date)
+                }
+                for (line in lineArrayList){
+                    filterLineData(line,filteredArrayList)
+                }
+            }
+        }
+    }
+
+    fun findShop(
+        elementArrayList: ArrayList<String>,
+        filteredArrayList: ArrayList<String>
+    ) {
+        doAsync {
+            val foundShop = findShop(elementArrayList)
+            onComplete {
+                var foodModel = FoodMasterModel()
+                if(foundShop != null) {
+                    for (foodItem in filteredArrayList) {
+                        foodModel = FoodMasterModel()
+                        foodModel.food.name = foodItem
+                        foodModel.food.shop = foundShop.shop
+                        foodModel.food.purchaseDate = date
+                        if (!storedFood.contains(foodModel)) {
+                            storedFood.add(foodModel)
+                        }
+                    }
+                    saveShop = foundShop.shop
+                    saveDate = date
+                    findFoodItems()
+                }else{
+                    view.showShopDialog()
+                }
+            }
+        }
+    }
+
+    fun filterLineData(
+        line: String,
+        filteredArrayList: ArrayList<String>
+    ) {
+        val wordArrayList = ArrayList<String>()
+        val wordList = line.split(" ")
+        val removingWords = ArrayList<String>()
+        wordArrayList.addAll(wordList)
+        wordArrayList.forEachIndexed { index, word ->
+            val chars: CharArray = word.toCharArray()
+            for (c in chars) {
+                if (Character.isDigit(c)) {
+                    removingWords.add(word)
+                    break
+                }
+            }
+        }
+        for (remove in removingWords){
+            wordArrayList.remove(remove)
+        }
+        var foodItem = String()
+        wordArrayList.forEachIndexed { index, word ->
+            val capWord = capitalize(word)
+            if(index == 0){
+                foodItem += capWord
+            }else {
+                foodItem += " $capWord"
+            }
+        }
+
+        filteredArrayList.add(foodItem)
+    }
+
+    fun findFoodItems(){
+        doAsync {
+            searchItemsInitial(storedFood)
+            onComplete {
+                if(itemsInDatabase().isNotEmpty()) {
+                    storedFood.forEachIndexed { index, foundFood ->
+                        val search: FoodMasterModel? = itemsInDatabase().find { p -> p.food.name == foundFood.food.name }
+                        if (search != null) {
+                            if (search.food.name.isNotEmpty()) {
+                                validFoodItems.add(search)
+                                storedFood[index] = search
+                                storedFood[index].food.foundItem = true
+                            }
+                        }
+                    }
+                }
+                view.showFoodItems()
+            }
+        }
+    }
+
 
     fun doFoodCreatePageUpdate(){
         infoStore!!.foodCreatePageUpdate()
@@ -108,9 +230,5 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     fun itemsInDatabase(): ArrayList<FoodMasterModel> {
         return infoStore!!.listOfFoodArray()
-    }
-
-    fun findNewData(): FoodMasterModel {
-        return infoStore!!.newFoodData()
     }
 }

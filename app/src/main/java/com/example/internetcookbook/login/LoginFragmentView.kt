@@ -12,7 +12,9 @@ import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.UserModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
+import kotlinx.android.synthetic.main.fragment_login.view.progressBar
 import java.io.Serializable
 
 class LoginFragmentView : BaseView() {
@@ -66,11 +68,11 @@ class LoginFragmentView : BaseView() {
     }
 
     override fun showProgress(){
-
+        progressBar.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-
+        progressBar.visibility = View.INVISIBLE
     }
 
     private fun handleTransition() {
