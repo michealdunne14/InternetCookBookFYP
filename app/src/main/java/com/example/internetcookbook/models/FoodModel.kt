@@ -25,7 +25,7 @@ data class FoodModel(
     @SerializedName("imagePath")
     var imagePath: String = "",
     @SerializedName("imagePathReliability")
-    var imagePathReliability: String = "",
+    var imagePathReliability: Number = 0,
     var foundItem: Boolean = false,
     var purchaseDate: String = "",
     var itemsCounter: Int = 1

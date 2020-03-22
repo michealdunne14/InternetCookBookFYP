@@ -96,6 +96,55 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
+    fun doExpirationYes(oid: String) {
+        doAsync {
+            infoStore!!.putExpireYes(oid)
+        }
+    }
+
+    fun doExpireNo(oid: String) {
+        doAsync {
+            infoStore!!.putExpireNo(oid)
+        }
+    }
+
+    fun doImageYes(oid: String) {
+        doAsync {
+            infoStore!!.putImageYes(oid)
+        }
+    }
+
+    fun doImageNo(oid: String) {
+        doAsync {
+            infoStore!!.putImageNo(oid)
+        }
+    }
+
+
+    fun doPriceYes(oid: String) {
+        doAsync {
+            infoStore!!.putPriceYes(oid)
+        }
+    }
+
+    fun doPriceNo(oid: String) {
+        doAsync {
+            infoStore!!.putPriceNo(oid)
+        }
+    }
+
+    fun doShopYes(oid: String) {
+        doAsync {
+            infoStore!!.putShopNo(oid)
+        }
+    }
+
+    fun doShopNo(oid: String) {
+        doAsync {
+            infoStore!!.putShopYes(oid)
+        }
+    }
+
     fun doAddCupboard(validFoodItems: ArrayList<FoodMasterModel>) {
         doAsync {
             infoStore!!.cupboardAdd(validFoodItems)

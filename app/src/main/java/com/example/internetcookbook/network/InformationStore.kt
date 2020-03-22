@@ -68,6 +68,128 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         userLocalStore = Gson().fromJson(jsonString, listType)
     }
 
+    fun putExpireYes(oid: String) {
+        val formBody: RequestBody = FormBody.Builder().build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/expirationTimeReliability/$oid")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
+    fun putExpireNo(oid: String) {
+        val formBody: RequestBody = FormBody.Builder().build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/removeExpirationTime/$oid")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
+
+    fun putShopNo(oid: String) {
+        val formBody: RequestBody = FormBody.Builder().build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/removeShop/$oid")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
+    fun putShopYes(oid: String) {
+        val formBody: RequestBody = FormBody.Builder().build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/shopReliability/$oid")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
+    fun putPriceNo(oid: String) {
+        val formBody: RequestBody = FormBody.Builder().build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/removePrice/$oid")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
+    fun putPriceYes(oid: String) {
+        val formBody: RequestBody = FormBody.Builder().build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/priceReliability/$oid")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
+    fun putImageNo(oid: String) {
+        val formBody: RequestBody = FormBody.Builder().build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/removeImagePath/$oid")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
+    fun putImageYes(oid: String) {
+        val formBody: RequestBody = FormBody.Builder().build()
+
+        val request = Request.Builder()
+            .url("http://52.51.34.156:3000/food/imagePathReliability/$oid")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
+
     fun findEmail(userModel: UserModel): UserMasterModel? {
         if (internetConnection) {
             lateinit var emailSearch: UserMasterModel

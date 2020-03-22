@@ -22,9 +22,11 @@ import com.example.internetcookbook.animations.Bounce
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.dialog.CustomDialog
 import com.example.internetcookbook.dialog.DateDialog
+import com.example.internetcookbook.dialog.QueryDialog
 import com.example.internetcookbook.fragmentpresenter.CameraFragmentPresenter
 import com.example.internetcookbook.fragmentpresenter.saveDate
 import com.example.internetcookbook.fragmentpresenter.saveShop
+import com.example.internetcookbook.helper.readBit64ImageSingle
 import com.example.internetcookbook.helper.readImageFromPath
 import com.example.internetcookbook.models.FoodMasterModel
 import com.google.android.material.snackbar.Snackbar
@@ -34,15 +36,19 @@ import com.google.firebase.ml.vision.text.FirebaseVisionText
 import kotlinx.android.synthetic.main.activity_custom.*
 import kotlinx.android.synthetic.main.camera_show.view.*
 import kotlinx.android.synthetic.main.date_dialog.*
-import kotlinx.android.synthetic.main.date_dialog.mRetake
 import kotlinx.android.synthetic.main.fragment_camera.view.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.listitems.view.*
-import kotlinx.android.synthetic.main.listitems.view.progressBar
+import kotlinx.android.synthetic.main.query_dialog.*
 import org.jetbrains.anko.*
 import java.nio.ByteBuffer
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 val storedFood: ArrayList<FoodMasterModel> = ArrayList()
 val validFoodItems = ArrayList<FoodMasterModel>()
@@ -58,6 +64,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     var torch = false
     lateinit var customDialog: CustomDialog
     lateinit var dateDialog: DateDialog
+    lateinit var queryDialog: QueryDialog
     var foodCreateCheck = false
     val elementArrayList = ArrayList<String>()
     val lineArrayList = ArrayList<String>()
@@ -217,7 +224,98 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
 
         cameraView.mAddCupboard.setOnClickListener {
-            presenter.doAddCupboard(validFoodItems)
+            val random = Random()
+            val foodData = ArrayList<Number>()
+            val randomFoodItem = validFoodItems[random.nextInt(validFoodItems.size)]
+            val expirationtime = randomFoodItem.food.expirationTimeReliability.toInt()
+            val imagepath = randomFoodItem.food.imagePathReliability.toInt()
+            val price = randomFoodItem.food.priceReliability.toInt()
+            val shop = randomFoodItem.food.shopReliability.toInt()
+            val itemArray = intArrayOf(expirationtime, imagepath, price, shop)
+            when (getSmallest(itemArray,itemArray.size)) {
+                expirationtime -> {
+                    queryDialog = QueryDialog(activity!!)
+                    queryDialog.show()
+                    queryDialog.mQuestionDialog.text = "Is the Expiration Date Correct"
+                    queryDialog.mFoodImageDialog.setImageBitmap(readBit64ImageSingle(randomFoodItem.image))
+                    val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yy")
+                    val c = Calendar.getInstance()
+                    try {
+                        c.time = dateFormat.parse(saveDate)!!
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                    }
+                    c.add(Calendar.DATE, expirationtime)
+                    val dateFormat1: DateFormat = SimpleDateFormat("dd/MM/yy")
+                    val output = dateFormat1.format(c.time)
+                    queryDialog.mQueryDialog.text = "${randomFoodItem.food.name} will expire on $output"
+                    queryDialog.setCanceledOnTouchOutside(false)
+                    queryDialog.mQueryDialogYes.setOnClickListener {
+                        queryDialog.dismiss()
+                        presenter.doAddCupboard(validFoodItems)
+                        presenter.doExpirationYes(randomFoodItem.food.oid)
+                    }
+                    queryDialog.mQueryDialogNo.setOnClickListener {
+                        queryDialog.dismiss()
+                        presenter.doAddCupboard(validFoodItems)
+                        presenter.doExpireNo(randomFoodItem.food.oid)
+                    }
+                }
+                imagepath -> {
+                    queryDialog = QueryDialog(activity!!)
+                    queryDialog.show()
+                    queryDialog.mQuestionDialog.text = "Is this a good Image?"
+                    queryDialog.mFoodImageDialog.setImageBitmap(readBit64ImageSingle(randomFoodItem.image))
+                    queryDialog.mQueryDialog.visibility = View.INVISIBLE
+                    queryDialog.setCanceledOnTouchOutside(false)
+                    queryDialog.mQueryDialogYes.setOnClickListener {
+                        queryDialog.dismiss()
+                        presenter.doAddCupboard(validFoodItems)
+                        presenter.doImageYes(randomFoodItem.food.oid)
+                    }
+                    queryDialog.mQueryDialogNo.setOnClickListener {
+                        queryDialog.dismiss()
+                        presenter.doAddCupboard(validFoodItems)
+                        presenter.doImageNo(randomFoodItem.food.oid)
+                    }
+                }
+                price -> {
+                    queryDialog = QueryDialog(activity!!)
+                    queryDialog.show()
+                    queryDialog.mQuestionDialog.text = "Is this price correct for this item?"
+                    queryDialog.mFoodImageDialog.setImageBitmap(readBit64ImageSingle(randomFoodItem.image))
+                    queryDialog.mQueryDialog.text = "Price of item ${randomFoodItem.food.price}"
+                    queryDialog.setCanceledOnTouchOutside(false)
+                    queryDialog.mQueryDialogYes.setOnClickListener {
+                        queryDialog.dismiss()
+                        presenter.doAddCupboard(validFoodItems)
+                        presenter.doPriceYes(randomFoodItem.food.oid)
+                    }
+                    queryDialog.mQueryDialogNo.setOnClickListener {
+                        queryDialog.dismiss()
+                        presenter.doAddCupboard(validFoodItems)
+                        presenter.doPriceNo(randomFoodItem.food.oid)
+                    }
+                }
+                shop -> {
+                    queryDialog = QueryDialog(activity!!)
+                    queryDialog.show()
+                    queryDialog.mQuestionDialog.text = "Is this the correct shop for this item?"
+                    queryDialog.mFoodImageDialog.setImageBitmap(readBit64ImageSingle(randomFoodItem.image))
+                    queryDialog.mQueryDialog.text = randomFoodItem.food.shop
+                    queryDialog.setCanceledOnTouchOutside(false)
+                    queryDialog.mQueryDialogYes.setOnClickListener {
+                        queryDialog.dismiss()
+                        presenter.doAddCupboard(validFoodItems)
+                        presenter.doShopYes(randomFoodItem.food.oid)
+                    }
+                    queryDialog.mQueryDialogNo.setOnClickListener {
+                        queryDialog.dismiss()
+                        presenter.doAddCupboard(validFoodItems)
+                        presenter.doShopNo(randomFoodItem.food.oid)
+                    }
+                }
+            }
         }
 
         cameraView.mButtonFindText.setOnClickListener {
@@ -303,6 +401,20 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         cameraView.mCapturedImage.visibility = View.VISIBLE
     }
 
+    fun getSmallest(a: IntArray, total: Int): Int {
+        var temp: Int
+        for (i in 0 until total) {
+            for (j in i + 1 until total) {
+                if (a[i] > a[j]) {
+                    temp = a[i]
+                    a[i] = a[j]
+                    a[j] = temp
+                }
+            }
+        }
+        return a[0]
+    }
+
     override fun addImageToCamera(stringData: String) {
         val bitmap = readImageFromPath(cameraView.context,stringData)
         cameraView.view_finder.visibility = View.INVISIBLE
@@ -380,7 +492,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             presenter.findFoodItems()
             cameraView.mShoppedAt.text = customDialog.mDialogSearch.text
         }
-        customDialog.mRetake.setOnClickListener {
+        customDialog.mRetakeShop.setOnClickListener {
             storedFood.clear()
             cameraView.mListItems.visibility = View.GONE
             cameraView.mCameraShow.visibility = View.VISIBLE

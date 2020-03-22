@@ -44,6 +44,7 @@
     <string name="expiration_date">Expiration Date</string>
     <string name="add">Add</string>
     <string name="search_username">Search Username</string>
+    <string name="is_this_expiration_date_correct">Is this Expiration Date Correct</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>
