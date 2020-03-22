@@ -75,7 +75,6 @@ class ReceiptListAdapter(
                             removeItem(foodItems,homeView,position)
                             validFood.food.itemsCounter++
                             itemView.mItemCounter.text = validFood.food.itemsCounter.toString()
-//                            validFoodItems.update
                             foodAlreadyPresent = true
                             break
                         }

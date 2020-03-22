@@ -58,7 +58,7 @@ class FoodCreateView : BaseView(){
 
         foodCreateView.mFoodCreateAdd.setOnClickListener {
             presenter.doAddFood(FoodModel("",foodCreateView.mFoodCreateName.text.toString(),foodCreateView.mFoodCreatePrice.text.toString().toDouble(),foodCreateView.mFoodCreateShop.text.toString(),0,
-            0,0,0,"",""))
+            0,0,0,"",0))
         }
 
         foodCreateView.mReturnButton.setOnClickListener {
