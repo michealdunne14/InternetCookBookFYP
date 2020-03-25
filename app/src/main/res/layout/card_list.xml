@@ -96,14 +96,14 @@
         app:layout_constraintStart_toEndOf="@+id/mSaveRecipe"
         app:srcCompat="@drawable/baseline_favorite_border_black_36" />
 
-    <ImageButton
-        android:id="@+id/mShareFood"
-        android:layout_width="@dimen/dimension50"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/baseline_share_black_36" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/mShareFood"-->
+<!--        android:layout_width="@dimen/dimension50"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@null"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:srcCompat="@drawable/baseline_share_black_36" />-->
 
     <ImageButton
         android:id="@+id/mMakeFood"
@@ -111,7 +111,7 @@
         android:layout_height="0dp"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mShareFood"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/outline_fastfood_black_36" />
 
     <ImageButton
@@ -149,5 +149,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mShowRecipeDetails"
         app:srcCompat="@drawable/baseline_comment_black_36" />
+
+    <ImageButton
+        android:id="@+id/mAddBasketButton"
+        android:layout_width="@dimen/dimension50"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mCommentsPage"
+        app:srcCompat="@drawable/outline_shopping_basket_black_36" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

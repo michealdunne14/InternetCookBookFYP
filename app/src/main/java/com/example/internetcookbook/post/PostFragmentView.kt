@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,13 +21,14 @@ import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_post.view.*
 import org.jetbrains.anko.AnkoLogger
 
-class PostFragmentView : BaseView(),AnkoLogger {
+class PostFragmentView : BaseView(),AnkoLogger,AdapterView.OnItemSelectedListener  {
 
     lateinit var presenter: PostFragmentPresenter
     lateinit var postView: View
     var postModel = PostModel()
     var personalPost = false
     var methodStepsArrayList = ArrayList<String>()
+    var selectedDifficulty = ""
 
 
     override fun onCreateView(
@@ -51,8 +54,25 @@ class PostFragmentView : BaseView(),AnkoLogger {
         view.mPostButton.setOnClickListener {
             postModel.title = view.mPostTitle.text.toString()
             postModel.description = view.mPostDescription.text.toString()
+            postModel.difficulty = selectedDifficulty
             presenter.doPostRecipe(postModel,methodStepsArrayList)
         }
+
+
+        ArrayAdapter.createFromResource(
+            context!!,
+            R.array.difficulty_level,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+            // Apply the adapter to the spinner
+            view.mSelectDifficulty.adapter = adapter
+        }
+
+        view.mSelectDifficulty.onItemSelectedListener = this
+
 
         view.mReturnButton.setOnClickListener {
             returnToPager()
@@ -128,6 +148,15 @@ class PostFragmentView : BaseView(),AnkoLogger {
     override fun onResume() {
         super.onResume()
         addImages(presenter.listofImages())
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        print(p0)
+    }
+
+    override fun onItemSelected(adapterView: AdapterView<*>, p1: View?, position: Int, p3: Long) {
+        val selectedClass: String = adapterView.getItemAtPosition(position).toString()
+        selectedDifficulty = selectedClass
     }
 
 }

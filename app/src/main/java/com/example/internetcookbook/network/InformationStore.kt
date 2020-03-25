@@ -33,6 +33,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var userMaster = UserMasterModel()
     var imageArrayList = ArrayList<Bitmap>()
     var postData = ArrayList<DataModel?>()
+    var filterArrayList = ArrayList<DataModel?>()
     var listFoodArray = ArrayList<FoodMasterModel>()
     var userPostData = ArrayList<DataModel?>()
     var cupboardData = ArrayList<FoodMasterModel>()
@@ -72,7 +73,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val formBody: RequestBody = FormBody.Builder().build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/expirationTimeReliability/$oid")
+            .url("http://34.244.232.228:3000/food/expirationTimeReliability/$oid")
             .put(formBody)
             .build()
 
@@ -87,7 +88,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val formBody: RequestBody = FormBody.Builder().build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/removeExpirationTime/$oid")
+            .url("http://34.244.232.228:3000/food/removeExpirationTime/$oid")
             .put(formBody)
             .build()
 
@@ -103,7 +104,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val formBody: RequestBody = FormBody.Builder().build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/removeShop/$oid")
+            .url("http://34.244.232.228:3000/food/removeShop/$oid")
             .put(formBody)
             .build()
 
@@ -118,7 +119,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val formBody: RequestBody = FormBody.Builder().build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/shopReliability/$oid")
+            .url("http://34.244.232.228:3000/food/shopReliability/$oid")
             .put(formBody)
             .build()
 
@@ -133,7 +134,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val formBody: RequestBody = FormBody.Builder().build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/removePrice/$oid")
+            .url("http://34.244.232.228:3000/food/removePrice/$oid")
             .put(formBody)
             .build()
 
@@ -148,7 +149,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val formBody: RequestBody = FormBody.Builder().build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/priceReliability/$oid")
+            .url("http://34.244.232.228:3000/food/priceReliability/$oid")
             .put(formBody)
             .build()
 
@@ -163,7 +164,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val formBody: RequestBody = FormBody.Builder().build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/removeImagePath/$oid")
+            .url("http://34.244.232.228:3000/food/removeImagePath/$oid")
             .put(formBody)
             .build()
 
@@ -178,7 +179,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val formBody: RequestBody = FormBody.Builder().build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/imagePathReliability/$oid")
+            .url("http://34.244.232.228:3000/food/imagePathReliability/$oid")
             .put(formBody)
             .build()
 
@@ -199,7 +200,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .add("password",userModel.password).build()
 
             val request = Request.Builder()
-                .url("http://52.51.34.156:3000/user/email")
+                .url("http://34.244.232.228:3000/user/email")
                 .post(formBody)
                 .build()
 
@@ -237,7 +238,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .add("username", userSearch.toString()).build()
 
             val request = Request.Builder()
-                .url("http://52.51.34.156:3000/user/username")
+                .url("http://34.244.232.228:3000/user/username")
                 .post(formBody)
                 .build()
 
@@ -277,7 +278,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .add("followingoid", userMasterModel.user.oid).build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/user/follow/${userMaster.user.oid}")
+            .url("http://34.244.232.228:3000/user/follow/${userMaster.user.oid}")
             .put(formBody)
             .build()
 
@@ -321,7 +322,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .add("signupdate", userModel.signupdate).build()
 
         val request: Request = Request.Builder()
-            .url("http://52.51.34.156:3000/user/create")
+            .url("http://34.244.232.228:3000/user/create")
             .post(formBody)
             .build()
 
@@ -344,7 +345,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         if (internetConnection) {
             lateinit var emailSearch: UserMasterModel
             val request = Request.Builder()
-                .url("http://52.51.34.156:3000/user/id/${userModel.oid}")
+                .url("http://34.244.232.228:3000/user/id/${userModel.oid}")
                 .build()
 
             client.newCall(request).execute().use { response ->
@@ -381,7 +382,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .add("shop", foodModel.shop).build()
 
         val request: Request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/create")
+            .url("http://34.244.232.228:3000/food/create")
             .post(formBody)
             .build()
 
@@ -400,7 +401,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     fun findShop(shop: String): String? {
         lateinit var foodModel: Array<FoodModel>
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/shop/${shop}")
+            .url("http://34.244.232.228:3000/food/shop/${shop}")
             .build()
 
         client.newCall(request).execute().use { response ->
@@ -434,7 +435,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .add("name", searchedItem).build()
 
             val request = Request.Builder()
-                .url("http://52.51.34.156:3000/food/partialTextSearch")
+                .url("http://34.244.232.228:3000/food/partialTextSearch")
                 .post(formBody)
                 .build()
 
@@ -487,7 +488,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                     .build()
 
                 val request = Request.Builder()
-                    .url("http://52.51.34.156:3000/food/name")
+                    .url("http://34.244.232.228:3000/food/name")
                     .post(formBody)
                     .build()
 
@@ -529,12 +530,35 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
 
             val request: Request = Request.Builder()
-                .url("http://52.51.34.156:3000/user/cupboard/${userMaster.user.oid}")
+                .url("http://34.244.232.228:3000/user/cupboard/${userMaster.user.oid}")
                 .post(body)
                 .build()
 
             client.newCall(request).execute().use { response -> if (!response.isSuccessful) throw IOException("Unexpected code $response") }
         }
+    }
+
+    fun basketAdd(dataModel: DataModel) {
+            val json = JSONObject()
+            val jsonArray = JSONArray()
+            for (ingredients in dataModel.post.ingredients) {
+                val jsonObj = JSONObject()
+                jsonObj.put("basketoid", ingredients.ingredientoid)
+                jsonArray.put(jsonObj)
+            }
+            json.put("basket", jsonArray)
+
+
+            val jsonString = json.toString()
+            val body = create(JSON, jsonString)
+
+
+            val request: Request = Request.Builder()
+                .url("http://34.244.232.228:3000/user/basket/${userMaster.user.oid}")
+                .post(body)
+                .build()
+
+            client.newCall(request).execute().use { response -> if (!response.isSuccessful) throw IOException("Unexpected code $response") }
     }
 
     fun userCreated() {
@@ -552,7 +576,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/post/heart/${id}")
+            .url("http://34.244.232.228:3000/post/heart/${id}")
             .put(formBody)
             .build()
 
@@ -569,7 +593,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/post/removeheart/${id}")
+            .url("http://34.244.232.228:3000/post/removeheart/${id}")
             .put(formBody)
             .build()
 
@@ -589,7 +613,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .add("id", userMaster.user.oid).build()
 
             val request: Request = Request.Builder()
-                .url("http://52.51.34.156:3000/post/id")
+                .url("http://34.244.232.228:3000/post/id")
                 .post(formBody)
                 .build()
 
@@ -611,6 +635,43 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+
+    fun getFilterDataDifficulty(difficultyLevel: String) {
+        filterArrayList.clear()
+        lateinit var dataArray: ListPostModel
+        if (internetConnection) {
+
+            val formBody: RequestBody = FormBody.Builder()
+                .add("id", userMaster.user.oid)
+                .add("difficulty",difficultyLevel).build()
+
+            val request: Request = Request.Builder()
+                .url("http://34.244.232.228:3000/post/id")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                if (body == "No Posts Found") {
+                    print("No Posts Found")
+                } else {
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    dataArray = gson.fromJson(body, ListPostModel::class.java)
+                    for (posts in dataArray.postArray) {
+                        filterArrayList.add(posts)
+                    }
+                }
+            }
+        }
+    }
+
+    fun getFilteredData(): ArrayList<DataModel?> {
+        return filterArrayList
+    }
+
     fun getMoreData(): Boolean {
         lateinit var dataArray: ListPostModel
         if (internetConnection) {
@@ -620,7 +681,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .add("posttime", postData[postData.lastIndex - 1]!!.post.posttime).build()
 
             val request: Request = Request.Builder()
-                .url("http://52.51.34.156:3000/post/newdata")
+                .url("http://34.244.232.228:3000/post/newdata")
                 .post(formBody)
                 .build()
 
@@ -655,7 +716,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .add("id", userMaster.user.oid).build()
 
             val request = Request.Builder()
-                .url("http://52.51.34.156:3000/food/byIdLoad")
+                .url("http://34.244.232.228:3000/food/byIdLoad")
                 .post(formBody)
                 .build()
 
@@ -686,7 +747,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .add("id", userMaster.user.oid).build()
 
             val request = Request.Builder()
-                .url("http://52.51.34.156:3000/food/byIdLoadBasket")
+                .url("http://34.244.232.228:3000/food/byIdLoadBasket")
                 .post(formBody)
                 .build()
 
@@ -717,7 +778,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .add("id", userMaster.user.oid).build()
 
             val request = Request.Builder()
-                .url("http://52.51.34.156:3000/user/following")
+                .url("http://34.244.232.228:3000/user/following")
                 .post(formBody)
                 .build()
 
@@ -811,7 +872,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             val body = create(JSON, jsonString)
 
             val request: Request = Request.Builder()
-                .url("http://52.51.34.156:3000/food/foodLoad")
+                .url("http://34.244.232.228:3000/food/foodLoad")
                 .post(body)
                 .build()
 
@@ -844,7 +905,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         dataModel.post.comments.add(CommentModel(comment,userMaster.user.oid))
 
         val request: Request = Request.Builder()
-            .url("http://52.51.34.156:3000/post/comment/${dataModel.post._id}")
+            .url("http://34.244.232.228:3000/post/comment/${dataModel.post._id}")
             .post(formBody)
             .build()
 
@@ -871,7 +932,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             val body = create(JSON, jsonString)
 
             val request: Request = Request.Builder()
-                .url("http://52.51.34.156:3000/food/shop")
+                .url("http://34.244.232.228:3000/food/shop")
                 .post(body)
                 .build()
 
@@ -919,13 +980,13 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
 
 
-        postData.add(DataModel(userImages,postModel))
+//        postData.add(DataModel(userImages,postModel))
 
 
         val requestBody: RequestBody = builder.build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/post/upload/${oid}")
+            .url("http://34.244.232.228:3000/post/upload/${oid}")
             .post(requestBody)
             .build()
 
@@ -948,7 +1009,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/user/upload/${oid}")
+            .url("http://34.244.232.228:3000/user/upload/${oid}")
             .post(requestBody)
             .build()
 
@@ -977,7 +1038,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .build()
 
         val request = Request.Builder()
-            .url("http://52.51.34.156:3000/food/upload/${oid}")
+            .url("http://34.244.232.228:3000/food/upload/${oid}")
             .post(requestBody)
             .build()
 
@@ -1017,6 +1078,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val postModelJson = JSONObject()
         postModelJson.put("title",postModel.title)
         postModelJson.put("description",postModel.description)
+        postModelJson.put("difficulty",postModel.difficulty)
         postModelJson.put("method", jsonArray)
         postModelJson.put("ingredients",jsonArrayIngre)
 
@@ -1024,7 +1086,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val body = create(JSON, jsonString)
 
         val request: Request = Request.Builder()
-            .url("http://52.51.34.156:3000/post/create/${userMaster.user.oid}")
+            .url("http://34.244.232.228:3000/post/create/${userMaster.user.oid}")
             .post(body)
             .build()
 
@@ -1055,7 +1117,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             .add("useroid", userMaster.user.oid).build()
 
         val request: Request = Request.Builder()
-            .url("http://52.51.34.156:3000/post/create")
+            .url("http://34.244.232.228:3000/post/create")
             .put(formBody)
             .build()
 

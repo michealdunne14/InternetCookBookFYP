@@ -14,12 +14,5 @@ class PagerFragmentPresenter(view: BaseView): BasePresenter(view) {
 
     init {
         infoStore = app.informationStore
-
-        doAsync {
-            infoStore.getFollowingData()
-        }
-        doAsync {
-            infoStore.getBasketData()
-        }
     }
 }

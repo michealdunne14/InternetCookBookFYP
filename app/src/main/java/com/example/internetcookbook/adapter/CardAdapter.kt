@@ -134,6 +134,10 @@ class CardAdapter(
                 }
             }
 
+            itemView.mAddBasketButton.setOnClickListener {
+                presenter!!.doAddBasket(dataModel)
+            }
+
 
             itemView.mSaveRecipe.setOnClickListener {
                 Snackbar.make(itemView,"Saved on Profile Page", Snackbar.LENGTH_SHORT).show()
