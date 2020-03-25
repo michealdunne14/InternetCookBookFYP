@@ -81,6 +81,12 @@
                 android:hint="@string/description"
                 android:inputType="textPersonName" />
 
+            <Spinner
+                android:id="@+id/mSelectDifficulty"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="50dp" />
+
             <Button
                 android:id="@+id/mIngredientsButton"
                 android:layout_width="match_parent"

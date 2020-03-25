@@ -52,6 +52,12 @@
         <item>@string/third_fragment</item>
     </string-array>
 
+    <string-array name="difficulty_level">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+
     <string-array name="number_of_people">
         <item>1</item>
         <item>2</item>

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <!--        Filter by Items In Basket-->
         <item
-            android:id="@+id/mBasketSearch"
+            android:id="@+id/mCupboardSearch"
             android:icon="@drawable/outline_shopping_basket_black_48"
             android:title="" />
 <!--        Filter By Time Available-->

@@ -28,5 +28,5 @@ data class FoodModel(
     var imagePathReliability: Number = 0,
     var foundItem: Boolean = false,
     var purchaseDate: String = "",
-    var itemsCounter: Int = 1
+    var itemsCounter: Int = 0
 ): Parcelable

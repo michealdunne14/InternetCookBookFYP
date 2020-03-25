@@ -201,6 +201,11 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                 if(foundShop != null) {
                     for (foodItem in filteredArrayList) {
                         foodModel = FoodMasterModel()
+                        for (item in filteredArrayList){
+                            if(foodItem == item){
+                                foodModel.food.itemsCounter++
+                            }
+                        }
                         foodModel.food.name = foodItem
                         foodModel.food.shop = foundShop.shop
                         foodModel.food.purchaseDate = date
@@ -260,6 +265,7 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                         val search: FoodMasterModel? = itemsInDatabase().find { p -> p.food.name == foundFood.food.name }
                         if (search != null) {
                             if (search.food.name.isNotEmpty()) {
+                                search.food.itemsCounter = foundFood.food.itemsCounter
                                 validFoodItems.add(search)
                                 storedFood[index] = search
                                 storedFood[index].food.foundItem = true

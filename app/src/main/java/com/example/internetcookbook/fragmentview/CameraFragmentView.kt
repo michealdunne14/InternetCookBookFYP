@@ -483,6 +483,11 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             customDialog.cancel()
             for (foodItem in filteredArrayList) {
                 val foodModel = FoodMasterModel()
+                for (item in filteredArrayList){
+                    if(foodItem == item){
+                        foodModel.food.itemsCounter++
+                    }
+                }
                 foodModel.food.name = foodItem
                 foodModel.food.shop = customDialog.mDialogSearch.text.toString()
                 if (!storedFood.contains(foodModel)) {
@@ -504,9 +509,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
     }
 
     override fun showFoodItems(){
-        cameraView.mFoodListRecyclerView.adapter = ReceiptListAdapter(
-            storedFood,presenter,
-            validFoodItems,cameraView)
+        cameraView.mFoodListRecyclerView.adapter = ReceiptListAdapter(storedFood,presenter, validFoodItems,cameraView)
         cameraView.mFoodListRecyclerView.adapter?.notifyDataSetChanged()
         if (saveShop.isNotEmpty()) {
             cameraView.mShoppedAt.text = saveShop

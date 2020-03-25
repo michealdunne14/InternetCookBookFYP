@@ -4,7 +4,6 @@ import android.view.View
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
-import com.example.internetcookbook.models.CommentModel
 import com.example.internetcookbook.models.DataModel
 import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.network.InformationStore
@@ -41,6 +40,15 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
+    fun doFilterDifficulty(difficultyLevel: String) {
+        doAsync {
+            infoStore!!.getFilterDataDifficulty(difficultyLevel)
+            onComplete {
+                view.showInformation(infoStore!!.getFilteredData())
+            }
+        }
+    }
+
     fun loadMoreData() {
         findData().add(DataModel())
         var moreDataAvilable = false
@@ -62,6 +70,12 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     fun doFindHomeData(){
         view.showInformation(infoStore!!.getHomeData())
+    }
+
+    fun doAddBasket(dataModel: DataModel) {
+        doAsync {
+            infoStore!!.basketAdd(dataModel)
+        }
     }
 
     fun doFindCurrentUser(): UserMasterModel {

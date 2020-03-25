@@ -36,6 +36,15 @@ class SplashActivity : AppCompatActivity() {
                 infoStore!!.updateUserInfo(currentUser.user)
                 onComplete {
                     doAsync {
+                        doAsync {
+                            infoStore!!.getCupboardData()
+                        }
+                        doAsync {
+                            infoStore!!.getFollowingData()
+                        }
+                        doAsync {
+                            infoStore!!.getBasketData()
+                        }
                         infoStore!!.getPostData()
                         onComplete {
                             startActivity(Intent(baseContext, MainView::class.java))
@@ -43,9 +52,6 @@ class SplashActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
-            doAsync {
-                infoStore!!.getCupboardData()
             }
         }
     }

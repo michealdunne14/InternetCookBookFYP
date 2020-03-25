@@ -56,6 +56,7 @@ class ReceiptListAdapter(
                 itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
                 itemView.mFoodImage.setImageBitmap(readBit64ImageSingle(foodModel.image))
                 itemView.mFoodImage.visibility == View.VISIBLE
+                itemView.mItemCounter.text = foodItems[position].food.itemsCounter.toString()
             }else{
                 itemView.mFoodImage.visibility == View.GONE
                 itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
@@ -73,8 +74,7 @@ class ReceiptListAdapter(
                     for (validFood in validFoodItems) {
                         if (validFood.food.name == foodItems[position].food.name) {
                             removeItem(foodItems,homeView,position)
-                            validFood.food.itemsCounter++
-                            itemView.mItemCounter.text = validFood.food.itemsCounter.toString()
+                            itemView.mItemCounter.text = foodItems[position].food.itemsCounter.toString()
                             foodAlreadyPresent = true
                             break
                         }

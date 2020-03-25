@@ -40,6 +40,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     private var difficulty = false
     private var basket = false
     var isLoading = false
+    var difficultyLevel = ""
 
 
     override fun onCreateView(
@@ -75,7 +76,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             homeView.findNavController().navigate(action)
         }
 
-        view.mBasketSearch.setOnClickListener {
+        view.mCupboardSearch.setOnClickListener {
 
         }
 
@@ -117,6 +118,32 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 showFilter()
             }
         }
+        view.mHomeScrollBarFirstPosition.setOnClickListener {
+            if (difficulty){
+                difficultyLevel = "Easy"
+                presenter.doFilterDifficulty(difficultyLevel)
+            }else{
+
+            }
+        }
+
+        view.mHomeScrollBarSecondPosition.setOnClickListener {
+            if (difficulty){
+                difficultyLevel = "Medium"
+                presenter.doFilterDifficulty(difficultyLevel)
+            }else{
+
+            }
+        }
+
+        view.mHomeScrollBarThirdPosition.setOnClickListener {
+            if (difficulty){
+                difficultyLevel = "Hard"
+                presenter.doFilterDifficulty(difficultyLevel)
+            }else{
+
+            }
+        }
 
         view.mHomeTopPosts.setOnClickListener {
             if(show) {
@@ -139,6 +166,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     override fun showInformation(homeData: ArrayList<DataModel?>) {
         homeView.mListRecyclerView.adapter = CardAdapter(homeData, presenter)
         homeView.mListRecyclerView.adapter?.notifyDataSetChanged()
+        println("Data reloaded here ...........")
     }
 
 

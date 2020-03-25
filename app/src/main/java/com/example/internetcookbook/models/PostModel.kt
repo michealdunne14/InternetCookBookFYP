@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class PostModel(
     var title: String = "",
     var description: String = "",
+    var difficulty: String = "",
     var _id: String = "",
     var imagePath: String = "",
     var useroid: String = "",
