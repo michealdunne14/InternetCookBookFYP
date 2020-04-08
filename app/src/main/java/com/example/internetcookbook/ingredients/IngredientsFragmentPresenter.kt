@@ -1,5 +1,7 @@
 package com.example.internetcookbook.ingredients
 
+import android.view.View
+import androidx.navigation.findNavController
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
@@ -41,5 +43,14 @@ class IngredientsFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLog
 
     fun ingredientsAddToRecipe(): ArrayList<FoodMasterModel> {
         return infoStore!!.ingredientsAddedToRecipe()
+    }
+
+    fun doIngredientsSearch(ingredientsView: View) {
+        doAsync {
+            infoStore!!.ingredientsSearchHomeData()
+            onComplete {
+                ingredientsView.findNavController().navigateUp()
+            }
+        }
     }
 }

@@ -27,6 +27,9 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     ) {
         doAsync {
             infoStore!!.sendComment(comment, dataModel)
+            onComplete {
+                view.commentAdded()
+            }
         }
     }
 
@@ -49,8 +52,8 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
+
     fun loadMoreData() {
-        findData().add(DataModel())
         var moreDataAvilable = false
         doAsync {
             moreDataAvilable = infoStore!!.getMoreData()
@@ -64,6 +67,10 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
+    fun findIngredientsSearch(): ArrayList<DataModel?> {
+        return infoStore!!.getFilteredData()
+    }
+
     fun findData(): ArrayList<DataModel?> {
         return infoStore!!.getHomeData()
     }
@@ -75,6 +82,11 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     fun doAddBasket(dataModel: DataModel) {
         doAsync {
             infoStore!!.basketAdd(dataModel)
+            onComplete {
+                doAsync {
+                    infoStore!!.getBasketData()
+                }
+            }
         }
     }
 

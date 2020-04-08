@@ -9,7 +9,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/mProfileRecyclerView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -52,32 +52,24 @@
                 android:id="@+id/mProfileName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dimension20sp"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="@dimen/dimension20sp" />
 
             <TextView
                 android:id="@+id/mProfileEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dimension20sp"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="@dimen/dimension20sp" />
 
             <TextView
                 android:id="@+id/mProfileUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dimension20sp"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="@dimen/dimension20sp" />
 
         </LinearLayout>
     </ScrollView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mProfileRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

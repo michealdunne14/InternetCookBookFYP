@@ -16,10 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
+import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.animations.Bounce
 import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.DataModel
+import com.example.internetcookbook.models.IngredientModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import com.google.android.material.snackbar.Snackbar
@@ -82,12 +84,12 @@ class CardAdapter(
             dataModel: DataModel,
             presenter: HomeFragPresenter?
         ) {
-
             val bitmapImages = readBit64ImageArrayList(dataModel)
             doFindImages(bitmapImages)
 
             itemView.mCardName.text = dataModel.post.title
             itemView.mCardDescription.text = dataModel.post.description
+            itemView.mCardDifficulty.text = dataModel.post.difficulty
 
             if (presenter != null) {
                 for (hearts in dataModel.post.userhearts) {
@@ -116,37 +118,22 @@ class CardAdapter(
                         itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_border_black_36)
                         presenter.doRemoveHeart(dataModel.post._id)
                     }
-
-                    itemView.mSendComment.setOnClickListener {
-                        presenter.doSendComment(itemView.mCardComment.text.toString().trim(),dataModel)
-                    }
                 }
+
+                itemView.mSendComment.setOnClickListener {
+                    val comment = itemView.mCardComment.text.toString().trim()
+                    presenter.doSendComment(comment,dataModel)
+                    itemView.mCardComment.setText("")
+                }
+
             }else{
                 itemView.mSendComment.visibility == View.INVISIBLE
                 itemView.mHeartButton.visibility == View.INVISIBLE
             }
 
-            itemView.mShowRecipeDetails.setOnClickListener {
-                if(showDetails) {
-                    cancelDetailsShow(itemView)
-                }else {
-                    showDetailsShow(itemView)
-                }
-            }
-
             itemView.mAddBasketButton.setOnClickListener {
                 presenter!!.doAddBasket(dataModel)
             }
-
-
-            itemView.mSaveRecipe.setOnClickListener {
-                Snackbar.make(itemView,"Saved on Profile Page", Snackbar.LENGTH_SHORT).show()
-            }
-
-            // Inflate the layout for this fragment
-            val layoutManager = LinearLayoutManager(itemView.context)
-
-            itemView.mCardIngredients.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
             itemView.mMakeFood.setOnClickListener {
                 val action = PagerFragmentViewDirections.actionPagerFragmentToMakeFragment(dataModel)
@@ -156,10 +143,6 @@ class CardAdapter(
             itemView.mCommentsPage.setOnClickListener {
                 val action = PagerFragmentViewDirections.actionPagerFragmentToCommentsFragment(dataModel)
                 itemView.findNavController().navigate(action)
-            }
-            itemView.mPostName.setOnClickListener {
-//                val action = PagerFragmentViewDirections.actionPagerFragmentToProfileFragment()
-//                itemView.findNavController().navigate(action)
             }
         }
 

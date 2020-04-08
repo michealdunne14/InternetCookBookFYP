@@ -34,8 +34,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
     lateinit var homeView: View
     private var show = false
-    private var time = false
-    private var item = false
     private var top = false
     private var difficulty = false
     private var basket = false
@@ -77,20 +75,8 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         }
 
         view.mCupboardSearch.setOnClickListener {
-
-        }
-
-        view.mHomeTime.setOnClickListener {
-            if(show) {
-                time = false
-                cancelFilter()
-            }else {
-                time = true
-                top = false
-                item = false
-                difficulty = false
-                showFilter()
-            }
+            val action = PagerFragmentViewDirections.actionPagerFragmentToIngredientsFragment("home_page")
+            homeView.findNavController().navigate(action)
         }
 
         view.mHomeDifficultyLevel.setOnClickListener {
@@ -99,28 +85,14 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 cancelFilter()
             }else {
                 difficulty = true
-                item = false
                 top = false
-                time = false
                 showFilter()
             }
         }
 
-        view.mHomeItem.setOnClickListener {
-            if(show) {
-                item = false
-                cancelFilter()
-            }else {
-                item = true
-                top = false
-                time = false
-                difficulty = false
-                showFilter()
-            }
-        }
         view.mHomeScrollBarFirstPosition.setOnClickListener {
             if (difficulty){
-                difficultyLevel = "Easy"
+                difficultyLevel = getString(R.string.easy)
                 presenter.doFilterDifficulty(difficultyLevel)
             }else{
 
@@ -129,7 +101,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
         view.mHomeScrollBarSecondPosition.setOnClickListener {
             if (difficulty){
-                difficultyLevel = "Medium"
+                difficultyLevel = getString(R.string.medium)
                 presenter.doFilterDifficulty(difficultyLevel)
             }else{
 
@@ -138,7 +110,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
         view.mHomeScrollBarThirdPosition.setOnClickListener {
             if (difficulty){
-                difficultyLevel = "Hard"
+                difficultyLevel = getString(R.string.hard)
                 presenter.doFilterDifficulty(difficultyLevel)
             }else{
 
@@ -151,8 +123,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 cancelFilter()
             }else {
                 top = true
-                item = false
-                time = false
                 difficulty = false
                 showFilter()
             }
@@ -200,6 +170,17 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         Snackbar.make(homeView,"No More Data Available", Snackbar.LENGTH_LONG).show()
     }
 
+    override fun commentAdded(){
+        Snackbar.make(homeView,"Comment Added", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(presenter.findIngredientsSearch().size != 0) {
+            showInformation(presenter.findIngredientsSearch())
+        }
+    }
+
     override fun removeLoading(findData: ArrayList<DataModel?>) {
         homeView.mListRecyclerView.adapter?.notifyItemRangeInserted(findData.lastIndex,findData.size)
         isLoading = false
@@ -207,37 +188,22 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
     private fun showFilter(){
         show = true
-        if(time){
-            homeView.filterbyItem.visibility = View.GONE
-            homeView.horizontalScrollBar.visibility = View.GONE
-            homeView.rangeBar.visibility = View.VISIBLE
-        }else if(item){
-            homeView.rangeBar.visibility = View.GONE
-            homeView.filterbyItem.visibility = View.VISIBLE
-            homeView.horizontalScrollBar.visibility = View.GONE
-        }else if(top){
+        if(top){
             homeView.rangeBar.visibility = View.GONE
             homeView.filterbyItem.visibility = View.GONE
             homeView.horizontalScrollBar.visibility = View.VISIBLE
-
             homeView.mHomeScrollBarFirstPosition.text = "Recipes this Week"
             homeView.mHomeScrollBarSecondPosition.text = "Recipes this Month"
             homeView.mHomeScrollBarThirdPosition.text = "Recipes this Year"
             homeView.mHomeScrollBarThirdPosition.visibility = View.VISIBLE
-            homeView.mHomeScrollBarForthPosition.visibility = View.VISIBLE
-            homeView.mHomeScrollBarFifthPosition.visibility = View.VISIBLE
-            homeView.mHomeScrollBarSixthPosition.visibility = View.VISIBLE
         }else if(difficulty){
             homeView.rangeBar.visibility = View.GONE
             homeView.filterbyItem.visibility = View.GONE
             homeView.horizontalScrollBar.visibility = View.VISIBLE
 
-            homeView.mHomeScrollBarFirstPosition.text = "Easy"
-            homeView.mHomeScrollBarSecondPosition.text = "Medium"
-            homeView.mHomeScrollBarThirdPosition.text = "Hard"
-            homeView.mHomeScrollBarForthPosition.visibility = View.GONE
-            homeView.mHomeScrollBarFifthPosition.visibility = View.GONE
-            homeView.mHomeScrollBarSixthPosition.visibility = View.GONE
+            homeView.mHomeScrollBarFirstPosition.text = getString(R.string.easy)
+            homeView.mHomeScrollBarSecondPosition.text = getString(R.string.medium)
+            homeView.mHomeScrollBarThirdPosition.text = getString(R.string.hard)
         }
             val constraintSet = ConstraintSet()
             constraintSet.clone(homeView.context, R.layout.fragment_home_filter)

@@ -78,12 +78,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mCardIngredients"
+        android:id="@+id/mIngredientsRecyclerView"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toTopOf="@+id/mMakeList"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -129,38 +129,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Created By"
-        app:layout_constraintBottom_toTopOf="@+id/mCardIngredients"
+        app:layout_constraintBottom_toTopOf="@+id/mIngredientsRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mMakeList"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toTopOf="@+id/mMakeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Spinner
-        android:id="@+id/mSelectPeopleNumbSpinner"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:padding="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mSelectNumPeople"
-        app:layout_constraintTop_toBottomOf="parent" />
-
-    <TextView
-        android:id="@+id/mSelectNumPeople"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:text="Select the amount of people"
-        app:layout_constraintEnd_toStartOf="@+id/mSelectPeopleNumbSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

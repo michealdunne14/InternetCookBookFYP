@@ -45,6 +45,9 @@
     <string name="add">Add</string>
     <string name="search_username">Search Username</string>
     <string name="is_this_expiration_date_correct">Is this Expiration Date Correct</string>
+    <string name="medium">Medium</string>
+    <string name="easy">Easy</string>
+    <string name="hard">Hard</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>

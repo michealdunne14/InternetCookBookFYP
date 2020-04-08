@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.listeachitem.view.*
 import kotlinx.android.synthetic.main.listitems.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
+import java.lang.Exception
 
 class ReceiptListAdapter(
     private var foodItems: ArrayList<FoodMasterModel>,
@@ -54,7 +55,12 @@ class ReceiptListAdapter(
 
             if(foodModel.food.foundItem) {
                 itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
-                itemView.mFoodImage.setImageBitmap(readBit64ImageSingle(foodModel.image))
+                try {
+                    itemView.mFoodImage.setImageBitmap(readBit64ImageSingle(foodModel.image))
+                }catch (e: Exception){
+                    e.printStackTrace()
+                    print(foodModel)
+                }
                 itemView.mFoodImage.visibility == View.VISIBLE
                 itemView.mItemCounter.text = foodItems[position].food.itemsCounter.toString()
             }else{
@@ -72,7 +78,7 @@ class ReceiptListAdapter(
                 var foodAlreadyPresent = false
                 if (validFoodItems.isNotEmpty()) {
                     for (validFood in validFoodItems) {
-                        if (validFood.food.name == foodItems[position].food.name) {
+                        if (validFood.food.name.toUpperCase() == foodItems[position].food.name.toUpperCase()) {
                             removeItem(foodItems,homeView,position)
                             itemView.mItemCounter.text = foodItems[position].food.itemsCounter.toString()
                             foodAlreadyPresent = true

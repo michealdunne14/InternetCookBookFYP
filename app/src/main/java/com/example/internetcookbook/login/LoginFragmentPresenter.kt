@@ -1,6 +1,9 @@
 package com.example.internetcookbook.login
 
+import android.content.Intent
+import androidx.core.content.ContextCompat.startActivity
 import com.example.internetcookbook.MainApp
+import com.example.internetcookbook.activities.SignInActivity
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.UserMasterModel
@@ -21,19 +24,37 @@ class LoginFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     }
 
     fun doSignIn(userModel: UserModel){
-        lateinit var signIn: UserMasterModel
+        var signIn: UserMasterModel?
         doAsync {
-            signIn = infoStore!!.findEmail(userModel)!!
+            signIn = infoStore!!.findEmail(userModel)
             uiThread {
                 view.showProgress()
             }
             onComplete {
-                if (signIn.user.email.isNotEmpty()){
-                        view.hideProgress()
-                        view.getMainPageFromLoginPage()
-                }else{
+                if (signIn != null) {
+                    if (signIn!!.user.email.isNotEmpty()) {
+                        doAsync {
+                            infoStore!!.getCupboardData()
+                        }
+                        doAsync {
+                            infoStore!!.getFollowingData()
+                        }
+                        doAsync {
+                            infoStore!!.getBasketData()
+                        }
+                        doAsync {
+                            infoStore!!.getPostData()
+                            onComplete {
+                                view.getMainPageFromLoginPage()
+                            }
+                        }
+                    } else {
+                        view.detailsIncorrect()
+                    }
+                }else {
                     view.detailsIncorrect()
                 }
+                view.hideProgress()
             }
         }
     }

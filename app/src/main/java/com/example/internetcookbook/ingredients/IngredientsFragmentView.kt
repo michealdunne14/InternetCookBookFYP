@@ -42,7 +42,12 @@ class IngredientsFragmentView : BaseView() {
         presenter.defaultIngredients()
 
         view.mReturnButtonIngredients.setOnClickListener {
-            ingredientsView.findNavController().navigateUp()
+            val ingredients = IngredientsFragmentViewArgs.fromBundle(arguments!!).ingredients
+            if (ingredients == "home_page"){
+                presenter.doIngredientsSearch(ingredientsView)
+            }else {
+                ingredientsView.findNavController().navigateUp()
+            }
         }
 
         view.mSearchIngredients.addTextChangedListener(object : TextWatcher {

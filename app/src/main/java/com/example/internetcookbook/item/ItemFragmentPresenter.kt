@@ -3,11 +3,12 @@ package com.example.internetcookbook.item
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
-import com.example.internetcookbook.models.FollowListModel
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.onComplete
 
 class ItemFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app : MainApp = view.activity?.application as MainApp
@@ -20,6 +21,19 @@ class ItemFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     fun doFindFollowers(): ArrayList<UserMasterModel> {
         return infoStore!!.findFollowingData()
+    }
+
+    fun doCurrentUser(): UserMasterModel {
+        return infoStore!!.getCurrentUser()
+    }
+
+    fun doRemoveItem(foodModel: FoodMasterModel) {
+        doAsync {
+            infoStore!!.deleteFromBasket(foodModel)
+            onComplete {
+                view.notifyDataSetChanged()
+            }
+        }
     }
 
     fun doFindBasket(): ArrayList<FoodMasterModel> {
