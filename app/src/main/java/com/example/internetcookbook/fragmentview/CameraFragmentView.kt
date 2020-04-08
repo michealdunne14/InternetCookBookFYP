@@ -108,8 +108,13 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                 cameraView.view_finder.visibility = View.INVISIBLE
                 cameraView.mCameraShow.visibility = View.GONE
                 presenter.doFoodCreatePageUpdate()
-                cameraView.mShoppedAt.text = saveShop
-                cameraView.mFoodDate.text = saveDate
+                if(cameraView.mShoppedAt.text == "Shop") {
+                    cameraView.mShoppedAt.text = saveShop
+                    cameraView.mFoodDate.text = saveDate
+                }else{
+                    saveShop = cameraView.mShoppedAt.text.toString()
+                    saveDate = cameraView.mFoodDate.text.toString()
+                }
             }
         }
 
@@ -224,97 +229,117 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
 
         cameraView.mAddCupboard.setOnClickListener {
-            val random = Random()
-            val foodData = ArrayList<Number>()
-            val randomFoodItem = validFoodItems[random.nextInt(validFoodItems.size)]
-            val expirationtime = randomFoodItem.food.expirationTimeReliability.toInt()
-            val imagepath = randomFoodItem.food.imagePathReliability.toInt()
-            val price = randomFoodItem.food.priceReliability.toInt()
-            val shop = randomFoodItem.food.shopReliability.toInt()
-            val itemArray = intArrayOf(expirationtime, imagepath, price, shop)
-            when (getSmallest(itemArray,itemArray.size)) {
-                expirationtime -> {
-                    queryDialog = QueryDialog(activity!!)
-                    queryDialog.show()
-                    queryDialog.mQuestionDialog.text = "Is the Expiration Date Correct"
-                    queryDialog.mFoodImageDialog.setImageBitmap(readBit64ImageSingle(randomFoodItem.image))
-                    val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yy")
-                    val c = Calendar.getInstance()
-                    try {
-                        c.time = dateFormat.parse(saveDate)!!
-                    } catch (e: ParseException) {
-                        e.printStackTrace()
+            if(validFoodItems.size != 0) {
+                val random = Random()
+                val randomFoodItem = validFoodItems[random.nextInt(validFoodItems.size)]
+                val expirationtime = randomFoodItem.food.expirationTimeReliability.toInt()
+                val imagepath = randomFoodItem.food.imagePathReliability.toInt()
+                val price = randomFoodItem.food.priceReliability.toInt()
+                val shop = randomFoodItem.food.shopReliability.toInt()
+                val itemArray = intArrayOf(expirationtime, imagepath, price, shop)
+                when (getSmallest(itemArray, itemArray.size)) {
+                    expirationtime -> {
+                        queryDialog = QueryDialog(activity!!)
+                        queryDialog.show()
+                        queryDialog.mQuestionDialog.text = "Is the Expiration Date Correct"
+                        queryDialog.mFoodImageDialog.setImageBitmap(
+                            readBit64ImageSingle(
+                                randomFoodItem.image
+                            )
+                        )
+                        val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yy")
+                        val c = Calendar.getInstance()
+                        try {
+                            c.time = dateFormat.parse(saveDate)!!
+                        } catch (e: ParseException) {
+                            e.printStackTrace()
+                        }
+                        c.add(Calendar.DATE, expirationtime)
+                        val dateFormat1: DateFormat = SimpleDateFormat("dd/MM/yy")
+                        val output = dateFormat1.format(c.time)
+                        queryDialog.mQueryDialog.text =
+                            "${randomFoodItem.food.name} will expire on $output"
+                        queryDialog.setCanceledOnTouchOutside(false)
+                        queryDialog.mQueryDialogYes.setOnClickListener {
+                            queryDialog.dismiss()
+                            presenter.doAddCupboard(validFoodItems)
+                            presenter.doExpirationYes(randomFoodItem.food.oid)
+                        }
+                        queryDialog.mQueryDialogNo.setOnClickListener {
+                            queryDialog.dismiss()
+                            presenter.doAddCupboard(validFoodItems)
+                            presenter.doExpireNo(randomFoodItem.food.oid)
+                        }
                     }
-                    c.add(Calendar.DATE, expirationtime)
-                    val dateFormat1: DateFormat = SimpleDateFormat("dd/MM/yy")
-                    val output = dateFormat1.format(c.time)
-                    queryDialog.mQueryDialog.text = "${randomFoodItem.food.name} will expire on $output"
-                    queryDialog.setCanceledOnTouchOutside(false)
-                    queryDialog.mQueryDialogYes.setOnClickListener {
-                        queryDialog.dismiss()
-                        presenter.doAddCupboard(validFoodItems)
-                        presenter.doExpirationYes(randomFoodItem.food.oid)
+                    imagepath -> {
+                        queryDialog = QueryDialog(activity!!)
+                        queryDialog.show()
+                        queryDialog.mQuestionDialog.text = "Is this a good Image?"
+                        queryDialog.mFoodImageDialog.setImageBitmap(
+                            readBit64ImageSingle(
+                                randomFoodItem.image
+                            )
+                        )
+                        queryDialog.mQueryDialog.visibility = View.INVISIBLE
+                        queryDialog.setCanceledOnTouchOutside(false)
+                        queryDialog.mQueryDialogYes.setOnClickListener {
+                            queryDialog.dismiss()
+                            presenter.doAddCupboard(validFoodItems)
+                            presenter.doImageYes(randomFoodItem.food.oid)
+                        }
+                        queryDialog.mQueryDialogNo.setOnClickListener {
+                            queryDialog.dismiss()
+                            presenter.doAddCupboard(validFoodItems)
+                            presenter.doImageNo(randomFoodItem.food.oid)
+                        }
                     }
-                    queryDialog.mQueryDialogNo.setOnClickListener {
-                        queryDialog.dismiss()
-                        presenter.doAddCupboard(validFoodItems)
-                        presenter.doExpireNo(randomFoodItem.food.oid)
+                    price -> {
+                        queryDialog = QueryDialog(activity!!)
+                        queryDialog.show()
+                        queryDialog.mQuestionDialog.text = "Is this price correct for this item?"
+                        queryDialog.mFoodImageDialog.setImageBitmap(
+                            readBit64ImageSingle(
+                                randomFoodItem.image
+                            )
+                        )
+                        queryDialog.mQueryDialog.text = "Price of item ${randomFoodItem.food.price}"
+                        queryDialog.setCanceledOnTouchOutside(false)
+                        queryDialog.mQueryDialogYes.setOnClickListener {
+                            queryDialog.dismiss()
+                            presenter.doAddCupboard(validFoodItems)
+                            presenter.doPriceYes(randomFoodItem.food.oid)
+                        }
+                        queryDialog.mQueryDialogNo.setOnClickListener {
+                            queryDialog.dismiss()
+                            presenter.doAddCupboard(validFoodItems)
+                            presenter.doPriceNo(randomFoodItem.food.oid)
+                        }
+                    }
+                    shop -> {
+                        queryDialog = QueryDialog(activity!!)
+                        queryDialog.show()
+                        queryDialog.mQuestionDialog.text = "Is this the correct shop for this item?"
+                        queryDialog.mFoodImageDialog.setImageBitmap(
+                            readBit64ImageSingle(
+                                randomFoodItem.image
+                            )
+                        )
+                        queryDialog.mQueryDialog.text = randomFoodItem.food.shop
+                        queryDialog.setCanceledOnTouchOutside(false)
+                        queryDialog.mQueryDialogYes.setOnClickListener {
+                            queryDialog.dismiss()
+                            presenter.doAddCupboard(validFoodItems)
+                            presenter.doShopYes(randomFoodItem.food.oid)
+                        }
+                        queryDialog.mQueryDialogNo.setOnClickListener {
+                            queryDialog.dismiss()
+                            presenter.doAddCupboard(validFoodItems)
+                            presenter.doShopNo(randomFoodItem.food.oid)
+                        }
                     }
                 }
-                imagepath -> {
-                    queryDialog = QueryDialog(activity!!)
-                    queryDialog.show()
-                    queryDialog.mQuestionDialog.text = "Is this a good Image?"
-                    queryDialog.mFoodImageDialog.setImageBitmap(readBit64ImageSingle(randomFoodItem.image))
-                    queryDialog.mQueryDialog.visibility = View.INVISIBLE
-                    queryDialog.setCanceledOnTouchOutside(false)
-                    queryDialog.mQueryDialogYes.setOnClickListener {
-                        queryDialog.dismiss()
-                        presenter.doAddCupboard(validFoodItems)
-                        presenter.doImageYes(randomFoodItem.food.oid)
-                    }
-                    queryDialog.mQueryDialogNo.setOnClickListener {
-                        queryDialog.dismiss()
-                        presenter.doAddCupboard(validFoodItems)
-                        presenter.doImageNo(randomFoodItem.food.oid)
-                    }
-                }
-                price -> {
-                    queryDialog = QueryDialog(activity!!)
-                    queryDialog.show()
-                    queryDialog.mQuestionDialog.text = "Is this price correct for this item?"
-                    queryDialog.mFoodImageDialog.setImageBitmap(readBit64ImageSingle(randomFoodItem.image))
-                    queryDialog.mQueryDialog.text = "Price of item ${randomFoodItem.food.price}"
-                    queryDialog.setCanceledOnTouchOutside(false)
-                    queryDialog.mQueryDialogYes.setOnClickListener {
-                        queryDialog.dismiss()
-                        presenter.doAddCupboard(validFoodItems)
-                        presenter.doPriceYes(randomFoodItem.food.oid)
-                    }
-                    queryDialog.mQueryDialogNo.setOnClickListener {
-                        queryDialog.dismiss()
-                        presenter.doAddCupboard(validFoodItems)
-                        presenter.doPriceNo(randomFoodItem.food.oid)
-                    }
-                }
-                shop -> {
-                    queryDialog = QueryDialog(activity!!)
-                    queryDialog.show()
-                    queryDialog.mQuestionDialog.text = "Is this the correct shop for this item?"
-                    queryDialog.mFoodImageDialog.setImageBitmap(readBit64ImageSingle(randomFoodItem.image))
-                    queryDialog.mQueryDialog.text = randomFoodItem.food.shop
-                    queryDialog.setCanceledOnTouchOutside(false)
-                    queryDialog.mQueryDialogYes.setOnClickListener {
-                        queryDialog.dismiss()
-                        presenter.doAddCupboard(validFoodItems)
-                        presenter.doShopYes(randomFoodItem.food.oid)
-                    }
-                    queryDialog.mQueryDialogNo.setOnClickListener {
-                        queryDialog.dismiss()
-                        presenter.doAddCupboard(validFoodItems)
-                        presenter.doShopNo(randomFoodItem.food.oid)
-                    }
-                }
+            }else{
+                Snackbar.make(cameraView,"No Data to Add", Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -503,6 +528,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             cameraView.mCameraShow.visibility = View.VISIBLE
             captureCheck = false
             cameraView.view_finder.visibility = View.VISIBLE
+            cameraView.mButtonFindText.visibility = View.INVISIBLE
             cameraView.mCapturedImage.setImageBitmap(null)
             customDialog.cancel()
         }
@@ -524,15 +550,12 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         dateDialog = DateDialog(activity!!)
         dateDialog.show()
         dateDialog.setCanceledOnTouchOutside(false)
-        dateDialog.mDateConfirm.setOnClickListener {
-            //sets the date of the calender when changed.
-            dateDialog.mDateCalender.setOnDateChangeListener(CalendarView.OnDateChangeListener(){
-                    view, year, month, dayOfMonth ->
-                saveDate = "$dayOfMonth/$month/$year"
-            })
+        dateDialog.mDateCalender.setOnDateChangeListener(CalendarView.OnDateChangeListener(){
+                view, year, month, dayOfMonth ->
+            saveDate = "$dayOfMonth/$month/$year"
             dateDialog.cancel()
             presenter.findShop(elementArrayList, filteredArrayList)
-        }
+        })
     }
 
     override fun hideProgress() {

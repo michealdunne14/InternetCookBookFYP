@@ -38,4 +38,8 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun showDateDialog(date: String) {}
     open fun showShopDialog(){}
     open fun showFoodItems(){}
+    open fun commentAdded(){}
+    open fun notifyDataSetChanged(){}
+    open fun ingredientsRecyclerView(){}
+
 }

@@ -39,27 +39,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Recipes this Year" />
-
-            <Button
-                android:id="@+id/mHomeScrollBarForthPosition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Top Creator this week" />
-
-            <Button
-                android:id="@+id/mHomeScrollBarFifthPosition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Top Creator this month" />
-
-            <Button
-                android:id="@+id/mHomeScrollBarSixthPosition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Top Creator this year" />
         </LinearLayout>
     </HorizontalScrollView>
 

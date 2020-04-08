@@ -17,7 +17,7 @@
             android:text="TextView"
             android:textSize="@dimen/dimension20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/mSelectedIngredient"
+            app:layout_constraintEnd_toStartOf="@+id/mIngredientCounter"
             app:layout_constraintStart_toEndOf="@+id/mFoodPicture"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,6 +38,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/outline_post_add_black_36" />
+
+        <TextView
+            android:id="@+id/mIngredientCounter"
+            android:layout_width="@dimen/dimension50"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mSelectedIngredient"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

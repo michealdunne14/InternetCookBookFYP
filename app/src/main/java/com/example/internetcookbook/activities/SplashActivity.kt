@@ -9,6 +9,7 @@ import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 import org.jetbrains.anko.uiThread
+import java.lang.Exception
 
 class SplashActivity : AppCompatActivity() {
 
@@ -32,27 +33,33 @@ class SplashActivity : AppCompatActivity() {
             infoStore!!.logoutUser()
             finish()
         } else {
-            doAsync {
-                infoStore!!.updateUserInfo(currentUser.user)
-                onComplete {
-                    doAsync {
-                        doAsync {
-                            infoStore!!.getCupboardData()
-                        }
-                        doAsync {
-                            infoStore!!.getFollowingData()
-                        }
-                        doAsync {
-                            infoStore!!.getBasketData()
-                        }
-                        infoStore!!.getPostData()
+                doAsync {
+                    try {
+                        infoStore!!.updateUserInfo(currentUser.user)
                         onComplete {
-                            startActivity(Intent(baseContext, MainView::class.java))
-                            finish()
+                            doAsync {
+                                infoStore!!.getCupboardData()
+                            }
+                            doAsync {
+                                infoStore!!.getFollowingData()
+                            }
+                            doAsync {
+                                infoStore!!.getBasketData()
+                            }
+                            doAsync {
+                                infoStore!!.getPostData()
+                                onComplete {
+                                    startActivity(Intent(baseContext, MainView::class.java))
+                                    finish()
+                                }
+                            }
                         }
+                    } catch (e: Exception) {
+                        startActivity(Intent(baseContext, SignInActivity::class.java))
+                        infoStore!!.logoutUser()
+                        finish()
                     }
                 }
-            }
         }
     }
 }

@@ -3,7 +3,8 @@ package com.example.internetcookbook.makefood
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
-import com.example.internetcookbook.models.UserModel
+import com.example.internetcookbook.models.PostModel
+import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
@@ -18,14 +19,17 @@ class MakeFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         infoStore = app.informationStore as InformationStore
     }
 
-//    fun doRegister(userModel: UserModel): String? {
-//        var usercreated: String? = String()
-//        doAsync {
-//            usercreated = infoStore!!.createUser(userModel)
-//            onComplete {
-//                infoStore!!.userCreated()
-//            }
-//        }
-//        return usercreated
-//    }
+
+    fun findIngredients(postModel: PostModel) {
+        doAsync {
+        infoStore!!.findIngredients(postModel)
+            onComplete {
+                view.ingredientsRecyclerView(infoStore!!.getIngredients())
+            }
+        }
+    }
+
+    fun doCurrentUser(): UserMasterModel {
+        return infoStore!!.getCurrentUser()
+    }
 }

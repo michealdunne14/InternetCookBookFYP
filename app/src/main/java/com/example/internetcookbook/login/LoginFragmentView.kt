@@ -81,7 +81,7 @@ class LoginFragmentView : BaseView() {
     }
 
     override fun detailsIncorrect(){
-        Snackbar.make(loginView,"Fill in all fields", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(loginView,"Details Incorrect", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun passwordIncorrect(){

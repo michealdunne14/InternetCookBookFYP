@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.archaeologicalfieldwork.adapter.CardAdapter
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
+import com.example.internetcookbook.helper.readBit64ImageSingle
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 class ProfileFragmentView : BaseView() {
@@ -31,19 +32,13 @@ class ProfileFragmentView : BaseView() {
         view.mProfileName.text = user.user.name
         view.mProfileEmail.text = user.user.email
         view.mProfileUsername.text = user.user.username
-//        val bitmapImage = readBit64ImageSingle(user.image)
-//        view.mProfilePicture.setImageBitmap(bitmapImage)
-
-        // Inflate the layout for this fragment
-        val layoutManager = LinearLayoutManager(context)
-        view.mProfileRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        val bitmapImage = readBit64ImageSingle(user.image)
+        view.mProfilePicture.setImageBitmap(bitmapImage)
 
         view.mProfileReturnButton.setOnClickListener {
             view.findNavController().navigateUp()
         }
 
-        profileView.mProfileRecyclerView.adapter = CardAdapter(presenter.doGetPosts(), null)
-        profileView.mProfileRecyclerView.adapter?.notifyDataSetChanged()
         return view
     }
 

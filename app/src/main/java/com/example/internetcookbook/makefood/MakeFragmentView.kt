@@ -8,34 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateOvershootInterpolator
-import android.widget.ArrayAdapter
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
-import com.example.internetcookbook.adapter.MakeAdapterWithModel
+import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.readBit64ImageArrayList
-import com.example.internetcookbook.models.FoodModel
+import com.example.internetcookbook.models.FoodMasterModel
+import com.example.internetcookbook.models.IngredientModel
 import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_make.*
-import kotlinx.android.synthetic.main.fragment_make.view.mCardIngredients
-import kotlinx.android.synthetic.main.fragment_make.view.mMakeButton
-import kotlinx.android.synthetic.main.fragment_make.view.mMakeCreatedBy
-import kotlinx.android.synthetic.main.fragment_make.view.mMakeDescription
-import kotlinx.android.synthetic.main.fragment_make.view.mMakeList
-import kotlinx.android.synthetic.main.fragment_make.view.mMakeName
-import kotlinx.android.synthetic.main.fragment_make.view.mMakeTimeToCreate
-import kotlinx.android.synthetic.main.fragment_make.view.mRemoveCreatedBy
-import kotlinx.android.synthetic.main.fragment_make.view.mRemoveDescription
-import kotlinx.android.synthetic.main.fragment_make.view.mRemoveIngredients
-import kotlinx.android.synthetic.main.fragment_make.view.mRemoveName
-import kotlinx.android.synthetic.main.fragment_make.view.mRemoveTimeToMake
+import kotlinx.android.synthetic.main.fragment_make.view.*
 import kotlinx.android.synthetic.main.fragment_make.view.mReturnButton
-import kotlinx.android.synthetic.main.fragment_make.view.mSelectPeopleNumbSpinner
 
 class MakeFragmentView : BaseView() {
 
@@ -44,7 +31,7 @@ class MakeFragmentView : BaseView() {
     val postModel = PostModel()
     private var show = false
     lateinit var makeView: View
-    val foodModelArrayList = ArrayList<FoodModel>()
+    val ingredientsFoodModel = ArrayList<IngredientModel>()
     val postModelArrayList = ArrayList<PostModel>()
 
 
@@ -66,7 +53,9 @@ class MakeFragmentView : BaseView() {
         val images = MakeFragmentViewArgs.fromBundle(arguments!!).dataModel
 
         val layoutManager = LinearLayoutManager(context)
-        view.mCardIngredients.layoutManager = layoutManager
+        view.mIngredientsRecyclerView.layoutManager = layoutManager
+
+        presenter.findIngredients(postModel)
         val makeLayoutManager = LinearLayoutManager(context)
         view.mMakeList.layoutManager = makeLayoutManager
         makeView = view
@@ -75,29 +64,6 @@ class MakeFragmentView : BaseView() {
         val bitmapImages = readBit64ImageArrayList(images)
         doFindImages(bitmapImages)
         hideAndShowToolbarButtons()
-
-//        foodModelArrayList.add(FoodModel("Food"))
-//        foodModelArrayList.add(FoodModel("Food"))
-
-
-//        view.mCardIngredients.adapter = IngredientsAdapter(foodModelArrayList)
-//        view.mCardIngredients.adapter?.notifyDataSetChanged()
-
-//        postModel.method.reverse()
-//        view.mMakeList.adapter = MakeAdapterWithModel(postModel.method)
-//        view.mMakeList.adapter?.notifyDataSetChanged()
-
-// Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter.createFromResource(
-            view.context,
-            R.array.number_of_people,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            view.mSelectPeopleNumbSpinner.adapter = adapter
-        }
 
 
         makeView.mMakeButton.setOnClickListener {
@@ -145,6 +111,11 @@ class MakeFragmentView : BaseView() {
         viewPager.adapter = adapter
     }
 
+    override fun ingredientsRecyclerView(searchedIngredients: ArrayList<FoodMasterModel>){
+        makeView.mIngredientsRecyclerView.adapter = IngredientsAdapter(searchedIngredients, presenter.doCurrentUser(), "make", presenter)
+        makeView.mIngredientsRecyclerView.adapter?.notifyDataSetChanged()
+    }
+
 
     fun hideAndShowToolbarButtons(){
         makeView.mReturnButton.setOnClickListener {
@@ -179,10 +150,10 @@ class MakeFragmentView : BaseView() {
                 }
             }
         makeView.mRemoveIngredients.setOnClickListener {
-                if (makeView.mCardIngredients.visibility == View.GONE){
-                    makeView.mCardIngredients.visibility = View.VISIBLE
+                if (makeView.mIngredientsRecyclerView.visibility == View.GONE){
+                    makeView.mIngredientsRecyclerView.visibility = View.VISIBLE
                 }else {
-                    makeView.mCardIngredients.visibility = View.GONE
+                    makeView.mIngredientsRecyclerView.visibility = View.GONE
                 }
             }
     }

@@ -57,8 +57,24 @@ class FoodCreateView : BaseView(){
         }
 
         foodCreateView.mFoodCreateAdd.setOnClickListener {
-            presenter.doAddFood(FoodModel("",foodCreateView.mFoodCreateName.text.toString(),foodCreateView.mFoodCreatePrice.text.toString().toDouble(),foodCreateView.mFoodCreateShop.text.toString(),0,
-            0,0,0,"",0))
+            if(foodCreateView.mFoodCreateName.text.toString().isNotEmpty() && foodCreateView.mFoodCreatePrice.text.isNotEmpty() && foodCreateView.mFoodCreateShop.text.toString().isNotEmpty()) {
+                presenter.doAddFood(
+                    FoodModel(
+                        "",
+                        foodCreateView.mFoodCreateName.text.toString(),
+                        foodCreateView.mFoodCreatePrice.text.toString().toDouble(),
+                        foodCreateView.mFoodCreateShop.text.toString(),
+                        0,
+                        0,
+                        0,
+                        0,
+                        "",
+                        0
+                    )
+                )
+            }else{
+                Snackbar.make(foodCreateView,"Fill in all fields", Snackbar.LENGTH_SHORT).show()
+            }
         }
 
         foodCreateView.mReturnButton.setOnClickListener {

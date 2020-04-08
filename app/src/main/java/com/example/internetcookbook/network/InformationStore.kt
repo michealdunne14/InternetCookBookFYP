@@ -25,6 +25,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import android.util.Base64
+import android.widget.Toast
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 
@@ -37,6 +39,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     var listFoodArray = ArrayList<FoodMasterModel>()
     var userPostData = ArrayList<DataModel?>()
     var cupboardData = ArrayList<FoodMasterModel>()
+    var ingredientsList = ArrayList<FoodMasterModel>()
     var basketData = ArrayList<FoodMasterModel>()
     var followingData = FollowListModel()
     var userLocalStore = mutableListOf<UserMasterModel>()
@@ -205,12 +208,17 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .build()
 
             client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                if (!response.isSuccessful){
+                    Toast.makeText(context,"Error with database",Toast.LENGTH_LONG).show()
+                    throw IOException("Unexpected code $response")
+                }
 
                 val body = response.body!!.string()
                 if (body == "No User found"){
                     return null
-                }else{
+                }else if(body == "User email or password is incorrect"){
+                    return null
+                } else{
                     val gsonBuilder = GsonBuilder()
                     val gson = gsonBuilder.create()
 
@@ -301,6 +309,27 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         serialize()
     }
 
+    fun deleteFromBasket(foodModel: FoodMasterModel) {
+        basketData.forEachIndexed { index, item ->
+            if(item.food.name == foodModel.food.name)
+            basketData.removeAt(index)
+        }
+        val formBody: RequestBody = FormBody.Builder()
+            .add("id", userMaster.user.oid)
+            .add("basketoid",foodModel.food.oid).build()
+
+        val request = Request.Builder()
+            .url("http://34.244.232.228:3000/user/deleteItemFromBasket")
+            .post(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
     fun foodCreatePageUpdate(){
         foodCreatePage = !foodCreatePage
     }
@@ -373,6 +402,36 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         } else {
             return null
         }
+    }
+
+    fun findIngredients(postModel: PostModel) {
+        lateinit var dataArray: ListFoodModel
+        if (internetConnection) {
+
+            val formBody: RequestBody = FormBody.Builder()
+                .add("id", postModel._id).build()
+
+            val request = Request.Builder()
+                .url("http://34.244.232.228:3000/food/findId")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                val body = response.body!!.string()
+                val gsonBuilder = GsonBuilder()
+                val gson = gsonBuilder.create()
+
+                dataArray = gson.fromJson(body, ListFoodModel::class.java)
+                for (food in dataArray.foodArray) {
+                    ingredientsList.add(food)
+                }
+            }
+        }
+    }
+
+    fun getIngredients(): ArrayList<FoodMasterModel> {
+        return ingredientsList
     }
 
     fun createFood(foodModel: FoodModel): Boolean {
@@ -534,31 +593,36 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 .post(body)
                 .build()
 
-            client.newCall(request).execute().use { response -> if (!response.isSuccessful) throw IOException("Unexpected code $response") }
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                cupboardData.addAll(validFoodItems)
+            }
         }
     }
 
     fun basketAdd(dataModel: DataModel) {
-            val json = JSONObject()
-            val jsonArray = JSONArray()
-            for (ingredients in dataModel.post.ingredients) {
-                val jsonObj = JSONObject()
-                jsonObj.put("basketoid", ingredients.ingredientoid)
-                jsonArray.put(jsonObj)
-            }
-            json.put("basket", jsonArray)
+        val json = JSONObject()
+        val jsonArray = JSONArray()
+        for (ingredients in dataModel.post.ingredients) {
+            val jsonObj = JSONObject()
+            jsonObj.put("basketoid", ingredients.ingredientoid)
+            jsonObj.put("counter",1)
+            jsonArray.put(jsonObj)
+        }
+        json.put("basket", jsonArray)
 
 
-            val jsonString = json.toString()
-            val body = create(JSON, jsonString)
+        val jsonString = json.toString()
+        val body = create(JSON, jsonString)
 
 
-            val request: Request = Request.Builder()
-                .url("http://34.244.232.228:3000/user/basket/${userMaster.user.oid}")
-                .post(body)
-                .build()
+        val request: Request = Request.Builder()
+            .url("http://34.244.232.228:3000/user/basket/${userMaster.user.oid}")
+            .post(body)
+            .build()
 
-            client.newCall(request).execute().use { response -> if (!response.isSuccessful) throw IOException("Unexpected code $response") }
+        client.newCall(request).execute().use { response -> if (!response.isSuccessful) throw IOException("Unexpected code $response") }
     }
 
     fun userCreated() {
@@ -676,6 +740,11 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         lateinit var dataArray: ListPostModel
         if (internetConnection) {
 
+            try {
+                postData[postData.lastIndex - 1]
+            }catch (e: Exception){
+                return false
+            }
             val formBody: RequestBody = FormBody.Builder()
                 .add("id", userMaster.user.oid)
                 .add("posttime", postData[postData.lastIndex - 1]!!.post.posttime).build()
@@ -691,7 +760,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                 val body = response.body!!.string()
 
                 return if(body == "no more posts") {
-                    postData.removeAt(postData.lastIndex)
+//                    postData.removeAt(postData.lastIndex)
                     false
                 }else{
                     val gsonBuilder = GsonBuilder()
@@ -740,6 +809,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
 
     fun getBasketData(){
+        basketData.clear()
         lateinit var dataArray: ListFoodModel
         if (internetConnection) {
 
@@ -787,11 +857,16 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
 
                 val body = response.body!!.string()
-                val gsonBuilder = GsonBuilder()
-                val gson = gsonBuilder.create()
 
-                dataArray = gson.fromJson(body, FollowListModel::class.java)
-                followingData = dataArray
+                if (body == "No Following Data"){
+                    print("No following data")
+                } else {
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+
+                    dataArray = gson.fromJson(body, FollowListModel::class.java)
+                    followingData = dataArray
+                }
             }
         }
     }
@@ -827,6 +902,48 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             }
         }
         return searchedPosts
+    }
+
+
+    fun ingredientsSearchHomeData(){
+        filterArrayList.clear()
+        lateinit var dataArray: ListPostModel
+        if (internetConnection) {
+
+            val json = JSONObject()
+            val jsonArray = JSONArray()
+            for (item in ingredientsArrayList) {
+                val jsonObj = JSONObject()
+                jsonObj.put("ingredientoid", item.food.oid)
+                jsonArray.put(jsonObj)
+            }
+            json.put("ingredients", jsonArray)
+            json.put("id", userMaster.user.oid)
+
+            val jsonString = json.toString()
+            val formBody = create(JSON, jsonString)
+
+            val request: Request = Request.Builder()
+                .url("http://34.244.232.228:3000/post/id")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                if (body == "no posts found") {
+                    print("no posts found")
+                } else {
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    dataArray = gson.fromJson(body, ListPostModel::class.java)
+                    for (posts in dataArray.postArray) {
+                        filterArrayList.add(posts)
+                    }
+                }
+            }
+        }
     }
 
     fun searchFollowing(query: CharSequence?): ArrayList<UserMasterModel> {
@@ -979,10 +1096,6 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
 
 
-
-//        postData.add(DataModel(userImages,postModel))
-
-
         val requestBody: RequestBody = builder.build()
 
         val request = Request.Builder()
@@ -1126,6 +1239,18 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
 
     fun logoutUser() {
         userLocalStore.clear()
+        imageArrayList.clear()
+        postData.clear()
+        filterArrayList.clear()
+        listFoodArray.clear()
+        userPostData.clear()
+        cupboardData.clear()
+        basketData.clear()
+        followingData = FollowListModel()
+        userLocalStore.clear()
+        searchingFollow.clear()
+        searchingIngredients.clear()
+        ingredientsArrayList.clear()
         serialize()
     }
 

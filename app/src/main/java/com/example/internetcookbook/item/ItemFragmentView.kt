@@ -57,8 +57,13 @@ class ItemFragmentView : BaseView() {
 
             override fun onTextChanged(characterSearch: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val searchedCupboard = presenter.doSearchCupboard(characterSearch)
-                itemView.mCupboardRecyclerView.adapter = IngredientsAdapter(searchedCupboard)
-                itemView.mCupboardRecyclerView.adapter?.notifyDataSetChanged()
+                itemView.mCupboardRecyclerView.adapter = IngredientsAdapter(
+                    searchedCupboard,
+                    presenter.doCurrentUser(),
+                    "cupboard",
+                    presenter
+                )
+                notifyDataSetChanged()
             }
 
         })
@@ -77,7 +82,12 @@ class ItemFragmentView : BaseView() {
 
             override fun onTextChanged(characterSearch: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val searchedBasket = presenter.doSearchBasket(characterSearch)
-                itemView.mBasketRecyclerView.adapter = IngredientsAdapter(searchedBasket)
+                itemView.mBasketRecyclerView.adapter = IngredientsAdapter(
+                    searchedBasket,
+                    presenter.doCurrentUser(),
+                    "basket",
+                    presenter
+                )
                 itemView.mBasketRecyclerView.adapter?.notifyDataSetChanged()
             }
         })
@@ -129,14 +139,24 @@ class ItemFragmentView : BaseView() {
     override fun showBasket(listofBasket: ArrayList<FoodMasterModel>){
         val layoutManager = LinearLayoutManager(context)
         itemView.mBasketRecyclerView.layoutManager = layoutManager
-        itemView.mBasketRecyclerView.adapter = IngredientsAdapter(listofBasket)
+        itemView.mBasketRecyclerView.adapter = IngredientsAdapter(
+            listofBasket,
+            presenter.doCurrentUser(),
+            "basket",
+            presenter
+        )
         itemView.mBasketRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun showCupboard(listofCupboard: ArrayList<FoodMasterModel>){
         val layoutManager = LinearLayoutManager(context)
         itemView.mCupboardRecyclerView.layoutManager = layoutManager
-        itemView.mCupboardRecyclerView.adapter = IngredientsAdapter(listofCupboard)
+        itemView.mCupboardRecyclerView.adapter = IngredientsAdapter(
+            listofCupboard,
+            presenter.doCurrentUser(),
+            "cupboard",
+            presenter
+        )
         itemView.mCupboardRecyclerView.adapter?.notifyDataSetChanged()
     }
 
@@ -152,6 +172,19 @@ class ItemFragmentView : BaseView() {
         super.onDestroy()
         foodModelArrayList.clear()
 
+    }
+
+
+    override fun notifyDataSetChanged(){
+        itemView.mCupboardRecyclerView.adapter?.notifyDataSetChanged()
+        itemView.mBasketRecyclerView.adapter?.notifyDataSetChanged()
+        itemView.mFollowerRecyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        if (isVisibleToUser) {
+            notifyDataSetChanged()
+        }
     }
 
 }

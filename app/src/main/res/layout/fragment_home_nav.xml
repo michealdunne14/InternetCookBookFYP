@@ -20,22 +20,6 @@
             app:srcCompat="@drawable/baseline_storefront_black_36" />
 
         <ImageButton
-            android:id="@+id/mHomeTime"
-            android:layout_width="@dimen/dimension50"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            app:srcCompat="@drawable/outline_access_time_black_36" />
-
-        <ImageButton
-            android:id="@+id/mHomeItem"
-            android:layout_width="@dimen/dimension50"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            app:srcCompat="@drawable/outline_search_black_36" />
-
-        <ImageButton
             android:id="@+id/mHomeDifficultyLevel"
             android:layout_width="@dimen/dimension50"
             android:layout_height="match_parent"

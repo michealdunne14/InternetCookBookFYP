@@ -44,6 +44,13 @@
         <action
             android:id="@+id/action_pagerFragment_to_findFollowingView"
             app:destination="@id/findFollowingView" />
+        <action
+            android:id="@+id/action_pagerFragment_to_ingredientsFragment"
+            app:destination="@id/ingredientsFragment" >
+            <argument
+                android:name="ingredients"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/postFragment2"
@@ -58,7 +65,11 @@
         android:id="@+id/ingredientsFragment"
         android:name="com.example.internetcookbook.ingredients.IngredientsFragmentView"
         android:label="fragment_ingredients"
-        tools:layout="@layout/fragment_ingredients" />
+        tools:layout="@layout/fragment_ingredients" >
+        <argument
+            android:name="ingredients"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/makeFragment"
         android:name="com.example.internetcookbook.makefood.MakeFragmentView"

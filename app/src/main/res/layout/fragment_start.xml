@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".start.StartFragment">
 
-
     <Button
         android:id="@+id/mStartLogin"
         android:layout_width="0dp"
@@ -31,10 +30,10 @@
         android:id="@+id/mLogo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@android:drawable/btn_dialog"
         android:transitionName="@string/logo_transition"
         app:layout_constraintBottom_toTopOf="@+id/mStartRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/internet_cookbook_logo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
