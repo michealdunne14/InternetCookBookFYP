@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
@@ -23,6 +24,10 @@ class CommentsFragmentView : BaseView() {
         val view=  inflater.inflate(R.layout.fragment_comments, container, false)
         commentView = view
         val comments = CommentsFragmentViewArgs.fromBundle(arguments!!).dataModel.post.comments
+
+        view.mReturnButton.setOnClickListener {
+            commentView.findNavController().navigateUp()
+        }
 
         // Inflate the layout for this fragment
         val layoutManager = LinearLayoutManager(context)

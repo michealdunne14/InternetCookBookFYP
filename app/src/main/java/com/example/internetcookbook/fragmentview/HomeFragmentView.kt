@@ -1,9 +1,12 @@
 package com.example.internetcookbook.fragmentview
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnticipateOvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.findNavController
@@ -21,9 +24,6 @@ import com.example.internetcookbook.pager.PagerFragmentViewDirections
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_home.view.filterbyItem
-import kotlinx.android.synthetic.main.fragment_home.view.mListRecyclerView
-import kotlinx.android.synthetic.main.fragment_home.view.rangeBar
 import kotlinx.android.synthetic.main.fragment_home_nav.view.*
 import kotlinx.android.synthetic.main.horizontalscrollbar.view.*
 
@@ -41,6 +41,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     var difficultyLevel = ""
 
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,15 +53,15 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         presenter = initPresenter(HomeFragPresenter(this)) as HomeFragPresenter
         initScrollListener()
 
-        // Inflate the layout for this fragment
-        val layoutManager = LinearLayoutManager(context)
+        homeView.mListRecyclerView.adapter?.notifyItemInserted(presenter.findData().size - 1)
 
-        view.mListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        // Inflate the layout for this fragment
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
         swipeRefreshLayout.setOnRefreshListener(this)
 
         swipeRefreshLayout.setOnRefreshListener {
             presenter.doRefreshData(view)
+            isLoading = false
         }
 
 
@@ -90,31 +91,35 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             }
         }
 
+        view.mCancelFilter.setOnClickListener {
+            presenter.doRefreshData(view)
+            homeView.mCancelFilter.visibility = View.INVISIBLE
+        }
+
         view.mHomeScrollBarFirstPosition.setOnClickListener {
             if (difficulty){
                 difficultyLevel = getString(R.string.easy)
                 presenter.doFilterDifficulty(difficultyLevel)
-            }else{
-
+            }else if(top){
+                presenter.doFilterTop()
             }
+            view.mCancelFilter.visibility = View.VISIBLE
         }
 
         view.mHomeScrollBarSecondPosition.setOnClickListener {
             if (difficulty){
                 difficultyLevel = getString(R.string.medium)
                 presenter.doFilterDifficulty(difficultyLevel)
-            }else{
-
             }
+            view.mCancelFilter.visibility = View.VISIBLE
         }
 
         view.mHomeScrollBarThirdPosition.setOnClickListener {
             if (difficulty){
                 difficultyLevel = getString(R.string.hard)
                 presenter.doFilterDifficulty(difficultyLevel)
-            }else{
-
             }
+            view.mCancelFilter.visibility == View.VISIBLE
         }
 
         view.mHomeTopPosts.setOnClickListener {
@@ -134,15 +139,19 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     }
 
     override fun showInformation(homeData: ArrayList<DataModel?>) {
-        homeView.mListRecyclerView.adapter = CardAdapter(homeData, presenter)
-        homeView.mListRecyclerView.adapter?.notifyDataSetChanged()
-        println("Data reloaded here ...........")
+        try {
+            val layoutManager = LinearLayoutManager(context)
+            homeView.mListRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+            homeView.mListRecyclerView.adapter = CardAdapter(homeData, presenter)
+            homeView.mListRecyclerView.adapter?.notifyDataSetChanged()
+            println("Data reloaded here ...........")
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
 
-    private fun initScrollListener() {
-        homeView.mListRecyclerView.adapter?.notifyItemInserted(presenter.findData().size - 1)
-
+    override fun initScrollListener() {
         homeView.mListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -182,6 +191,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     }
 
     override fun removeLoading(findData: ArrayList<DataModel?>) {
+
         homeView.mListRecyclerView.adapter?.notifyItemRangeInserted(findData.lastIndex,findData.size)
         isLoading = false
     }
@@ -192,14 +202,15 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             homeView.rangeBar.visibility = View.GONE
             homeView.filterbyItem.visibility = View.GONE
             homeView.horizontalScrollBar.visibility = View.VISIBLE
-            homeView.mHomeScrollBarFirstPosition.text = "Recipes this Week"
-            homeView.mHomeScrollBarSecondPosition.text = "Recipes this Month"
-            homeView.mHomeScrollBarThirdPosition.text = "Recipes this Year"
-            homeView.mHomeScrollBarThirdPosition.visibility = View.VISIBLE
+            homeView.mHomeScrollBarFirstPosition.text = "Top Recipes"
+            homeView.mHomeScrollBarThirdPosition.visibility = View.INVISIBLE
+            homeView.mHomeScrollBarSecondPosition.visibility = View.INVISIBLE
         }else if(difficulty){
             homeView.rangeBar.visibility = View.GONE
             homeView.filterbyItem.visibility = View.GONE
             homeView.horizontalScrollBar.visibility = View.VISIBLE
+            homeView.mHomeScrollBarThirdPosition.visibility = View.VISIBLE
+            homeView.mHomeScrollBarSecondPosition.visibility = View.VISIBLE
 
             homeView.mHomeScrollBarFirstPosition.text = getString(R.string.easy)
             homeView.mHomeScrollBarSecondPosition.text = getString(R.string.medium)

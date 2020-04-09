@@ -609,9 +609,80 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             jsonObj.put("basketoid", ingredients.ingredientoid)
             jsonObj.put("counter",1)
             jsonArray.put(jsonObj)
+            for (basket in userMaster.user.basket){
+                if (basket.basketoid == ingredients.ingredientoid){
+                    val counter = basket.counter.toInt()
+                    basket.counter = counter+1
+                }
+            }
         }
         json.put("basket", jsonArray)
 
+
+        val jsonString = json.toString()
+        val body = create(JSON, jsonString)
+
+
+        val request: Request = Request.Builder()
+            .url("http://34.244.232.228:3000/user/basket/${userMaster.user.oid}")
+            .post(body)
+            .build()
+
+        client.newCall(request).execute().use { response -> if (!response.isSuccessful) throw IOException("Unexpected code $response") }
+    }
+
+    fun cupboardAddManual() {
+        val addingNewItemsToCupboard: MutableList<CupboardOidModel> = mutableListOf()
+        for (item in ingredientsArrayList){
+            addingNewItemsToCupboard.add(CupboardOidModel(item.food.oid,item.food.itemsCounter))
+        }
+        if (addingNewItemsToCupboard.isNotEmpty()){
+            val json = JSONObject()
+            val jsonArray = JSONArray()
+            for (item in addingNewItemsToCupboard) {
+                val jsonObj = JSONObject()
+                jsonObj.put("cupboardoid", item.cupboardoid)
+                jsonObj.put("foodPurchasedCounter", 1)
+                jsonArray.put(jsonObj)
+            }
+            json.put("cupboard", jsonArray)
+
+            cupboardData.addAll(ingredientsArrayList)
+
+
+            val jsonString = json.toString()
+            val body = create(JSON, jsonString)
+
+
+            val request: Request = Request.Builder()
+                .url("http://34.244.232.228:3000/user/cupboard/${userMaster.user.oid}")
+                .post(body)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            }
+        }
+    }
+
+    fun basketAddManual() {
+        val json = JSONObject()
+        val jsonArray = JSONArray()
+        for (ingredients in ingredientsArrayList) {
+            val jsonObj = JSONObject()
+            jsonObj.put("basketoid", ingredients.food.oid)
+            jsonObj.put("counter",1)
+            jsonArray.put(jsonObj)
+            for (basket in userMaster.user.basket){
+                if (basket.basketoid == ingredients.food.oid){
+                    val counter = basket.counter.toInt()
+                    basket.counter = counter+1
+                }
+            }
+        }
+        json.put("basket", jsonArray)
+
+        basketData.addAll(ingredientsArrayList)
 
         val jsonString = json.toString()
         val body = create(JSON, jsonString)
@@ -648,6 +719,23 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
            print(response.body!!.string())
+        }
+    }
+
+    fun doUpdateUserHeart(id: String) {
+        val formBody: RequestBody = FormBody.Builder()
+            .add("userId", userMaster.user.oid)
+            .build()
+
+        val request = Request.Builder()
+            .url("http://34.244.232.228:3000/post/heart/user/${id}")
+            .post(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
         }
     }
 
@@ -708,6 +796,38 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             val formBody: RequestBody = FormBody.Builder()
                 .add("id", userMaster.user.oid)
                 .add("difficulty",difficultyLevel).build()
+
+            val request: Request = Request.Builder()
+                .url("http://34.244.232.228:3000/post/id")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                if (body == "No Posts Found") {
+                    print("No Posts Found")
+                } else {
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    dataArray = gson.fromJson(body, ListPostModel::class.java)
+                    for (posts in dataArray.postArray) {
+                        filterArrayList.add(posts)
+                    }
+                }
+            }
+        }
+    }
+
+    fun getFilterDataTop() {
+        filterArrayList.clear()
+        lateinit var dataArray: ListPostModel
+        if (internetConnection) {
+
+            val formBody: RequestBody = FormBody.Builder()
+                .add("id", userMaster.user.oid)
+                .add("top","").build()
 
             val request: Request = Request.Builder()
                 .url("http://34.244.232.228:3000/post/id")
@@ -1085,6 +1205,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
 
         val userImages: MutableList<String?> = mutableListOf()
+        var counter = 0
         for(image in listofImages) {
             val bitmap = readImageFromPath(context, image)
             val stream = ByteArrayOutputStream()
@@ -1092,7 +1213,8 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             val byteArray: ByteArray = stream.toByteArray()
             val encoded: String = Base64.encodeToString(byteArray, Base64.DEFAULT)
             userImages.add(encoded)
-            builder.addFormDataPart("imageFiles",  "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())}.jpeg", create(MEDIA_TYPE_JPEG, byteArray));
+            counter++
+            builder.addFormDataPart("imageFiles",  "${TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + counter}.jpeg", create(MEDIA_TYPE_JPEG, byteArray));
         }
 
 

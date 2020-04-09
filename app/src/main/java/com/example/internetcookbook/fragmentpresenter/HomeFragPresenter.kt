@@ -33,12 +33,13 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
-    fun doRefreshData(view: View) {
+    fun doRefreshData(swipeView: View) {
         doAsync {
             infoStore!!.getPostData()
             onComplete {
                 doFindHomeData()
-                view.swipeToRefresh.isRefreshing = false
+                swipeView.swipeToRefresh.isRefreshing = false
+                view.initScrollListener()
             }
         }
     }
@@ -52,6 +53,15 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
+    fun doFilterTop(){
+        doAsync {
+            infoStore!!.getFilterDataTop()
+            onComplete {
+                view.showInformation(infoStore!!.getFilteredData())
+            }
+        }
+    }
+
 
     fun loadMoreData() {
         var moreDataAvilable = false
@@ -59,6 +69,7 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
             moreDataAvilable = infoStore!!.getMoreData()
             onComplete {
                 if (moreDataAvilable) {
+                    view.initScrollListener()
                     view.removeLoading(findData())
                 }else{
                     view.noDataAvilable()
@@ -97,6 +108,9 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override fun doHeartData(id: String) {
         doAsync {
             infoStore!!.putHeart(id)
+        }
+        doAsync {
+            infoStore!!.doUpdateUserHeart(id)
         }
     }
 

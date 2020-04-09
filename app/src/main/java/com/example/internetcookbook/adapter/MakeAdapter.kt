@@ -5,9 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
-import com.example.internetcookbook.models.FoodModel
-import com.example.internetcookbook.models.PostModel
-import kotlinx.android.synthetic.main.ingredients_list.view.*
 import kotlinx.android.synthetic.main.make_items.view.*
 
 class MakeAdapter(private var makeArrayList: ArrayList<String>) : RecyclerView.Adapter<MakeAdapter.MainHolder>() {

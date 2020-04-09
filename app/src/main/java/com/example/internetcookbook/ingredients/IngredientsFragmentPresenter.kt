@@ -1,6 +1,7 @@
 package com.example.internetcookbook.ingredients
 
 import android.view.View
+import android.widget.Toast
 import androidx.navigation.findNavController
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
@@ -46,11 +47,46 @@ class IngredientsFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLog
     }
 
     fun doIngredientsSearch(ingredientsView: View) {
-        doAsync {
-            infoStore!!.ingredientsSearchHomeData()
-            onComplete {
-                ingredientsView.findNavController().navigateUp()
+        if (infoStore!!.ingredientsAddedToRecipe().size != 0) {
+            doAsync {
+                infoStore!!.ingredientsSearchHomeData()
+                onComplete {
+                    ingredientsView.findNavController().navigateUp()
+                }
             }
+        } else {
+            infoStore!!.getFilteredData().clear()
+            ingredientsView.findNavController().navigateUp()
+        }
+    }
+
+    fun doAddBasket(ingredientsView: View) {
+        if (infoStore!!.ingredientsAddedToRecipe().size != 0) {
+            doAsync {
+                infoStore!!.basketAddManual()
+                onComplete {
+                    ingredientsView.findNavController().navigateUp()
+                }
+            }
+        } else {
+            infoStore!!.getFilteredData().clear()
+            ingredientsView.findNavController().navigateUp()
+            Toast.makeText(ingredientsView.context,"Add to basket", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun doAddCupboard(ingredientsView: View){
+        if (infoStore!!.ingredientsAddedToRecipe().size != 0) {
+            doAsync {
+                infoStore!!.cupboardAddManual()
+                onComplete {
+                    ingredientsView.findNavController().navigateUp()
+                }
+            }
+        } else {
+            infoStore!!.getFilteredData().clear()
+            ingredientsView.findNavController().navigateUp()
+            Toast.makeText(ingredientsView.context,"Add to basket", Toast.LENGTH_LONG).show()
         }
     }
 }

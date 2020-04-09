@@ -69,6 +69,17 @@ class ItemFragmentView : BaseView() {
         })
 
 
+        itemView.mAddItemToBasket.setOnClickListener {
+            val action = PagerFragmentViewDirections.actionPagerFragmentToIngredientsFragment("basket")
+            view.findNavController().navigate(action)
+        }
+
+        itemView.mAddItemToCupboard.setOnClickListener {
+            val action = PagerFragmentViewDirections.actionPagerFragmentToIngredientsFragment("cupboard")
+            view.findNavController().navigate(action)
+        }
+
+
         itemView.mFollowerFind.setOnClickListener {
             val action = PagerFragmentViewDirections.actionPagerFragmentToFindFollowingView()
             view.findNavController().navigate(action)
