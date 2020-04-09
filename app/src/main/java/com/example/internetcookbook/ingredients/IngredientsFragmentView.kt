@@ -45,7 +45,11 @@ class IngredientsFragmentView : BaseView() {
             val ingredients = IngredientsFragmentViewArgs.fromBundle(arguments!!).ingredients
             if (ingredients == "home_page"){
                 presenter.doIngredientsSearch(ingredientsView)
-            }else {
+            }else if (ingredients == "basket"){
+                presenter.doAddBasket(ingredientsView)
+            }else if(ingredients == "cupboard"){
+                presenter.doAddCupboard(ingredientsView)
+            } else {
                 ingredientsView.findNavController().navigateUp()
             }
         }

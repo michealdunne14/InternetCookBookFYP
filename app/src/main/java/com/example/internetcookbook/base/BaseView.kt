@@ -41,5 +41,6 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun commentAdded(){}
     open fun notifyDataSetChanged(){}
     open fun ingredientsRecyclerView(){}
+    open fun initScrollListener(){}
 
 }

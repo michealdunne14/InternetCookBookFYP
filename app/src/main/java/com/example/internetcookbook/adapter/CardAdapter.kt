@@ -45,15 +45,16 @@ class CardAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (viewType == VIEW_TYPE_ITEM) {
             return MainHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_list, parent, false))
-        } else {
-            return LoadingViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.loading, parent, false))
-        }
+//        else {
+//            LoadingViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.loading, parent, false))
+//        }
     }
 
     //  Item Count
-    override fun getItemCount(): Int = posts.size
+    override fun getItemCount(): Int {
+        return posts.size
+    }
 
     override fun getItemViewType(position: Int): Int {
         return if (posts[position] == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
@@ -64,18 +65,7 @@ class CardAdapter(
         if (holder is MainHolder) {
             val postModel = posts[holder.adapterPosition]
             holder.bind(postModel!!,presenter)
-        } else if (holder is LoadingViewHolder) {
-            showLoadingView(holder, position)
         }
-    }
-
-    private class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        var progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
-    }
-
-    private fun showLoadingView(viewHolder: LoadingViewHolder, position: Int) {
-        //ProgressBar would be displayed
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){

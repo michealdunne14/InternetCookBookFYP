@@ -15,10 +15,12 @@ import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
 import com.example.internetcookbook.adapter.IngredientsAdapter
+import com.example.internetcookbook.adapter.MakeAdapter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.IngredientModel
+import com.example.internetcookbook.models.MethodModel
 import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_make.*
 import kotlinx.android.synthetic.main.fragment_make.view.*
@@ -31,9 +33,6 @@ class MakeFragmentView : BaseView() {
     val postModel = PostModel()
     private var show = false
     lateinit var makeView: View
-    val ingredientsFoodModel = ArrayList<IngredientModel>()
-    val postModelArrayList = ArrayList<PostModel>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,14 +50,20 @@ class MakeFragmentView : BaseView() {
         presenter = initPresenter(MakeFragmentPresenter(this)) as MakeFragmentPresenter
         val postModel = MakeFragmentViewArgs.fromBundle(arguments!!).dataModel.post
         val images = MakeFragmentViewArgs.fromBundle(arguments!!).dataModel
+        makeView = view
 
         val layoutManager = LinearLayoutManager(context)
-        view.mIngredientsRecyclerView.layoutManager = layoutManager
-
-        presenter.findIngredients(postModel)
         val makeLayoutManager = LinearLayoutManager(context)
+        view.mIngredientsRecyclerView.layoutManager = layoutManager
         view.mMakeList.layoutManager = makeLayoutManager
-        makeView = view
+        presenter.findIngredients(postModel)
+
+        val methodArrayList = ArrayList<String>()
+        for (method in postModel.method){
+            methodArrayList.add(method.methodStep)
+        }
+        makeView.mMakeList.adapter = MakeAdapter(methodArrayList)
+        makeView.mMakeList.adapter?.notifyDataSetChanged()
         makeView.mMakeName.text = postModel.title
         makeView.mMakeDescription.text = postModel.description
         val bitmapImages = readBit64ImageArrayList(images)
