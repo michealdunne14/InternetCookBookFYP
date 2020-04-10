@@ -330,6 +330,28 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    fun deleteFromCupboard(foodModel: FoodMasterModel){
+        cupboardData.forEachIndexed { index, item ->
+            if(item.food.name == foodModel.food.name)
+                cupboardData.removeAt(index)
+        }
+
+        val formBody: RequestBody = FormBody.Builder()
+            .add("id", userMaster.user.oid)
+            .add("cupboardoid",foodModel.food.oid).build()
+
+        val request = Request.Builder()
+            .url("http://34.244.232.228:3000/user/deleteItemFromCupboard")
+            .post(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
     fun foodCreatePageUpdate(){
         foodCreatePage = !foodCreatePage
     }
@@ -861,13 +883,13 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         if (internetConnection) {
 
             try {
-                postData[postData.lastIndex - 1]
+                postData[postData.lastIndex]
             }catch (e: Exception){
                 return false
             }
             val formBody: RequestBody = FormBody.Builder()
                 .add("id", userMaster.user.oid)
-                .add("posttime", postData[postData.lastIndex - 1]!!.post.posttime).build()
+                .add("posttime", postData[postData.lastIndex]!!.post.posttime).build()
 
             val request: Request = Request.Builder()
                 .url("http://34.244.232.228:3000/post/newdata")
@@ -886,7 +908,6 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                     val gsonBuilder = GsonBuilder()
                     val gson = gsonBuilder.create()
                     dataArray = gson.fromJson(body, ListPostModel::class.java)
-                    postData.removeAt(postData.lastIndex)
                     for (posts in dataArray.postArray) {
                         postData.add(posts)
                     }
@@ -1022,6 +1043,61 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             }
         }
         return searchedPosts
+    }
+
+    fun updateItemCounterBasket(
+        characterSearch: Int,
+        foodModel: FoodMasterModel
+    ) {
+        if (internetConnection) {
+            val json = JSONObject()
+            json.put("basketoid", foodModel.food.oid)
+            json.put("id", userMaster.user.oid)
+            json.put("counter",characterSearch)
+
+            val jsonString = json.toString()
+            val formBody = create(JSON, jsonString)
+
+            val request: Request = Request.Builder()
+                .url("http://34.244.232.228:3000/user/changeCounterBasket")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                print(body)
+            }
+        }
+    }
+
+
+    fun updateItemCounterCupboard(
+        characterSearch: Int,
+        foodModel: FoodMasterModel
+    ) {
+        if (internetConnection) {
+            val json = JSONObject()
+            json.put("cupboardoid", foodModel.food.oid)
+            json.put("id", userMaster.user.oid)
+            json.put("foodPurchasedCounter",characterSearch)
+
+            val jsonString = json.toString()
+            val formBody = create(JSON, jsonString)
+
+            val request: Request = Request.Builder()
+                .url("http://34.244.232.228:3000/user/changeCounterCupboard")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+                print(body)
+            }
+        }
     }
 
 

@@ -36,6 +36,15 @@ class ItemFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
+    fun doRemoveItemCupboard(foodModel: FoodMasterModel){
+        doAsync {
+            infoStore!!.deleteFromCupboard(foodModel)
+            onComplete {
+                view.notifyDataSetChanged()
+            }
+        }
+    }
+
     fun doFindBasket(): ArrayList<FoodMasterModel> {
         return infoStore!!.findBasketData()
     }
@@ -50,6 +59,30 @@ class ItemFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     fun doSearchBasket(characterSearch: CharSequence?): ArrayList<FoodMasterModel>{
         return infoStore!!.searchBasket(characterSearch)
+    }
+
+    fun doUpdateItemCounterCupboard(
+        characterSearch: Int,
+        foodModel: FoodMasterModel
+    ) {
+        doAsync {
+            infoStore!!.updateItemCounterCupboard(characterSearch,foodModel)
+            onComplete {
+
+            }
+        }
+    }
+
+    fun doUpdateItemCounterBasket(
+        characterSearch: Int,
+        foodModel: FoodMasterModel
+    ) {
+        doAsync {
+            infoStore!!.updateItemCounterBasket(characterSearch,foodModel)
+            onComplete {
+
+            }
+        }
     }
 
     fun doSearchFollowers(characterSearch: CharSequence?): ArrayList<UserMasterModel>{

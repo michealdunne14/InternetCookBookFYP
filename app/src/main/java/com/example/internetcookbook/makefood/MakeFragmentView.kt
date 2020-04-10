@@ -19,8 +19,6 @@ import com.example.internetcookbook.adapter.MakeAdapter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.FoodMasterModel
-import com.example.internetcookbook.models.IngredientModel
-import com.example.internetcookbook.models.MethodModel
 import com.example.internetcookbook.models.PostModel
 import kotlinx.android.synthetic.main.fragment_make.*
 import kotlinx.android.synthetic.main.fragment_make.view.*
@@ -117,7 +115,13 @@ class MakeFragmentView : BaseView() {
     }
 
     override fun ingredientsRecyclerView(searchedIngredients: ArrayList<FoodMasterModel>){
-        makeView.mIngredientsRecyclerView.adapter = IngredientsAdapter(searchedIngredients, presenter.doCurrentUser(), "make", presenter)
+        makeView.mIngredientsRecyclerView.adapter = IngredientsAdapter(
+            searchedIngredients,
+            presenter.doCurrentUser(),
+            "make",
+            presenter,
+            activity
+        )
         makeView.mIngredientsRecyclerView.adapter?.notifyDataSetChanged()
     }
 

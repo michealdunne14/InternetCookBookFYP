@@ -142,7 +142,8 @@ class PostFragmentView : BaseView(),AnkoLogger  {
             listofBasket,
             presenter.doCurrentUser(),
             "post",
-            presenter
+            presenter,
+            activity
         )
         postView.mPostIngredientRecyclerView.adapter?.notifyDataSetChanged()
     }
