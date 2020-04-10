@@ -61,7 +61,8 @@ class ItemFragmentView : BaseView() {
                     searchedCupboard,
                     presenter.doCurrentUser(),
                     "cupboard",
-                    presenter
+                    presenter,
+                    activity
                 )
                 notifyDataSetChanged()
             }
@@ -97,7 +98,8 @@ class ItemFragmentView : BaseView() {
                     searchedBasket,
                     presenter.doCurrentUser(),
                     "basket",
-                    presenter
+                    presenter,
+                    activity
                 )
                 itemView.mBasketRecyclerView.adapter?.notifyDataSetChanged()
             }
@@ -154,7 +156,8 @@ class ItemFragmentView : BaseView() {
             listofBasket,
             presenter.doCurrentUser(),
             "basket",
-            presenter
+            presenter,
+            activity
         )
         itemView.mBasketRecyclerView.adapter?.notifyDataSetChanged()
     }
@@ -166,7 +169,8 @@ class ItemFragmentView : BaseView() {
             listofCupboard,
             presenter.doCurrentUser(),
             "cupboard",
-            presenter
+            presenter,
+            activity
         )
         itemView.mCupboardRecyclerView.adapter?.notifyDataSetChanged()
     }
