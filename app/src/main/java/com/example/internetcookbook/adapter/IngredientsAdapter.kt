@@ -76,6 +76,9 @@ class IngredientsAdapter(
                     itemView.mIngredientCounter.setOnClickListener {
                         showNumberDialog(activity,presenter,foodModel,currentUser,selectedOption)
                     }
+                }else if(selectedOption == "post"){
+                    itemView.mSelectedIngredient.visibility = View.INVISIBLE
+                    itemView.mIngredientCounter.visibility = View.INVISIBLE
                 }
                 itemView.mIngredientsName.text = foodModel.food.name
                 val bitmapImage = readBit64ImageSingle(foodModel.image)

@@ -35,7 +35,7 @@
     <string name="enter_shop">Enter Shop</string>
     <string name="search">Search</string>
     <string name="search_cupboard">Search Cupboard</string>
-    <string name="search_followers">Search Followers</string>
+    <string name="search_following">Search Following</string>
     <string name="search_basket">Search Basket</string>
     <string name="huh_no_shop">!Huh No Shop</string>
     <string name="name">Name</string>
@@ -48,6 +48,7 @@
     <string name="medium">Medium</string>
     <string name="easy">Easy</string>
     <string name="hard">Hard</string>
+    <string name="follow">Follow</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>

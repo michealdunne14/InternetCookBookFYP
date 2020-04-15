@@ -48,6 +48,7 @@
             <ImageView
                 android:id="@+id/mFoodCreateImage"
                 android:layout_width="match_parent"
+                android:src="@drawable/baseline_insert_photo_black_36"
                 android:layout_height="300dp" />
 
             <EditText
@@ -55,12 +56,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:background="@drawable/border_box_edittext"
                 android:hint="@string/name"
                 android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/mFoodCreatePrice"
                 android:layout_width="match_parent"
+                android:background="@drawable/border_box_edittext"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/price"
@@ -80,15 +83,26 @@
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:id="@+id/shoppedAt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dimension20sp"
+                android:ems="10"
+                android:hint="Shopped At:" />
+
+            <TextView
                 android:id="@+id/mFoodCreateShop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/dimension20sp"
                 android:ems="10"
                 android:hint="@string/shop" />
 
             <Button
                 android:id="@+id/mFoodCreateAdd"
                 android:layout_width="match_parent"
+                android:background="@drawable/greenbutton"
+                android:textColor="@color/colorWhite"
                 android:layout_height="wrap_content"
                 android:text="@string/add" />
 

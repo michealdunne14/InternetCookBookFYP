@@ -13,6 +13,8 @@
         android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/colorGreen"
+        android:textColor="@color/colorWhite"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -23,6 +25,8 @@
         android:text="@string/register"
         app:layout_constraintBottom_toTopOf="@+id/mStartLogin"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/colorBlue"
+        android:textColor="@color/colorWhite"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -53,6 +53,8 @@ class IngredientsAddAdapter(
                 itemView.mSelectedIngredient.setImageResource(R.drawable.baseline_remove_black_36)
             }
 
+            itemView.mIngredientCounter.visibility = View.INVISIBLE
+
             itemView.mSelectedIngredient.setOnClickListener {
                 if (ingredientsFragment){
                     presenter.ingredientsAddToRecipe().add(foodModel)

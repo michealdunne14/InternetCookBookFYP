@@ -28,12 +28,22 @@ class FindFollowingPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
+    fun followingUsers(): ArrayList<UserMasterModel> {
+        return infoStore!!.findFollowingData()
+    }
+
     fun searchUsers(characterSearch: CharSequence) {
         val searched=  infoStore!!.searchFollowingSearched(characterSearch)
         view.showFollowList(searched)
     }
 
     fun followUser(userMasterModel: UserMasterModel) {
+        doAsync {
+            infoStore!!.followUser(userMasterModel)
+        }
+    }
+
+    fun unfollowUser(userMasterModel: UserMasterModel){
         doAsync {
             infoStore!!.followUser(userMasterModel)
         }

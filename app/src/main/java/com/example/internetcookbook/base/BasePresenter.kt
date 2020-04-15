@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.models.DataModel
+import com.example.internetcookbook.models.PostModel
 
 open class BasePresenter(var view: BaseView) {
     open var app:MainApp = view.activity!!.application as MainApp
@@ -18,7 +19,7 @@ open class BasePresenter(var view: BaseView) {
 
     }
 
-    open fun doHeartData(id: String){}
+    open fun doHeartData(postModel: PostModel){}
     open fun doCurrentUser(id: String){}
     open fun doSendComment(
         comment: String,

@@ -11,7 +11,8 @@
         android:id="@+id/mRegisterFirstname"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/border_box_edittext"
         android:ems="10"
         android:hint="@string/first_name"
         android:inputType="textPersonName"
@@ -24,7 +25,8 @@
         android:id="@+id/mSurname"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/border_box_edittext"
         android:ems="10"
         android:hint="@string/surname"
         android:inputType="textPersonName"
@@ -35,31 +37,36 @@
 
     <Button
         android:id="@+id/mRegisterSignupButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
         android:text="@string/sign_up"
         app:layout_constraintBottom_toTopOf="@+id/mLoginReturnButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/bluebutton"
+        android:textColor="@color/colorWhite"
         app:layout_constraintTop_toBottomOf="@+id/mRegisterProfilePic" />
 
     <Button
         android:id="@+id/mLoginReturnButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
         android:text="@string/return_string"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/redbutton"
+        android:textColor="@color/colorWhite"
         app:layout_constraintTop_toBottomOf="@+id/mRegisterSignupButton" />
 
     <EditText
         android:id="@+id/mFriendEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimension300"
+        android:layout_height="@dimen/dimension50"
         android:ems="10"
+        android:background="@drawable/border_box_edittext"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/mPasswordRegister"
@@ -70,10 +77,11 @@
 
     <EditText
         android:id="@+id/mPasswordRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimension300"
+        android:layout_height="@dimen/dimension50"
         android:ems="10"
         android:hint="@string/password"
+        android:background="@drawable/border_box_edittext"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/mUsernameRegister"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,10 +91,11 @@
 
     <EditText
         android:id="@+id/mUsernameRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimension300"
+        android:layout_height="@dimen/dimension50"
         android:ems="10"
         android:hint="@string/username"
+        android:background="@drawable/border_box_edittext"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/mRegisterProfilePic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,13 +105,23 @@
 
     <ImageView
         android:id="@+id/mRegisterProfilePic"
-        android:layout_width="@dimen/dimension250"
-        android:layout_height="@dimen/dimension250"
-        android:src="@android:drawable/alert_light_frame"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:src="@drawable/baseline_insert_photo_black_36"
         app:layout_constraintBottom_toTopOf="@+id/mRegisterSignupButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mUsernameRegister" />
+
+    <ImageView
+        android:id="@+id/mLogo"
+        android:layout_width="159dp"
+        android:layout_height="119dp"
+        android:src="@drawable/internet_cookbook_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

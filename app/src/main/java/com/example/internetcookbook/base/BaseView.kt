@@ -40,7 +40,8 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun showFoodItems(){}
     open fun commentAdded(){}
     open fun notifyDataSetChanged(){}
-    open fun ingredientsRecyclerView(){}
+    open fun makeUser(makeName: UserMasterModel) {}
     open fun initScrollListener(){}
-
+    open fun hideCamera(){}
+    open fun noResults(){}
 }

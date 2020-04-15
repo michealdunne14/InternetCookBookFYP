@@ -55,6 +55,8 @@ class ReceiptListAdapter(
 
             if(foodModel.food.foundItem) {
                 itemView.setBackgroundColor(getColor(itemView.context,R.color.colorGreen))
+                itemView.mFoodRemoveButton.visibility = View.INVISIBLE
+                itemView.mFoodUpdateButton.visibility = View.INVISIBLE
                 try {
                     itemView.mFoodImage.setImageBitmap(readBit64ImageSingle(foodModel.image))
                 }catch (e: Exception){
@@ -65,7 +67,7 @@ class ReceiptListAdapter(
                 itemView.mItemCounter.text = foodItems[position].food.itemsCounter.toString()
             }else{
                 itemView.mFoodImage.visibility == View.GONE
-                itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRed))
+                itemView.setBackgroundColor(getColor(itemView.context,R.color.colorRedLight))
             }
 
             itemView.mFoodRemoveButton.setOnClickListener {
@@ -104,7 +106,7 @@ class ReceiptListAdapter(
                         validFoodItems.add(result)
                         itemView.mFoodImage.visibility == View.VISIBLE
                     } else {
-                        itemView.setBackgroundColor(getColor(itemView.context, R.color.colorRed))
+                        itemView.setBackgroundColor(getColor(itemView.context, R.color.colorRedLight))
                         val action = PagerFragmentViewDirections.actionPagerFragmentToFoodCreateView(text,foodModel.food.shop)
                         itemView.findNavController().navigate(action)
                     }

@@ -14,6 +14,7 @@ import com.example.internetcookbook.helper.showImagePicker
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.FoodModel
 import com.example.internetcookbook.network.InformationStore
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
@@ -174,17 +175,24 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                 }
             }
             onComplete {
-                val foundDate = findDate(elementArrayList)
-                if (foundDate!!.isNotEmpty()){
-                    if (saveDate.isEmpty()) {
-                        date = foundDate
+                date = ""
+                if (elementArrayList.size != 0) {
+                    view.hideCamera()
+                    val foundDate = findDate(elementArrayList)
+                    if (foundDate!!.isNotEmpty()) {
+                        if (saveDate.isEmpty()) {
+                            date = foundDate
+                            saveDate = foundDate
+                        }
+                        findShop(elementArrayList, filteredArrayList)
+                    } else {
+                        view.showDateDialog(date)
                     }
-                    findShop(elementArrayList,filteredArrayList)
+                    for (line in lineArrayList) {
+                        filterLineData(line, filteredArrayList)
+                    }
                 }else{
-                    view.showDateDialog(date)
-                }
-                for (line in lineArrayList){
-                    filterLineData(line,filteredArrayList)
+                    view.noResults()
                 }
             }
         }

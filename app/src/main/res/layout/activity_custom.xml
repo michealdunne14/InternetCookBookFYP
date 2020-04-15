@@ -6,27 +6,31 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_above="@+id/mDialogSearch"
+        android:layout_width="@dimen/dimension300"
+        android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="1dp"
-        android:text="Unable to find Shop Please Enter" />
+        android:text="Unable to find Shop"
+        android:textSize="@dimen/dimension20sp" />
 
     <EditText
         android:id="@+id/mDialogSearch"
-        android:layout_width="match_parent"
+        android:layout_width="360dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/border"
         android:ems="10"
         android:gravity="center"
+        android:hint="@string/enter_shop"
         android:inputType="textPersonName"
-        android:padding="20dp"
-        android:background="@drawable/border"
-        android:hint="@string/enter_shop" />
+        android:padding="20dp" />
 
     <Button
         android:id="@+id/mConfirm"
@@ -34,9 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/mDialogSearch"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/whitebutton"
         android:text="Confirm" />
 
     <Button
@@ -45,9 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/mDialogSearch"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/whitebutton"
         android:text="Retake Picture" />
 
 

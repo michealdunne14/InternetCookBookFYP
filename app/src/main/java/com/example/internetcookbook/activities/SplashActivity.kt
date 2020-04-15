@@ -36,30 +36,29 @@ class SplashActivity : AppCompatActivity() {
                 doAsync {
                     try {
                         infoStore!!.updateUserInfo(currentUser.user)
-                        onComplete {
-                            doAsync {
-                                infoStore!!.getCupboardData()
-                            }
-                            doAsync {
-                                infoStore!!.getFollowingData()
-                            }
-                            doAsync {
-                                infoStore!!.getBasketData()
-                            }
-                            doAsync {
-                                infoStore!!.getPostData()
-                                onComplete {
-                                    startActivity(Intent(baseContext, MainView::class.java))
-                                    finish()
-                                }
-                            }
-                        }
                     } catch (e: Exception) {
                         startActivity(Intent(baseContext, SignInActivity::class.java))
                         infoStore!!.logoutUser()
                         finish()
                     }
                 }
+
+            doAsync {
+                infoStore!!.getCupboardData()
+            }
+            doAsync {
+                infoStore!!.getFollowingData()
+            }
+            doAsync {
+                infoStore!!.getBasketData()
+            }
+            doAsync {
+                infoStore!!.getPostData()
+                onComplete {
+                    startActivity(Intent(baseContext, MainView::class.java))
+                    finish()
+                }
+            }
         }
     }
 }

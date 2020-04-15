@@ -5,6 +5,7 @@ import com.example.internetcookbook.MainApp
 import com.example.internetcookbook.base.BasePresenter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.DataModel
+import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.network.InformationStore
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -63,10 +64,16 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     }
 
 
-    fun loadMoreData() {
+    fun loadMoreData(filterUsed: String) {
         var moreDataAvilable = false
         doAsync {
-            moreDataAvilable = infoStore!!.getMoreData()
+            if (filterUsed == "difficulty"){
+                moreDataAvilable = infoStore!!.getMoreDataDifficulty()
+            }else if(filterUsed == "top"){
+
+            }else{
+                moreDataAvilable = infoStore!!.getMoreData()
+            }
             onComplete {
                 if (moreDataAvilable) {
                     view.initScrollListener()
@@ -105,18 +112,18 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return infoStore!!.getCurrentUser()
     }
 
-    override fun doHeartData(id: String) {
+    override fun doHeartData(postModel: PostModel) {
         doAsync {
-            infoStore!!.putHeart(id)
+            infoStore!!.putHeart(postModel)
         }
         doAsync {
-            infoStore!!.doUpdateUserHeart(id)
+            infoStore!!.doUpdateUserHeart(postModel)
         }
     }
 
-    fun doRemoveHeart(id: String){
+    fun doRemoveHeart(postModel: PostModel){
         doAsync {
-            infoStore!!.removeHeart(id)
+            infoStore!!.removeHeart(postModel)
         }
     }
 }

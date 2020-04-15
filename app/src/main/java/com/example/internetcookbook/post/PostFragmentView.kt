@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.horizontalscrollbar.view.*
 import org.jetbrains.anko.AnkoLogger
 
 var selectedDifficulty = ""
+var methodStepsArrayList = ArrayList<String>()
 
 class PostFragmentView : BaseView(),AnkoLogger  {
 
@@ -29,7 +30,6 @@ class PostFragmentView : BaseView(),AnkoLogger  {
     lateinit var postView: View
     var postModel = PostModel()
     var personalPost = false
-    var methodStepsArrayList = ArrayList<String>()
 
 
     override fun onCreateView(
@@ -84,8 +84,10 @@ class PostFragmentView : BaseView(),AnkoLogger  {
             postModel.title = view.mPostTitle.text.toString()
             postModel.description = view.mPostDescription.text.toString()
             postModel.difficulty = selectedDifficulty
-            if(postModel.title.isNotEmpty() && postModel.description.isNotEmpty() && postModel.difficulty.isNotEmpty() && presenter.ingredientsAddToRecipe().size > 0 && methodStepsArrayList.size > 0) {
+            postModel.completionTime = view.mPostCompletionTime.text.toString()
+            if(postModel.title.isNotEmpty() && postModel.description.isNotEmpty() && postModel.difficulty.isNotEmpty() && postModel.completionTime.isNotEmpty() && presenter.ingredientsAddToRecipe().size > 0 && methodStepsArrayList.size > 0) {
                 presenter.doPostRecipe(postModel, methodStepsArrayList)
+
             }else{
                 Snackbar.make(postView,"Fill in all fields", Snackbar.LENGTH_SHORT).show()
             }
@@ -96,7 +98,7 @@ class PostFragmentView : BaseView(),AnkoLogger  {
         }
 
         view.mIngredientsButton.setOnClickListener {
-            val action = PostFragmentViewDirections.actionPostFragment2ToIngredientsFragment("")
+            val action = PostFragmentViewDirections.actionPostFragment2ToIngredientsFragment("ingredients")
             view.findNavController().navigate(action)
         }
 
@@ -160,6 +162,7 @@ class PostFragmentView : BaseView(),AnkoLogger  {
         super.onActivityResult(requestCode, resultCode, data)
         if(data != null){
             presenter.doActivityResult(requestCode,resultCode,data,postView.context)
+            postView.mFragmentPager.visibility = View.VISIBLE
         }
     }
 
@@ -171,5 +174,17 @@ class PostFragmentView : BaseView(),AnkoLogger  {
     override fun onResume() {
         super.onResume()
         addImages(presenter.listofImages())
+        when (selectedDifficulty) {
+            getString(R.string.easy) -> {
+                postView.mHomeScrollBarFirstPosition.setBackgroundColor(resources.getColor(R.color.colorBlue))
+            }
+            getString(R.string.medium) -> {
+                postView.mHomeScrollBarSecondPosition.setBackgroundColor(resources.getColor(R.color.colorBlue))
+            }
+            getString(R.string.hard) -> {
+                postView.mHomeScrollBarThirdPosition.setBackgroundColor(resources.getColor(R.color.colorBlue))
+            }
+        }
+        showMethod(methodStepsArrayList)
     }
 }
