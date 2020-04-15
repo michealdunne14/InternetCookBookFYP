@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
@@ -32,6 +33,10 @@ class FindFollowingView : BaseView() {
         val layoutManager = LinearLayoutManager(context)
 
         view.mFindFollowerRecyclerView.layoutManager = layoutManager as RecyclerView.LayoutManager?
+
+        view.mReturnButton.setOnClickListener {
+            followingView.findNavController().navigateUp()
+        }
 
         followingView.mFindFollowerItem.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}

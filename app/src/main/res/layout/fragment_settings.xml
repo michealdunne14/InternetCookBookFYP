@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@null"
+            android:background="@drawable/greybutton"
             app:srcCompat="@drawable/outline_person_black_36" />
 
         <ImageButton
@@ -32,7 +32,7 @@
             android:layout_width="@dimen/dimension50"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@null"
+            android:background="@drawable/greybutton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -47,6 +47,8 @@
         android:layout_height="wrap_content"
         android:text="Logout"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/redbutton"
+        android:textColor="@color/colorWhite"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintFragmentSettings" />

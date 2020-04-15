@@ -12,6 +12,7 @@ import com.example.internetcookbook.models.UserMasterModel
 import com.example.internetcookbook.network.InformationStore
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.onComplete
 
 var listofImages = ArrayList<String>()
 

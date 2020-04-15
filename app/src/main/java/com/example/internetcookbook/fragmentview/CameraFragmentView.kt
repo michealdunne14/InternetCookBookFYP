@@ -34,7 +34,9 @@ import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import kotlinx.android.synthetic.main.activity_custom.*
+import kotlinx.android.synthetic.main.camera_show.*
 import kotlinx.android.synthetic.main.camera_show.view.*
+import kotlinx.android.synthetic.main.camera_show.view.mConfirmOption
 import kotlinx.android.synthetic.main.date_dialog.*
 import kotlinx.android.synthetic.main.fragment_camera.view.*
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -99,7 +101,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             if (images == "food_create") {
                 foodCreateCheck = true
                 cameraView.mButtonFindText.visibility = View.INVISIBLE
-                cameraView.mScanBarcodeButton.visibility = View.INVISIBLE
+                cameraView.mConfirmOption.visibility = View.INVISIBLE
             }
         }else {
             if (storedFood.size != 0) {
@@ -214,7 +216,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                     }
                 }
                 if (foodCreateCheck){
-                    cameraView.mScanBarcodeButton.visibility = View.VISIBLE
+                    cameraView.mConfirmOption.visibility = View.VISIBLE
                 }
             }else{
                 captureCheck = false
@@ -223,7 +225,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                     cameraView.mButtonFindText.visibility = View.INVISIBLE
                 }
                 if (foodCreateCheck){
-                    cameraView.mScanBarcodeButton.visibility = View.INVISIBLE
+                    cameraView.mConfirmOption.visibility = View.INVISIBLE
                 }
             }
         }
@@ -242,11 +244,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                         queryDialog = QueryDialog(activity!!)
                         queryDialog.show()
                         queryDialog.mQuestionDialog.text = "Is the Expiration Date Correct"
-                        queryDialog.mFoodImageDialog.setImageBitmap(
-                            readBit64ImageSingle(
-                                randomFoodItem.image
-                            )
-                        )
+                        queryDialog.mFoodImageDialog.setImageBitmap(readBit64ImageSingle(randomFoodItem.image))
                         val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yy")
                         val c = Calendar.getInstance()
                         try {
@@ -254,7 +252,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
                         } catch (e: ParseException) {
                             e.printStackTrace()
                         }
-                        c.add(Calendar.DATE, expirationtime)
+                        c.add(Calendar.DATE, randomFoodItem.food.expirationTime.toInt())
                         val dateFormat1: DateFormat = SimpleDateFormat("dd/MM/yy")
                         val output = dateFormat1.format(c.time)
                         queryDialog.mQueryDialog.text =
@@ -344,7 +342,6 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         }
 
         cameraView.mButtonFindText.setOnClickListener {
-            cameraView.mCameraShow.visibility = View.INVISIBLE
             val bitmap = (cameraView.mCapturedImage.drawable as BitmapDrawable).bitmap
 //            Resets data
             storedFood.clear()
@@ -354,7 +351,11 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             mChangeImageToText(bitmap)
         }
 
-        cameraView.mScanBarcodeButton.setOnClickListener {
+        if(foodCreateCheck){
+            mConfirmOption.visibility = View.VISIBLE
+        }
+
+        cameraView.mConfirmOption.setOnClickListener {
             if (foodCreateCheck){
                 val bitmap = (cameraView.mCapturedImage.drawable as BitmapDrawable).bitmap
                 presenter.storeImage(bitmap)
@@ -390,6 +391,10 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         cameraView.mCapturedImage.setImageBitmap(null)
     }
 
+    override fun noResults(){
+        Snackbar.make(cameraView,"No Text Detected", Snackbar.LENGTH_SHORT).show()
+    }
+
     fun mChangeImageToText(bitmap: Bitmap) {
             val image = FirebaseVisionImage.fromBitmap(bitmap)
             val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
@@ -405,6 +410,10 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
         info { "Select Country Started" }
         showProgress()
         presenter.cameraSearch(elementArrayList,lineArrayList,filteredArrayList,resultText)
+    }
+
+    override fun hideCamera(){
+        cameraView.mCameraShow.visibility = View.INVISIBLE
         cameraView.mCapturedImage.visibility = View.INVISIBLE
         cameraView.mFoodListRecyclerView.visibility = View.VISIBLE
         cameraView.mListItems.visibility = View.VISIBLE
@@ -521,6 +530,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             }
             presenter.findFoodItems()
             cameraView.mShoppedAt.text = customDialog.mDialogSearch.text
+            saveShop = customDialog.mDialogSearch.text.toString()
         }
         customDialog.mRetakeShop.setOnClickListener {
             storedFood.clear()

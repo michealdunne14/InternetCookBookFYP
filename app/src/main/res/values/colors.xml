@@ -4,8 +4,12 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorGrey">#cfcfcf</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorBlue">#754CAF50</color>
-    <color name="colorRed">#FF0000</color>
+    <color name="colorBlue">#1e88e5</color>
+    <color name="colorLightBlue">#8e99f3</color>
+    <color name="colorRed">#d32f2f</color>
+    <color name="colorRedLight">#ff4c4c</color>
     <color name="colorGreen">#8BC34A</color>
+    <color name="colorOrange">#FF8C00</color>
 </resources>

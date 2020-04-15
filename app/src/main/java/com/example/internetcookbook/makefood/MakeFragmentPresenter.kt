@@ -28,6 +28,14 @@ class MakeFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
             }
         }
     }
+    fun findUser(postModel: PostModel) {
+        doAsync {
+            infoStore!!.findUser(postModel)
+            onComplete {
+                view.makeUser(infoStore!!.getMakeName())
+            }
+        }
+    }
 
     fun doCurrentUser(): UserMasterModel {
         return infoStore!!.getCurrentUser()

@@ -66,12 +66,12 @@ class IngredientsFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLog
                 infoStore!!.basketAddManual()
                 onComplete {
                     ingredientsView.findNavController().navigateUp()
+                    Toast.makeText(ingredientsView.context,"Add to basket", Toast.LENGTH_LONG).show()
                 }
             }
         } else {
             infoStore!!.getFilteredData().clear()
             ingredientsView.findNavController().navigateUp()
-            Toast.makeText(ingredientsView.context,"Add to basket", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -81,12 +81,12 @@ class IngredientsFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLog
                 infoStore!!.cupboardAddManual()
                 onComplete {
                     ingredientsView.findNavController().navigateUp()
+                    Toast.makeText(ingredientsView.context,"Add to Cupboard", Toast.LENGTH_LONG).show()
                 }
             }
         } else {
             infoStore!!.getFilteredData().clear()
             ingredientsView.findNavController().navigateUp()
-            Toast.makeText(ingredientsView.context,"Add to basket", Toast.LENGTH_LONG).show()
         }
     }
 }

@@ -23,7 +23,7 @@
         android:background="@null"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toStartOf="@+id/mScanBarcodeButton"
+        app:layout_constraintEnd_toStartOf="@+id/mConfirmOption"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/mButtonFindText"
         app:srcCompat="@drawable/baseline_panorama_fish_eye_white_48" />
@@ -43,7 +43,7 @@
 
 
     <ImageButton
-        android:id="@+id/mScanBarcodeButton"
+        android:id="@+id/mConfirmOption"
         android:layout_width="@dimen/dimension80"
         android:layout_height="@dimen/dimension50"
         android:background="@null"
@@ -51,6 +51,7 @@
         android:src="@drawable/outline_add_box_white_48"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/mCameraCaptureButton" />
 

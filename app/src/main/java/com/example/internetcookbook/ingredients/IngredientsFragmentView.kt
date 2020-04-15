@@ -41,16 +41,29 @@ class IngredientsFragmentView : BaseView() {
 
         presenter.defaultIngredients()
 
+        val ingredients = IngredientsFragmentViewArgs.fromBundle(arguments!!).ingredients
+
+        if(ingredients == "cupboard"){
+            presenter.ingredientsAddToRecipe().clear()
+        }else if(ingredients == "basket"){
+            presenter.ingredientsAddToRecipe().clear()
+        }
+
+
         view.mReturnButtonIngredients.setOnClickListener {
-            val ingredients = IngredientsFragmentViewArgs.fromBundle(arguments!!).ingredients
-            if (ingredients == "home_page"){
-                presenter.doIngredientsSearch(ingredientsView)
-            }else if (ingredients == "basket"){
-                presenter.doAddBasket(ingredientsView)
-            }else if(ingredients == "cupboard"){
-                presenter.doAddCupboard(ingredientsView)
-            } else {
-                ingredientsView.findNavController().navigateUp()
+            when (ingredients) {
+                "home_page" -> {
+                    presenter.doIngredientsSearch(ingredientsView)
+                }
+                "basket" -> {
+                    presenter.doAddBasket(ingredientsView)
+                }
+                "cupboard" -> {
+                    presenter.doAddCupboard(ingredientsView)
+                }
+                else -> {
+                    ingredientsView.findNavController().navigateUp()
+                }
             }
         }
 
@@ -82,6 +95,9 @@ class IngredientsFragmentView : BaseView() {
     }
 
     override fun ingredientsRecyclerView(searchedIngredients: ArrayList<FoodMasterModel>) {
+        val set: Set<FoodMasterModel> = HashSet(searchedIngredients)
+        searchedIngredients.clear()
+        searchedIngredients.addAll(set)
         ingredientsView.mIngredientsSearchRecyclerView.adapter = IngredientsAddAdapter(searchedIngredients,presenter,  true,false,ingredientsView)
         ingredientsView.mIngredientsSearchRecyclerView.adapter?.notifyDataSetChanged()
         ingredientsView.mIngredientsListRecyclerView.adapter = IngredientsAddAdapter(presenter.ingredientsAddToRecipe(), presenter, false, true, ingredientsView)

@@ -41,9 +41,30 @@ class UserFollowAdapter(
             itemView.mFollowingName.text = userMasterModel.user.name
             val bitmapImage = readBit64ImageSingle(userMasterModel.image)
             itemView.mFollowingPicture.setImageBitmap(bitmapImage)
-            itemView.mFollowButton.setOnClickListener {
-                presenter.followUser(userMasterModel)
+            val followingArrayList = presenter.followingUsers()
+
+            for (following in followingArrayList){
+                if (following.user.username == userMasterModel.user.username){
+                    followingUser()
+                }
             }
+            itemView.mFollowButton.setOnClickListener {
+                if (itemView.mFollowButton.text == itemView.context.getString(R.string.following)){
+                    itemView.mFollowButton.text = itemView.context.getString(R.string.follow)
+                    itemView.mFollowButton.background = itemView.resources.getDrawable(R.drawable.greybutton)
+                    itemView.mFollowButton.setTextColor(itemView.resources.getColor(R.color.colorBlack))
+                    presenter.unfollowUser(userMasterModel)
+                }else {
+                    presenter.followUser(userMasterModel)
+                    followingUser()
+                }
+            }
+        }
+
+        fun followingUser(){
+            itemView.mFollowButton.text = itemView.context.getString(R.string.following)
+            itemView.mFollowButton.background = itemView.resources.getDrawable(R.drawable.bluebutton)
+            itemView.mFollowButton.setTextColor(itemView.resources.getColor(R.color.colorWhite))
         }
     }
 }

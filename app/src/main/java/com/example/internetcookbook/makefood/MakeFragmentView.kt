@@ -20,6 +20,7 @@ import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.FoodMasterModel
 import com.example.internetcookbook.models.PostModel
+import com.example.internetcookbook.models.UserMasterModel
 import kotlinx.android.synthetic.main.fragment_make.*
 import kotlinx.android.synthetic.main.fragment_make.view.*
 import kotlinx.android.synthetic.main.fragment_make.view.mReturnButton
@@ -55,6 +56,7 @@ class MakeFragmentView : BaseView() {
         view.mIngredientsRecyclerView.layoutManager = layoutManager
         view.mMakeList.layoutManager = makeLayoutManager
         presenter.findIngredients(postModel)
+        presenter.findUser(postModel)
 
         val methodArrayList = ArrayList<String>()
         for (method in postModel.method){
@@ -64,6 +66,7 @@ class MakeFragmentView : BaseView() {
         makeView.mMakeList.adapter?.notifyDataSetChanged()
         makeView.mMakeName.text = postModel.title
         makeView.mMakeDescription.text = postModel.description
+        makeView.mMakeTimeToCreate.text = "Time to Create is ${postModel.completionTime} minutes"
         val bitmapImages = readBit64ImageArrayList(images)
         doFindImages(bitmapImages)
         hideAndShowToolbarButtons()
@@ -112,6 +115,10 @@ class MakeFragmentView : BaseView() {
         val viewPager = makeView.findViewById<ViewPager>(R.id.mMakeImage)
         val adapter = BitmapCardAdapter(makeView.context, images)
         viewPager.adapter = adapter
+    }
+
+    override fun makeUser(makeName: UserMasterModel) {
+        makeView.mMakeCreatedBy.text = "Created By ${makeName.user.name}"
     }
 
     override fun ingredientsRecyclerView(searchedIngredients: ArrayList<FoodMasterModel>){

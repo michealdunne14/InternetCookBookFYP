@@ -9,52 +9,60 @@
 
     <EditText
         android:id="@+id/mLoginEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimension300"
+        android:layout_height="@dimen/dimension50"
+        android:layout_marginBottom="70dp"
         android:ems="10"
         android:hint="@string/email"
+        android:background="@drawable/border_box_edittext"
         app:layout_constraintBottom_toTopOf="@+id/mLoginPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/mLoginPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimension300"
+        android:layout_height="@dimen/dimension50"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/border_box_edittext"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/mLoginSignInButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mLoginEmail" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/mLoginSignInButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="80dp"
         android:text="@string/sign_in"
+        android:background="@drawable/bluebutton"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toTopOf="@+id/mLoginReturnButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mLoginPassword" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/mLoginReturnButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="60dp"
         android:text="@string/return_string"
+        android:background="@drawable/redbutton"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mLoginSignInButton" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/mLogo"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:src="@android:drawable/btn_dialog"
+        android:layout_width="306dp"
+        android:layout_height="231dp"
+        android:src="@drawable/internet_cookbook_logo"
         app:layout_constraintBottom_toTopOf="@+id/mLoginEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

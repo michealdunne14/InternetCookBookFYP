@@ -42,5 +42,15 @@ class ProfileFragmentView : BaseView() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        val user= presenter.doGetUser()
+        profileView.mProfileName.text = user.user.name
+        profileView.mProfileEmail.text = user.user.email
+        profileView.mProfileUsername.text = user.user.username
+        val bitmapImage = readBit64ImageSingle(user.image)
+        profileView.mProfilePicture.setImageBitmap(bitmapImage)
+    }
+
 
 }

@@ -4,6 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/mCupboardEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cupboard Empty"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
@@ -23,6 +34,7 @@
             android:textColor="@color/colorBlack"
             android:textColorHint="@color/colorBlack"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/border_box_edittext"
             app:layout_constraintEnd_toStartOf="@+id/mAddItemToCupboard"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +45,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_add_black_36"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@null"
+            android:background="@drawable/greybutton"
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

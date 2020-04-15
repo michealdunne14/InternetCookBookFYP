@@ -39,6 +39,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     private var basket = false
     var isLoading = false
     var difficultyLevel = ""
+    var filterUsed = ""
 
 
     @SuppressLint("RestrictedApi")
@@ -62,6 +63,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         swipeRefreshLayout.setOnRefreshListener {
             presenter.doRefreshData(view)
             isLoading = false
+            homeView.mCancelFilter.visibility = View.INVISIBLE
         }
 
 
@@ -100,26 +102,33 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             if (difficulty){
                 difficultyLevel = getString(R.string.easy)
                 presenter.doFilterDifficulty(difficultyLevel)
+                filterUsed = "difficulty"
             }else if(top){
                 presenter.doFilterTop()
+                filterUsed = "top"
             }
             view.mCancelFilter.visibility = View.VISIBLE
+            cancelFilter()
         }
 
         view.mHomeScrollBarSecondPosition.setOnClickListener {
             if (difficulty){
                 difficultyLevel = getString(R.string.medium)
                 presenter.doFilterDifficulty(difficultyLevel)
+                filterUsed = "difficulty"
             }
             view.mCancelFilter.visibility = View.VISIBLE
+            cancelFilter()
         }
 
         view.mHomeScrollBarThirdPosition.setOnClickListener {
             if (difficulty){
                 difficultyLevel = getString(R.string.hard)
                 presenter.doFilterDifficulty(difficultyLevel)
+                filterUsed = "difficulty"
             }
-            view.mCancelFilter.visibility == View.VISIBLE
+            view.mCancelFilter.visibility = View.VISIBLE
+            cancelFilter()
         }
 
         view.mHomeTopPosts.setOnClickListener {
@@ -145,6 +154,11 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             homeView.mListRecyclerView.adapter = CardAdapter(homeData, presenter)
             homeView.mListRecyclerView.adapter?.notifyDataSetChanged()
             println("Data reloaded here ...........")
+            if(homeData.size == 0){
+                homeView.NoPostAvailable.visibility = View.VISIBLE
+            }else{
+                homeView.NoPostAvailable.visibility = View.INVISIBLE
+            }
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -164,15 +178,15 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 if (!isLoading) {
                     if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == presenter.findData().size - 1) {
                         isLoading = true
-                        loadMore()
+                        loadMore(filterUsed)
                     }
                 }
             }
         })
     }
 
-    private fun loadMore() {
-        presenter.loadMoreData()
+    private fun loadMore(filterUsed: String) {
+        presenter.loadMoreData(filterUsed)
     }
 
     override fun noDataAvilable(){

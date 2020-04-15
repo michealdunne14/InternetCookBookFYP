@@ -8,23 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.AnticipateOvershootInterpolator
-import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
 import com.example.internetcookbook.adapter.BitmapCardAdapter
-import com.example.internetcookbook.adapter.IngredientsAdapter
 import com.example.internetcookbook.animations.Bounce
 import com.example.internetcookbook.fragmentpresenter.HomeFragPresenter
 import com.example.internetcookbook.helper.readBit64ImageArrayList
 import com.example.internetcookbook.models.DataModel
-import com.example.internetcookbook.models.IngredientModel
 import com.example.internetcookbook.models.PostModel
 import com.example.internetcookbook.pager.PagerFragmentViewDirections
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.card_list.view.*
 
 interface PostListener {
@@ -80,6 +75,17 @@ class CardAdapter(
             itemView.mCardName.text = dataModel.post.title
             itemView.mCardDescription.text = dataModel.post.description
             itemView.mCardDifficulty.text = dataModel.post.difficulty
+            when (dataModel.post.difficulty) {
+                "Easy" -> {
+                    itemView.mCardDifficulty.setTextColor(itemView.resources.getColor(R.color.colorGreen))
+                }
+                "Medium" -> {
+                    itemView.mCardDifficulty.setTextColor(itemView.resources.getColor(R.color.colorOrange))
+                }
+                "Hard" -> {
+                    itemView.mCardDifficulty.setTextColor(itemView.resources.getColor(R.color.colorRed))
+                }
+            }
 
             if (presenter != null) {
                 for (hearts in dataModel.post.userhearts) {
@@ -98,7 +104,7 @@ class CardAdapter(
                         myAnim.interpolator = interpolator
                         itemView.mHeartButton.startAnimation(myAnim)
                         itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_black_36)
-                        presenter.doHeartData(dataModel.post._id)
+                        presenter.doHeartData(dataModel.post)
                     } else {
                         val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
                         val interpolator =
@@ -106,7 +112,7 @@ class CardAdapter(
                         myAnim.interpolator = interpolator
                         itemView.mHeartButton.startAnimation(myAnim)
                         itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_border_black_36)
-                        presenter.doRemoveHeart(dataModel.post._id)
+                        presenter.doRemoveHeart(dataModel.post)
                     }
                 }
 

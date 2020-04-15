@@ -12,6 +12,7 @@ data class PostModel(
     var _id: String = "",
     var imagePath: String = "",
     var useroid: String = "",
+    var completionTime: String = "",
     var comments: MutableList<CommentModel?> = mutableListOf(),
     var method: MutableList<MethodModel> = mutableListOf(),
     var ingredients: MutableList<IngredientModel> = mutableListOf(),

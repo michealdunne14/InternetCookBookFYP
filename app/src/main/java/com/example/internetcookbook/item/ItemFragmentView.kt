@@ -160,6 +160,9 @@ class ItemFragmentView : BaseView() {
             activity
         )
         itemView.mBasketRecyclerView.adapter?.notifyDataSetChanged()
+        if (listofBasket.isEmpty()) {
+            itemView.mBasketEmpty.visibility = View.VISIBLE
+        }
     }
 
     override fun showCupboard(listofCupboard: ArrayList<FoodMasterModel>){
@@ -173,6 +176,9 @@ class ItemFragmentView : BaseView() {
             activity
         )
         itemView.mCupboardRecyclerView.adapter?.notifyDataSetChanged()
+        if (listofCupboard.isEmpty()) {
+            itemView.mCupboardEmpty.visibility = View.VISIBLE
+        }
     }
 
     override fun showFollowers(userMasterModel: ArrayList<UserMasterModel>){
@@ -180,6 +186,9 @@ class ItemFragmentView : BaseView() {
         itemView.mFollowerRecyclerView.layoutManager = layoutManager
         itemView.mFollowerRecyclerView.adapter = FollowerAdapter(userMasterModel)
         itemView.mFollowerRecyclerView.adapter?.notifyDataSetChanged()
+        if (userMasterModel.isEmpty()) {
+            itemView.mFollowersEmpty.visibility = View.VISIBLE
+        }
     }
 
 

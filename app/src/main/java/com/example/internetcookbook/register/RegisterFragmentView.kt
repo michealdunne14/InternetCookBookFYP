@@ -69,7 +69,7 @@ class RegisterFragmentView : BaseView() {
             startActivity(Intent(context, MainView::class.java))
             activity!!.finish()
         }else{
-            Snackbar.make(registerView,"Email is already registered", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(registerView,"Details Incorrect", Snackbar.LENGTH_SHORT).show()
         }
     }
 
