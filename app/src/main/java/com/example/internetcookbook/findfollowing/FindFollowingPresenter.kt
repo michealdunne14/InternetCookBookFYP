@@ -45,7 +45,7 @@ class FindFollowingPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     fun unfollowUser(userMasterModel: UserMasterModel){
         doAsync {
-            infoStore!!.followUser(userMasterModel)
+            infoStore!!.unFollowUser(userMasterModel)
         }
     }
 }

@@ -67,6 +67,7 @@ class MakeFragmentView : BaseView() {
         makeView.mMakeName.text = postModel.title
         makeView.mMakeDescription.text = postModel.description
         makeView.mMakeTimeToCreate.text = "Time to Create is ${postModel.completionTime} minutes"
+        makeView.mMakeDifficulty.text = "Level of Difficulty: ${postModel.difficulty}"
         val bitmapImages = readBit64ImageArrayList(images)
         doFindImages(bitmapImages)
         hideAndShowToolbarButtons()
