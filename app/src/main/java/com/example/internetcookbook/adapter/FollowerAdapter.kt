@@ -23,8 +23,8 @@ class FollowerAdapter(private var user: ArrayList<UserMasterModel>) : RecyclerVi
     override fun getItemCount(): Int = user.size
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val postModel = user[holder.adapterPosition]
-        holder.bind(postModel)
+        val userModel = user[holder.adapterPosition]
+        holder.bind(userModel)
     }
 
 

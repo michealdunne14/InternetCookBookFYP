@@ -129,6 +129,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Created By"
+        app:layout_constraintBottom_toTopOf="@+id/mMakeDifficulty"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/mMakeDifficulty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Difficulty"
         app:layout_constraintBottom_toTopOf="@+id/mIngredientsRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

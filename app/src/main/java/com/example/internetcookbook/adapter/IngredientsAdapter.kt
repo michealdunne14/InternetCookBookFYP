@@ -79,6 +79,9 @@ class IngredientsAdapter(
                 }else if(selectedOption == "post"){
                     itemView.mSelectedIngredient.visibility = View.INVISIBLE
                     itemView.mIngredientCounter.visibility = View.INVISIBLE
+                }else if(selectedOption == "make"){
+                    itemView.mSelectedIngredient.visibility = View.INVISIBLE
+                    itemView.mIngredientCounter.visibility = View.INVISIBLE
                 }
                 itemView.mIngredientsName.text = foodModel.food.name
                 val bitmapImage = readBit64ImageSingle(foodModel.image)

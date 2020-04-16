@@ -7,10 +7,7 @@ import android.widget.Toast
 import com.example.internetcookbook.R
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.fragmentview.validFoodItems
-import com.example.internetcookbook.helper.exists
-import com.example.internetcookbook.helper.read
-import com.example.internetcookbook.helper.readImageFromPath
-import com.example.internetcookbook.helper.write
+import com.example.internetcookbook.helper.*
 import com.example.internetcookbook.models.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -286,11 +283,33 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     fun followUser(userMasterModel: UserMasterModel) {
+        followingData.add(userMasterModel)
         val formBody: RequestBody = FormBody.Builder()
             .add("followingoid", userMasterModel.user.oid).build()
 
         val request = Request.Builder()
             .url("http://34.244.232.228:3000/user/follow/${userMaster.user.oid}")
+            .put(formBody)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            print(response.body!!.string())
+        }
+    }
+
+    fun unFollowUser(userMasterModel: UserMasterModel) {
+        followingData.forEachIndexed { index, following ->
+            if (following.user.username == userMasterModel.user.username){
+                followingData.removeAt(index)
+            }
+        }
+        val formBody: RequestBody = FormBody.Builder()
+            .add("followingoid", userMasterModel.user.oid).build()
+
+        val request = Request.Builder()
+            .url("http://34.244.232.228:3000/user/unfollow/${userMaster.user.oid}")
             .put(formBody)
             .build()
 
