@@ -39,6 +39,8 @@ class LoginFragmentView : BaseView() {
         val view =  inflater.inflate(R.layout.fragment_login, container, false)
         handleTransition()
         loginView = view
+
+//      Sign in user
         view.mLoginSignInButton.setOnClickListener {
             if (view.mLoginEmail.text.isNotEmpty() && view.mLoginPassword.text.isNotEmpty() && checkEmail(view.mLoginEmail.text.toString())) {
                 userModel.email = view.mLoginEmail.text.toString()
@@ -58,7 +60,8 @@ class LoginFragmentView : BaseView() {
         return view
     }
 
-    fun checkEmail(email: String):Boolean{
+//  Checks is email is valid
+    private fun checkEmail(email: String):Boolean{
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 

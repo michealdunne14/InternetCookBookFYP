@@ -36,6 +36,7 @@ class FoodCreateView : BaseView(){
         val view=  inflater.inflate(R.layout.fragment_food_create, container, false)
         foodCreateView = view
 
+//      Gets the information from the camera fragment
         if (arguments != null) {
             if (arguments!!.containsKey("fooditem")){
                 val foodItem = FoodCreateViewArgs.fromBundle(
@@ -51,7 +52,7 @@ class FoodCreateView : BaseView(){
 
 //       sets the date of the calender when changed.
         foodCreateView.mFoodCreateExpirationDate.setOnDateChangeListener(CalendarView.OnDateChangeListener(){
-                view, year, month, dayOfMonth ->
+                _, year, month, dayOfMonth ->
             date = "$dayOfMonth/$month/$year"
         })
 
@@ -68,6 +69,7 @@ class FoodCreateView : BaseView(){
         }
 
         foodCreateView.mFoodCreateAdd.setOnClickListener {
+//          Gets the difference in days
             val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yy")
             val date1: Date = dateFormat.parse(saveDate)!!
             val dateFormat2: DateFormat = SimpleDateFormat("dd/MM/yy")

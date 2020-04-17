@@ -20,11 +20,8 @@ open class BasePresenter(var view: BaseView) {
     }
 
     open fun doHeartData(postModel: PostModel){}
-    open fun doCurrentUser(id: String){}
     open fun doSendComment(
         comment: String,
         dataModel: DataModel
     ) {}
-
-//    open fun doCreateNote(fireStore: HillfortFireStore?, note: String, hillfort: HillFortModel){}
 }

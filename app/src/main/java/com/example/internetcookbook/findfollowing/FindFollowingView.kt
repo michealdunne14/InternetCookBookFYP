@@ -10,7 +10,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internetcookbook.R
-import com.example.internetcookbook.UserFollowAdapter
+import com.example.internetcookbook.adapter.UserFollowAdapter
 import com.example.internetcookbook.base.BaseView
 import com.example.internetcookbook.models.UserMasterModel
 import kotlinx.android.synthetic.main.fragment_find_following.view.*
@@ -38,6 +38,7 @@ class FindFollowingView : BaseView() {
             followingView.findNavController().navigateUp()
         }
 
+//      Search for user when text entered
         followingView.mFindFollowerItem.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
 
@@ -46,7 +47,7 @@ class FindFollowingView : BaseView() {
 
             override fun onTextChanged(characterSearch: CharSequence, p1: Int, p2: Int, p3: Int) {
                 if (characterSearch.length == 3) {
-                    presenter.doFindUser(characterSearch)
+                    presenter.doFindFollowing(characterSearch)
                 }else if (characterSearch.length > 3){
                     presenter.searchUsers(characterSearch)
                 }
@@ -58,7 +59,11 @@ class FindFollowingView : BaseView() {
     }
 
     override fun showFollowList(searchFollowing: ArrayList<UserMasterModel>) {
-        followingView.mFindFollowerRecyclerView.adapter = UserFollowAdapter(searchFollowing,presenter)
+        followingView.mFindFollowerRecyclerView.adapter =
+            UserFollowAdapter(
+                searchFollowing,
+                presenter
+            )
         followingView.mFindFollowerRecyclerView.adapter?.notifyDataSetChanged()
     }
 }

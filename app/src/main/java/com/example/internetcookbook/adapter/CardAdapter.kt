@@ -40,10 +40,7 @@ class CardAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return MainHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_list, parent, false))
-//        else {
-//            LoadingViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.loading, parent, false))
-//        }
+        return MainHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_list, parent, false))
     }
 
     //  Item Count
@@ -88,6 +85,7 @@ class CardAdapter(
             }
 
             if (presenter != null) {
+//                Heart item that is liked already
                 for (hearts in dataModel.post.userhearts) {
                     if (presenter.doFindCurrentUser().user.oid == hearts.userId) {
                         itemView.mHeartButton.setImageResource(R.drawable.baseline_favorite_black_36)
@@ -123,8 +121,8 @@ class CardAdapter(
                 }
 
             }else{
-                itemView.mSendComment.visibility == View.INVISIBLE
-                itemView.mHeartButton.visibility == View.INVISIBLE
+                itemView.mSendComment.visibility = View.INVISIBLE
+                itemView.mHeartButton.visibility = View.INVISIBLE
             }
 
             itemView.mAddBasketButton.setOnClickListener {
@@ -142,6 +140,7 @@ class CardAdapter(
             }
         }
 
+//      Set images to viewpager
         fun doFindImages(images: ArrayList<Bitmap>) {
             val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
             val adapter = BitmapCardAdapter(itemView.context, images)

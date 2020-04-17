@@ -27,7 +27,7 @@ class ItemFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return infoStore!!.getCurrentUser()
     }
 
-    fun doRemoveItem(foodModel: FoodMasterModel) {
+    fun doRemoveItemBasket(foodModel: FoodMasterModel) {
         doAsync {
             infoStore!!.deleteFromBasket(foodModel)
             onComplete {

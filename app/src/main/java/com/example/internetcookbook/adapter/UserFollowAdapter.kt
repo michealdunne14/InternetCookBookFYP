@@ -1,9 +1,10 @@
-package com.example.internetcookbook
+package com.example.internetcookbook.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.internetcookbook.R
 import com.example.internetcookbook.findfollowing.FindFollowingPresenter
 import com.example.internetcookbook.helper.readBit64ImageSingle
 import com.example.internetcookbook.models.UserMasterModel
@@ -51,8 +52,12 @@ class UserFollowAdapter(
             itemView.mFollowButton.setOnClickListener {
                 if (itemView.mFollowButton.text == itemView.context.getString(R.string.following)){
                     itemView.mFollowButton.text = itemView.context.getString(R.string.follow)
-                    itemView.mFollowButton.background = itemView.resources.getDrawable(R.drawable.greybutton)
-                    itemView.mFollowButton.setTextColor(itemView.resources.getColor(R.color.colorBlack))
+                    itemView.mFollowButton.background = itemView.resources.getDrawable(
+                        R.drawable.greybutton
+                    )
+                    itemView.mFollowButton.setTextColor(itemView.resources.getColor(
+                        R.color.colorBlack
+                    ))
                     presenter.unfollowUser(userMasterModel)
                 }else {
                     presenter.followUser(userMasterModel)
