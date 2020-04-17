@@ -90,10 +90,10 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
             }
 
         }
-        if (date != null){
-            return finalDate
+        return if (date != null){
+            finalDate
         }else{
-            return null
+            null
         }
     }
 
@@ -155,16 +155,13 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
-    fun doFoodCreatePage(): Boolean {
-        return infoStore!!.foodCreatePage()
-    }
-
     fun cameraSearch(
         elementArrayList: ArrayList<String>,
         lineArrayList: ArrayList<String>,
         filteredArrayList: ArrayList<String>,
         resultText: FirebaseVisionText
     ) {
+//      add text to arrays line and elements
         doAsync {
             for (block in resultText.textBlocks) {
                 for (line in block.lines) {
@@ -231,6 +228,8 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
+
+//  Filter out not wanted information on the receipt
     fun filterLineData(
         line: String,
         filteredArrayList: ArrayList<String>
@@ -239,6 +238,7 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         val wordList = line.split(" ")
         val removingWords = ArrayList<String>()
         wordArrayList.addAll(wordList)
+//      Remove words where there is a number
         wordArrayList.forEachIndexed { index, word ->
             val chars: CharArray = word.toCharArray()
             for (c in chars) {
@@ -252,6 +252,7 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
             wordArrayList.remove(remove)
         }
         var foodItem = String()
+//      Join line back together with words that don't have numbers
         wordArrayList.forEachIndexed { index, word ->
             val capWord = capitalize(word)
             if(index == 0){
@@ -265,6 +266,7 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     }
 
     fun findFoodItems(){
+//      Search for text on the receipt in the database
         doAsync {
             searchItemsInitial(storedFood)
             onComplete {
@@ -274,7 +276,9 @@ class CameraFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                         if (search != null) {
                             if (search.food.name.isNotEmpty()) {
                                 search.food.itemsCounter = foundFood.food.itemsCounter
+
                                 validFoodItems.add(search)
+
                                 storedFood[index] = search
                                 storedFood[index].food.foundItem = true
                             }

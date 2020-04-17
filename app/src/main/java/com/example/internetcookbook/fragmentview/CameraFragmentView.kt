@@ -96,6 +96,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
     override fun onResume() {
         super.onResume()
+//      Check what page came from
         if (arguments != null) {
             val images = CameraFragmentViewArgs.fromBundle(arguments!!).foodcreate
             if (images == "food_create") {
@@ -176,6 +177,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             updateTransform()
         }
 
+//      Turns the torch on an off
         cameraView.mCameraFlashButton.setOnClickListener {
             torch = !torch
             if (torch) {
@@ -195,6 +197,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
             }
         }
 
+//      Take picture
         cameraView.mCameraCaptureButton.setOnClickListener {
             if(!captureCheck) {
                 doAsync {

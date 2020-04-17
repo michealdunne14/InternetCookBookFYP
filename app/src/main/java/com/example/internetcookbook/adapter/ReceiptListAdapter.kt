@@ -93,12 +93,13 @@ class ReceiptListAdapter(
                 }
             }
         }
+
         fun addNewValidItem(text: String, presenter: CameraFragmentPresenter, foodModel: FoodMasterModel, validFoodItems: ArrayList<FoodMasterModel>) {
             doAsync {
 //                  If food item is not in valid foodItems
                 val result = presenter.searchItems(text)
                 onComplete {
-                    if (result!!.food.name.isNotEmpty()) {
+                    if (result != null && result.food.name.isNotEmpty()) {
                         itemView.setBackgroundColor(getColor(itemView.context, R.color.colorGreen))
                         itemView.mFoodImage.setImageBitmap(readBit64ImageSingle(result.image))
                         result.food.foundItem = true
@@ -114,6 +115,7 @@ class ReceiptListAdapter(
             }
         }
 
+//      Remove item from list
         fun removeItem(
             foodItems: ArrayList<FoodMasterModel>,
             homeView: View,

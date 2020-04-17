@@ -13,8 +13,6 @@ open class BaseView: Fragment(), AnkoLogger {
         return presenter
     }
 
-    open fun showHillforts(post: List<PostModel>) {}
-
     open fun showProgress(){}
     open fun hideProgress(){}
     open fun getMainPageFromLoginPage(){}
@@ -28,7 +26,10 @@ open class BaseView: Fragment(), AnkoLogger {
     open fun showCupboard(listofCupboard: ArrayList<FoodMasterModel>){}
     open fun showInformation(homeData: ArrayList<DataModel?>) {}
     open fun returnToPager(){}
-    open fun removeLoading(findData: ArrayList<DataModel?>) {}
+    open fun removeLoading(
+        findData: ArrayList<DataModel?>,
+        filterUsed: String
+    ) {}
     open fun setRegisterResponse(usercreated: Boolean) {}
     open fun naviateUp(){}
     open fun resetInformation(){}

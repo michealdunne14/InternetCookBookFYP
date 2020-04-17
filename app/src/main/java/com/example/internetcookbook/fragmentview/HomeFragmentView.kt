@@ -36,7 +36,6 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     private var show = false
     private var top = false
     private var difficulty = false
-    private var basket = false
     var isLoading = false
     var difficultyLevel = ""
     var filterUsed = ""
@@ -60,10 +59,12 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
         swipeRefreshLayout.setOnRefreshListener(this)
 
+//      Refresh Layout
         swipeRefreshLayout.setOnRefreshListener {
             presenter.doRefreshData(view)
             isLoading = false
             homeView.mCancelFilter.visibility = View.INVISIBLE
+            filterUsed = ""
         }
 
 
@@ -98,6 +99,8 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
             homeView.mCancelFilter.visibility = View.INVISIBLE
         }
 
+
+//      Filter buttons
         view.mHomeScrollBarFirstPosition.setOnClickListener {
             if (difficulty){
                 difficultyLevel = getString(R.string.easy)
@@ -164,7 +167,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         }
     }
 
-
+//  Load more data when the bottom of the list is hit
     override fun initScrollListener() {
         homeView.mListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -186,7 +189,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
     }
 
     private fun loadMore(filterUsed: String) {
-        presenter.loadMoreData(filterUsed)
+        presenter.loadMoreData(filterUsed,difficultyLevel)
     }
 
     override fun noDataAvilable(){
@@ -204,10 +207,21 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
         }
     }
 
-    override fun removeLoading(findData: ArrayList<DataModel?>) {
-
-        homeView.mListRecyclerView.adapter?.notifyItemRangeInserted(findData.lastIndex,findData.size)
-        isLoading = false
+//  adds on the end of the recycler view
+    override fun removeLoading(
+        findData: ArrayList<DataModel?>,
+        filterUsed: String
+    ) {
+        if (filterUsed == "difficulty"){
+            homeView.mListRecyclerView.adapter?.notifyItemRangeInserted(presenter.findIngredientsSearch().lastIndex,presenter.findIngredientsSearch().size)
+            isLoading = false
+        }else if(filterUsed == "top"){
+            homeView.mListRecyclerView.adapter?.notifyItemRangeInserted(presenter.findIngredientsSearch().lastIndex,presenter.findIngredientsSearch().size)
+            isLoading = false
+        }else{
+            homeView.mListRecyclerView.adapter?.notifyItemRangeInserted(findData.lastIndex,findData.size)
+            isLoading = false
+        }
     }
 
     private fun showFilter(){

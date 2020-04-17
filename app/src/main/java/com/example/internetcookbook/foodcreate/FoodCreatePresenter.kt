@@ -22,6 +22,7 @@ class FoodCreatePresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         return infoStore!!.getImage()
     }
 
+//  add food to database
     fun doAddFood(foodModel: FoodModel) {
         var pass = false
         doAsync {

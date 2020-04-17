@@ -64,20 +64,20 @@ class HomeFragPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     }
 
 
-    fun loadMoreData(filterUsed: String) {
+    fun loadMoreData(filterUsed: String, difficultyLevel: String) {
         var moreDataAvilable = false
         doAsync {
             if (filterUsed == "difficulty"){
-                moreDataAvilable = infoStore!!.getMoreDataDifficulty()
+                moreDataAvilable = infoStore!!.getMoreDataDifficulty(difficultyLevel)
             }else if(filterUsed == "top"){
-
+                moreDataAvilable = infoStore!!.getMoreDataTop()
             }else{
                 moreDataAvilable = infoStore!!.getMoreData()
             }
             onComplete {
                 if (moreDataAvilable) {
                     view.initScrollListener()
-                    view.removeLoading(findData())
+                    view.removeLoading(findData(),filterUsed)
                 }else{
                     view.noDataAvilable()
                 }

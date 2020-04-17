@@ -98,6 +98,7 @@ class IngredientsFragmentView : BaseView() {
         val set: Set<FoodMasterModel> = HashSet(searchedIngredients)
         searchedIngredients.clear()
         searchedIngredients.addAll(set)
+//      Load items in to search ingredients and added ingredients
         ingredientsView.mIngredientsSearchRecyclerView.adapter = IngredientsAddAdapter(searchedIngredients,presenter,  true,false,ingredientsView)
         ingredientsView.mIngredientsSearchRecyclerView.adapter?.notifyDataSetChanged()
         ingredientsView.mIngredientsListRecyclerView.adapter = IngredientsAddAdapter(presenter.ingredientsAddToRecipe(), presenter, false, true, ingredientsView)

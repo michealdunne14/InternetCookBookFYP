@@ -24,33 +24,35 @@ class IngredientsAdapter(
 ) : RecyclerView.Adapter<IngredientsAdapter.MainHolder>() {
 
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
-            return MainHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.ingredients_list,
-                    parent,
-                    false
-                )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
+        return MainHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.ingredients_list,
+                parent,
+                false
             )
-        }
+        )
+    }
 
-        //  Item Count
-        override fun getItemCount(): Int = food.size
+    //  Item Count
+    override fun getItemCount(): Int = food.size
 
-        override fun onBindViewHolder(holder: MainHolder, position: Int) {
-            val postModel = food[holder.adapterPosition]
-            holder.bind(postModel,currentUser,selectedOption,presenter,activity)
-        }
+    override fun onBindViewHolder(holder: MainHolder, position: Int) {
+        val postModel = food[holder.adapterPosition]
+        holder.bind(postModel,currentUser,selectedOption,presenter,activity)
+    }
 
-        class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
-            fun bind(
-                foodModel: FoodMasterModel,
-                currentUser: UserMasterModel,
-                selectedOption: String,
-                presenter: BasePresenter,
-                activity: FragmentActivity?
-            ) {
-                if (selectedOption == "basket") {
+    class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
+        fun bind(
+            foodModel: FoodMasterModel,
+            currentUser: UserMasterModel,
+            selectedOption: String,
+            presenter: BasePresenter,
+            activity: FragmentActivity?
+        ) {
+//              Change buttons depending on the page
+            when (selectedOption) {
+                "basket" -> {
                     itemView.mSelectedIngredient.setImageResource(R.drawable.baseline_remove_black_36)
                     for (basket in currentUser.user.basket) {
                         if (basket.basketoid == foodModel.food.oid) {
@@ -59,9 +61,10 @@ class IngredientsAdapter(
                     }
                     itemView.mSelectedIngredient.setOnClickListener {
                         val itemPresenter = presenter as ItemFragmentPresenter
-                        itemPresenter.doRemoveItem(foodModel)
+                        itemPresenter.doRemoveItemBasket(foodModel)
                     }
-                }else if(selectedOption == "cupboard"){
+                }
+                "cupboard" -> {
                     itemView.mSelectedIngredient.setImageResource(R.drawable.baseline_remove_black_36)
                     for (cupboard in currentUser.user.cupboard) {
                         if (cupboard.cupboardoid == foodModel.food.oid) {
@@ -76,58 +79,63 @@ class IngredientsAdapter(
                     itemView.mIngredientCounter.setOnClickListener {
                         showNumberDialog(activity,presenter,foodModel,currentUser,selectedOption)
                     }
-                }else if(selectedOption == "post"){
-                    itemView.mSelectedIngredient.visibility = View.INVISIBLE
-                    itemView.mIngredientCounter.visibility = View.INVISIBLE
-                }else if(selectedOption == "make"){
+                }
+                "post" -> {
                     itemView.mSelectedIngredient.visibility = View.INVISIBLE
                     itemView.mIngredientCounter.visibility = View.INVISIBLE
                 }
-                itemView.mIngredientsName.text = foodModel.food.name
-                val bitmapImage = readBit64ImageSingle(foodModel.image)
-                itemView.mFoodPicture.setImageBitmap(bitmapImage)
+                "make" -> {
+                    itemView.mSelectedIngredient.visibility = View.INVISIBLE
+                    itemView.mIngredientCounter.visibility = View.INVISIBLE
+                }
             }
+            itemView.mIngredientsName.text = foodModel.food.name
+            val bitmapImage = readBit64ImageSingle(foodModel.image)
+            itemView.mFoodPicture.setImageBitmap(bitmapImage)
+        }
 
-            fun showNumberDialog(
-                activity: FragmentActivity?,
-                presenter: BasePresenter,
-                foodModel: FoodMasterModel,
-                currentUser: UserMasterModel,
-                selectedOption: String
-            ) {
-                val numberDialog: NumberDialog = NumberDialog(activity!!)
-                numberDialog.show()
-                numberDialog.setCanceledOnTouchOutside(false)
-                numberDialog.mConfirm.setOnClickListener {
-                    if(selectedOption == "cupboard") {
-                        for (cupboard in currentUser.user.cupboard) {
-                            if (cupboard.cupboardoid == foodModel.food.oid) {
-                                val number = numberDialog.mDialogSearch.text.toString().toInt()
-                                cupboard.foodPurchasedCounter = number
-                                val itemPresenter = presenter as ItemFragmentPresenter
-                                itemPresenter.doUpdateItemCounterCupboard(number, foodModel)
-                                itemView.mIngredientCounter.text =
-                                    cupboard.foodPurchasedCounter.toString()
-                            }
-                        }
-                    }else{
-                        for (basket in currentUser.user.basket) {
-                            if (basket.basketoid == foodModel.food.oid) {
-                                val number = numberDialog.mDialogSearch.text.toString().toInt()
-                                basket.counter = number
-                                val itemPresenter = presenter as ItemFragmentPresenter
-                                itemPresenter.doUpdateItemCounterBasket(number, foodModel)
-                                itemView.mIngredientCounter.text = basket.counter.toString()
-                            }
+
+        //          number dialog for changing the amount of items in the basket/cupboard
+        private fun showNumberDialog(
+            activity: FragmentActivity?,
+            presenter: BasePresenter,
+            foodModel: FoodMasterModel,
+            currentUser: UserMasterModel,
+            selectedOption: String
+        ) {
+            val numberDialog = NumberDialog(activity!!)
+            numberDialog.show()
+            numberDialog.setCanceledOnTouchOutside(false)
+            numberDialog.mConfirm.setOnClickListener {
+                if(selectedOption == "cupboard") {
+                    for (cupboard in currentUser.user.cupboard) {
+                        if (cupboard.cupboardoid == foodModel.food.oid) {
+                            val number = numberDialog.mDialogSearch.text.toString().toInt()
+                            cupboard.foodPurchasedCounter = number
+                            val itemPresenter = presenter as ItemFragmentPresenter
+                            itemPresenter.doUpdateItemCounterCupboard(number, foodModel)
+                            itemView.mIngredientCounter.text =
+                                cupboard.foodPurchasedCounter.toString()
                         }
                     }
-                    numberDialog.cancel()
+                }else{
+                    for (basket in currentUser.user.basket) {
+                        if (basket.basketoid == foodModel.food.oid) {
+                            val number = numberDialog.mDialogSearch.text.toString().toInt()
+                            basket.counter = number
+                            val itemPresenter = presenter as ItemFragmentPresenter
+                            itemPresenter.doUpdateItemCounterBasket(number, foodModel)
+                            itemView.mIngredientCounter.text = basket.counter.toString()
+                        }
+                    }
                 }
-                numberDialog.mRetakeShop.setOnClickListener {
-                    numberDialog.cancel()
-                }
+                numberDialog.cancel()
+            }
+            numberDialog.mRetakeShop.setOnClickListener {
+                numberDialog.cancel()
             }
         }
+    }
 
 
 }

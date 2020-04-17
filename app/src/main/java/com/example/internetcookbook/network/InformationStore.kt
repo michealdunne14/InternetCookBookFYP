@@ -63,16 +63,19 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+//  Store information locally in a JSON file
     private fun serialize() {
         val jsonString = gsonBuilder.toJson(userLocalStore, listType)
         write(context, JSON_FILE, jsonString)
     }
 
+    //  Remove information locally in a JSON file
     private fun deserialize() {
         val jsonString = read(context, JSON_FILE)
         userLocalStore = Gson().fromJson(jsonString, listType)
     }
 
+//  Increments expiration date of food item by 1
     fun putExpireYes(oid: String) {
         val formBody: RequestBody = FormBody.Builder().build()
 
@@ -88,6 +91,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+//  removes expiration date of food item by 1
     fun putExpireNo(oid: String) {
         val formBody: RequestBody = FormBody.Builder().build()
 
@@ -103,7 +107,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-
+//  removes shop reliability of food item by 1
     fun putShopNo(oid: String) {
         val formBody: RequestBody = FormBody.Builder().build()
 
@@ -119,6 +123,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    //  Increments shop reliability of food item by 1
     fun putShopYes(oid: String) {
         val formBody: RequestBody = FormBody.Builder().build()
 
@@ -134,6 +139,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    //  removes price reliability of food item by 1
     fun putPriceNo(oid: String) {
         val formBody: RequestBody = FormBody.Builder().build()
 
@@ -149,6 +155,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    //  improves price reliability of food item by 1
     fun putPriceYes(oid: String) {
         val formBody: RequestBody = FormBody.Builder().build()
 
@@ -164,6 +171,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    //  removes image reliability of food item by 1
     fun putImageNo(oid: String) {
         val formBody: RequestBody = FormBody.Builder().build()
 
@@ -179,6 +187,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    //  improves image reliability of food item by 1
     fun putImageYes(oid: String) {
         val formBody: RequestBody = FormBody.Builder().build()
 
@@ -194,7 +203,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-
+//  Seach for email when user signs in
     fun findEmail(userModel: UserModel): UserMasterModel? {
         if (internetConnection) {
             lateinit var emailSearch: UserMasterModel
@@ -241,7 +250,9 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    //  Search for following by username
     fun searchForFollowing(userSearch: CharSequence): ArrayList<UserMasterModel>? {
+        searchingFollow.clear()
         if (internetConnection) {
             val formBody: RequestBody = FormBody.Builder()
                 .add("username", userSearch.toString()).build()
@@ -272,6 +283,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    //  Search threw following locally
     fun searchFollowingSearched(characterSearch: CharSequence): ArrayList<UserMasterModel> {
         val searchedPosts = ArrayList<UserMasterModel>()
         for(searchedFollower in searchingFollow){
@@ -282,6 +294,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         return searchedPosts
     }
 
+    //  Follow a user and be followed by that user
     fun followUser(userMasterModel: UserMasterModel) {
         followingData.add(userMasterModel)
         val formBody: RequestBody = FormBody.Builder()
@@ -320,6 +333,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+    //  gets the user from the json file
     fun getCurrentUser(): UserMasterModel {
         if (userLocalStore.isNotEmpty()) {
             userMaster = userLocalStore[0]
@@ -332,6 +346,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         serialize()
     }
 
+    //  delete item from basket
     fun deleteFromBasket(foodModel: FoodMasterModel) {
         basketData.forEachIndexed { index, item ->
             if(item.food.name == foodModel.food.name)
@@ -379,11 +394,6 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         foodCreatePage = !foodCreatePage
     }
 
-    fun foodCreatePage(): Boolean {
-        return foodCreatePage
-    }
-
-
     fun createUser(
         userModel: UserModel,
         profilePicture: String
@@ -414,7 +424,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
 
-
+    //  Gets the latest information from the user
     fun updateUserInfo(userModel: UserModel): UserMasterModel? {
         if (internetConnection) {
             lateinit var emailSearch: UserMasterModel
@@ -449,6 +459,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+//  Find ingredients by id
     fun findIngredients(postModel: PostModel) {
         ingredientsList.clear()
         lateinit var dataArray: ListFoodModel
@@ -479,7 +490,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     fun getIngredients(): ArrayList<FoodMasterModel> {
         return ingredientsList
     }
-
+//  Create a new food item
     fun createFood(foodModel: FoodModel): Boolean {
         val formBody: RequestBody = FormBody.Builder()
             .add("name", foodModel.name)
@@ -561,7 +572,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             return null
         }
     }
-
+//  Search threw ingredients locally
     fun searchIngredients(searchedItem: String): ArrayList<FoodMasterModel> {
         val searchedPosts = ArrayList<FoodMasterModel>()
         for(searchedFollower in searchingIngredients){
@@ -584,11 +595,13 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     fun findItem(item: String, saveShop: String): FoodMasterModel? {
+//      Search threw basket
         val basketSearch: FoodMasterModel? = basketData.find { p -> ((p.food.name == item) && (p.food.shop == saveShop)) }
         if (basketSearch == null){
+            //      Search threw cupboard
             val cupboardSearch: FoodMasterModel? = cupboardData.find { p -> ((p.food.name == item) && (p.food.shop == saveShop))  }
             if (cupboardSearch == null){
-
+//      Search threw database
                 val formBody: RequestBody = FormBody.Builder()
                     .add("name", item)
                     .build()
@@ -602,9 +615,14 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
                     val body = response.body!!.string()
-                    val gsonBuilder = GsonBuilder()
-                    val gson = gsonBuilder.create()
-                    return gson.fromJson(body, FoodMasterModel::class.java)
+
+                    return if (body == "No Food Found"){
+                        null
+                    }else {
+                        val gsonBuilder = GsonBuilder()
+                        val gson = gsonBuilder.create()
+                        gson.fromJson(body, FoodMasterModel::class.java)
+                    }
                 }
             }else{
                 return cupboardSearch
@@ -614,6 +632,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+//   Add information to the cupboard
     fun cupboardAdd(validFoodItems: ArrayList<FoodMasterModel>) {
         val addingNewItemsToCupboard: MutableList<CupboardOidModel> = mutableListOf()
         for (item in validFoodItems){
@@ -664,6 +683,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+//    Add item to basket
     fun basketAdd(dataModel: DataModel) {
         val json = JSONObject()
         val jsonArray = JSONArray()
@@ -694,6 +714,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         client.newCall(request).execute().use { response -> if (!response.isSuccessful) throw IOException("Unexpected code $response") }
     }
 
+//  Add item to cupboard
     fun cupboardAddManual() {
         val addingNewItemsToCupboard: MutableList<CupboardOidModel> = mutableListOf()
         for (item in ingredientsArrayList){
@@ -727,7 +748,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             }
         }
     }
-
+//  Add item to basket
     fun basketAddManual() {
         val json = JSONObject()
         val jsonArray = JSONArray()
@@ -785,7 +806,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             println(body)
         }
     }
-
+//  Add user id to the post
     fun doUpdateUserHeart(postModel: PostModel) {
         val formBody: RequestBody = FormBody.Builder()
             .add("userId", postModel.useroid)
@@ -822,6 +843,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+//  Get the most recent posts
     fun getPostData(){
         postData.clear()
         lateinit var dataArray: ListPostModel
@@ -853,7 +875,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-
+//  Filter by difficulty
     fun getFilterDataDifficulty(difficultyLevel: String) {
         filterArrayList.clear()
         lateinit var dataArray: ListPostModel
@@ -887,7 +909,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             }
         }
     }
-
+//  Filter by top
     fun getFilterDataTop() {
         filterArrayList.clear()
         lateinit var dataArray: ListPostModel
@@ -923,7 +945,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     fun getFilteredData(): ArrayList<DataModel?> {
         return filterArrayList
     }
-
+//  Get more data after the timestamp
     fun getMoreData(): Boolean {
         lateinit var dataArray: ListPostModel
         if (internetConnection) {
@@ -978,18 +1000,33 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         return false
     }
 
-    fun getMoreDataDifficulty(): Boolean {
+//  Get more data with difficulty  filter
+    fun getMoreDataDifficulty(difficultyLevel: String): Boolean {
         lateinit var dataArray: ListPostModel
         if (internetConnection) {
 
-            try {
-                postData[postData.lastIndex]
-            }catch (e: Exception){
-                return false
+            val datesCollection = ArrayList<Date>()
+            for(post in filterArrayList){
+                val format: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+                try {
+                    val date: Date = format.parse(post!!.post.posttime)!!
+                    datesCollection.add(date)
+                } catch (e: ParseException) {
+                    e.printStackTrace()
+                }
             }
+            var postDate = datesCollection[datesCollection.size -1]
+
+            datesCollection.forEachIndexed { index, date ->
+                if (date.before(postDate)){
+                    postDate = date
+                }
+            }
+
             val formBody: RequestBody = FormBody.Builder()
                 .add("id", userMaster.user.oid)
-                .add("posttime", postData[postData.lastIndex]!!.post.posttime).build()
+                .add("difficulty",difficultyLevel)
+                .add("posttime", postDate.toString()).build()
 
             val request: Request = Request.Builder()
                 .url("http://34.244.232.228:3000/post/newdata")
@@ -1009,7 +1046,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
                     val gson = gsonBuilder.create()
                     dataArray = gson.fromJson(body, ListPostModel::class.java)
                     for (posts in dataArray.postArray) {
-                        postData.add(posts)
+                        filterArrayList.add(posts)
                     }
                     true
                 }
@@ -1017,7 +1054,59 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
         return false
     }
+//  Get more data with top filter
+    fun getMoreDataTop(): Boolean {
+        lateinit var dataArray: ListPostModel
+        if (internetConnection) {
+            val datesCollection = ArrayList<Date>()
+            for(post in filterArrayList){
+                val format: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+                try {
+                    val date: Date = format.parse(post!!.post.posttime)!!
+                    datesCollection.add(date)
+                } catch (e: ParseException) {
+                    e.printStackTrace()
+                }
+            }
+            var postDate = datesCollection[datesCollection.size -1]
 
+            datesCollection.forEachIndexed { index, date ->
+                if (date.before(postDate)){
+                    postDate = date
+                }
+            }
+            val formBody: RequestBody = FormBody.Builder()
+                .add("id", userMaster.user.oid)
+                .add("top","")
+                .add("posttime", postDate.toString()).build()
+
+            val request: Request = Request.Builder()
+                .url("http://34.244.232.228:3000/post/newdata")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val body = response.body!!.string()
+
+                return if(body == "no more posts") {
+//                    postData.removeAt(postData.lastIndex)
+                    false
+                }else{
+                    val gsonBuilder = GsonBuilder()
+                    val gson = gsonBuilder.create()
+                    dataArray = gson.fromJson(body, ListPostModel::class.java)
+                    for (posts in dataArray.postArray) {
+                        filterArrayList.add(posts)
+                    }
+                    true
+                }
+            }
+        }
+        return false
+    }
+//  Get cupboard data
     fun getCupboardData(){
         lateinit var dataArray: ListFoodModel
         if (internetConnection) {
@@ -1048,7 +1137,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-
+//  Get basket data
     fun getBasketData(){
         basketData.clear()
         lateinit var dataArray: ListFoodModel
@@ -1126,6 +1215,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         return cupboardData
     }
 
+//  Search threw cupboard locally
     fun searchCupboard(query: CharSequence?): ArrayList<FoodMasterModel> {
         val searchedPosts = ArrayList<FoodMasterModel>()
         for(marks in cupboardData){
@@ -1136,7 +1226,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         return searchedPosts
     }
 
-
+//  Search threw basket locally
     fun searchBasket(query: CharSequence?): ArrayList<FoodMasterModel> {
         val searchedPosts = ArrayList<FoodMasterModel>()
         for(marks in basketData){
@@ -1146,7 +1236,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
         return searchedPosts
     }
-
+//  Change the counter in database for the amount of items in basket
     fun updateItemCounterBasket(
         characterSearch: Int,
         foodModel: FoodMasterModel
@@ -1174,7 +1264,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-
+//  Change the counter in database for the amount of items in cupboard
     fun updateItemCounterCupboard(
         characterSearch: Int,
         foodModel: FoodMasterModel
@@ -1202,7 +1292,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
-
+//  Filter for searching by ingredients
     fun ingredientsSearchHomeData(){
         filterArrayList.clear()
         lateinit var dataArray: ListPostModel
@@ -1254,6 +1344,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         return searchedPosts
     }
 
+//  Search items threw the receipt for items present in the database or locally
     fun searchItemsInitial(storedFood: ArrayList<FoodMasterModel>) {
         for (food in storedFood) {
             val basketSearch: FoodMasterModel? = basketData.find { p -> ((p.food.name == food.food.name) && (p.food.shop == food.food.shop)) }
@@ -1401,7 +1492,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     }
 
     private val MEDIA_TYPE_JPEG = "image/jpeg".toMediaType()
-
+//  Upload images to the database
     fun uploadImagesPost(
         oid: String,
         listofImages: ArrayList<String>,
@@ -1436,7 +1527,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
             return body == "All images posted"
         }
     }
-
+//  Upload profile picture image
     fun uploadImagesUser(oid: String, image: String): Boolean {
         val bitmap = readImageFromPath(context, image)
         val stream = ByteArrayOutputStream()
@@ -1467,6 +1558,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+//  Upload image with food
     fun uploadImagesFood(oid: String): Boolean {
         val stream = ByteArrayOutputStream()
         storedImage!!.compress(Bitmap.CompressFormat.JPEG, 80, stream)
@@ -1495,6 +1587,7 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
         }
     }
 
+//  Create Post
     fun createPost(
         postModel: PostModel,
         listofImages: ArrayList<String>,

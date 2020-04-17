@@ -26,23 +26,24 @@ class SplashActivity : AppCompatActivity() {
     }
 
 
+    //  Load information before proceeding to the main application
     fun doLoadData() {
+        print("Load data")
         val currentUser = infoStore!!.getCurrentUser()
         if (!currentUser.user.loggedIn) {
             startActivity(Intent(baseContext, SignInActivity::class.java))
             infoStore!!.logoutUser()
             finish()
         } else {
-                doAsync {
-                    try {
-                        infoStore!!.updateUserInfo(currentUser.user)
-                    } catch (e: Exception) {
-                        startActivity(Intent(baseContext, SignInActivity::class.java))
-                        infoStore!!.logoutUser()
-                        finish()
-                    }
+            doAsync {
+                try {
+                    infoStore!!.updateUserInfo(currentUser.user)
+                } catch (e: Exception) {
+                    startActivity(Intent(baseContext, SignInActivity::class.java))
+                    infoStore!!.logoutUser()
+                    finish()
                 }
-
+            }
             doAsync {
                 infoStore!!.getCupboardData()
             }

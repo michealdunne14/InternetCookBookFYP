@@ -2,24 +2,16 @@ package com.example.internetcookbook.pager
 
 import android.content.Context
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.viewpager.widget.ViewPager
 import com.example.internetcookbook.R
-import com.example.internetcookbook.adapter.SampleFragmentPagerAdapter
 import com.example.internetcookbook.adapter.TabsPagerAdapter
 import com.example.internetcookbook.base.BaseView
-import com.example.internetcookbook.fragmentpresenter.FriendFragmentPresenter
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.fragment_pager.*
 import kotlinx.android.synthetic.main.fragment_pager.view.*
-import kotlinx.android.synthetic.main.fragment_pager.view_pager
 import org.jetbrains.anko.AnkoLogger
-import java.io.Serializable
 
 class PagerFragmentView : BaseView(), AnkoLogger {
 

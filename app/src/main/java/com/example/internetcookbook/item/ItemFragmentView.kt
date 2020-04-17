@@ -45,30 +45,10 @@ class ItemFragmentView : BaseView() {
         presenter = initPresenter(ItemFragmentPresenter(this)) as ItemFragmentPresenter
         itemView = view
 
+//      Show information on pages
         showFollowers(presenter.doFindFollowers())
         showBasket(presenter.doFindBasket())
         showCupboard(presenter.doFindCupboard())
-
-        itemView.mSearchCupboardItem.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(characterSearch: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val searchedCupboard = presenter.doSearchCupboard(characterSearch)
-                itemView.mCupboardRecyclerView.adapter = IngredientsAdapter(
-                    searchedCupboard,
-                    presenter.doCurrentUser(),
-                    "cupboard",
-                    presenter,
-                    activity
-                )
-                notifyDataSetChanged()
-            }
-
-        })
-
 
         itemView.mAddItemToBasket.setOnClickListener {
             val action = PagerFragmentViewDirections.actionPagerFragmentToIngredientsFragment("basket")
@@ -104,6 +84,27 @@ class ItemFragmentView : BaseView() {
                 itemView.mBasketRecyclerView.adapter?.notifyDataSetChanged()
             }
         })
+
+        itemView.mSearchCupboardItem.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(characterSearch: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                val searchedCupboard = presenter.doSearchCupboard(characterSearch)
+                itemView.mCupboardRecyclerView.adapter = IngredientsAdapter(
+                    searchedCupboard,
+                    presenter.doCurrentUser(),
+                    "cupboard",
+                    presenter,
+                    activity
+                )
+                notifyDataSetChanged()
+            }
+
+        })
+
 
         itemView.mSearchFollowerItem.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}

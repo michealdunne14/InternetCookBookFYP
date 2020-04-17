@@ -47,14 +47,18 @@ class MakeFragmentView : BaseView() {
         val view =  inflater.inflate(R.layout.fragment_make, container, false)
 //        val args = SecondFragmentArgs.fromBundle(arguments).users
         presenter = initPresenter(MakeFragmentPresenter(this)) as MakeFragmentPresenter
+
         val postModel = MakeFragmentViewArgs.fromBundle(arguments!!).dataModel.post
         val images = MakeFragmentViewArgs.fromBundle(arguments!!).dataModel
+
         makeView = view
 
         val layoutManager = LinearLayoutManager(context)
         val makeLayoutManager = LinearLayoutManager(context)
+
         view.mIngredientsRecyclerView.layoutManager = layoutManager
         view.mMakeList.layoutManager = makeLayoutManager
+
         presenter.findIngredients(postModel)
         presenter.findUser(postModel)
 
@@ -64,10 +68,12 @@ class MakeFragmentView : BaseView() {
         }
         makeView.mMakeList.adapter = MakeAdapter(methodArrayList)
         makeView.mMakeList.adapter?.notifyDataSetChanged()
+
         makeView.mMakeName.text = postModel.title
         makeView.mMakeDescription.text = postModel.description
         makeView.mMakeTimeToCreate.text = "Time to Create is ${postModel.completionTime} minutes"
         makeView.mMakeDifficulty.text = "Level of Difficulty: ${postModel.difficulty}"
+
         val bitmapImages = readBit64ImageArrayList(images)
         doFindImages(bitmapImages)
         hideAndShowToolbarButtons()
@@ -134,7 +140,7 @@ class MakeFragmentView : BaseView() {
     }
 
 
-    fun hideAndShowToolbarButtons(){
+    private fun hideAndShowToolbarButtons(){
         makeView.mReturnButton.setOnClickListener {
             makeView.findNavController().navigateUp()
         }

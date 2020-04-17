@@ -17,8 +17,8 @@ class FindFollowingPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         infoStore = app.informationStore as InformationStore
     }
 
-
-    fun doFindUser(userSearch: CharSequence) {
+//  Find users following
+    fun doFindFollowing(userSearch: CharSequence) {
         var searchFollowing: ArrayList<UserMasterModel>
         doAsync {
             searchFollowing = infoStore!!.searchForFollowing(userSearch)!!
@@ -28,6 +28,7 @@ class FindFollowingPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
     }
 
+//  Get the users following
     fun followingUsers(): ArrayList<UserMasterModel> {
         return infoStore!!.findFollowingData()
     }
