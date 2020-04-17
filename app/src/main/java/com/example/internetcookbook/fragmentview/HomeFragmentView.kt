@@ -52,6 +52,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
 
         presenter = initPresenter(HomeFragPresenter(this)) as HomeFragPresenter
         initScrollListener()
+        homeView.mCancelFilter.visibility = View.INVISIBLE
 
         homeView.mListRecyclerView.adapter?.notifyItemInserted(presenter.findData().size - 1)
 
@@ -92,11 +93,13 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 top = false
                 showFilter()
             }
+            homeView.mCancelFilter.visibility = View.INVISIBLE
         }
 
         view.mCancelFilter.setOnClickListener {
             presenter.doRefreshData(view)
             homeView.mCancelFilter.visibility = View.INVISIBLE
+            filterUsed = ""
         }
 
 
@@ -110,7 +113,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 presenter.doFilterTop()
                 filterUsed = "top"
             }
-            view.mCancelFilter.visibility = View.VISIBLE
+            homeView.mCancelFilter.visibility = View.VISIBLE
             cancelFilter()
         }
 
@@ -120,7 +123,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 presenter.doFilterDifficulty(difficultyLevel)
                 filterUsed = "difficulty"
             }
-            view.mCancelFilter.visibility = View.VISIBLE
+            homeView.mCancelFilter.visibility = View.VISIBLE
             cancelFilter()
         }
 
@@ -130,7 +133,8 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 presenter.doFilterDifficulty(difficultyLevel)
                 filterUsed = "difficulty"
             }
-            view.mCancelFilter.visibility = View.VISIBLE
+
+            homeView.mCancelFilter.visibility = View.VISIBLE
             cancelFilter()
         }
 
@@ -143,6 +147,7 @@ class HomeFragmentView : BaseView(), PostListener, SwipeRefreshLayout.OnRefreshL
                 difficulty = false
                 showFilter()
             }
+            homeView.mCancelFilter.visibility = View.INVISIBLE
         }
 
         presenter.doFindHomeData()

@@ -1058,27 +1058,21 @@ class InformationStore(val context: Context, val internetConnection: Boolean) {
     fun getMoreDataTop(): Boolean {
         lateinit var dataArray: ListPostModel
         if (internetConnection) {
-            val datesCollection = ArrayList<Date>()
-            for(post in filterArrayList){
-                val format: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-                try {
-                    val date: Date = format.parse(post!!.post.posttime)!!
-                    datesCollection.add(date)
-                } catch (e: ParseException) {
-                    e.printStackTrace()
+            var storedNumber = filterArrayList[0]!!.post.hearts.toInt()
+            var storedIndex = 0
+            filterArrayList.forEachIndexed { index, filterHearts ->
+                val heart = filterHearts!!.post.hearts.toInt()
+                if (heart < storedNumber){
+                    storedNumber = heart
+                    storedIndex = index
                 }
             }
-            var postDate = datesCollection[datesCollection.size -1]
 
-            datesCollection.forEachIndexed { index, date ->
-                if (date.before(postDate)){
-                    postDate = date
-                }
-            }
+
             val formBody: RequestBody = FormBody.Builder()
                 .add("id", userMaster.user.oid)
                 .add("top","")
-                .add("posttime", postDate.toString()).build()
+                .add("posttime", filterArrayList[storedIndex]!!.post.posttime).build()
 
             val request: Request = Request.Builder()
                 .url("http://34.244.232.228:3000/post/newdata")
