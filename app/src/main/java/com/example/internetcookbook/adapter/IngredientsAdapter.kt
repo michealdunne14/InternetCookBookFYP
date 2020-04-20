@@ -42,7 +42,7 @@ class IngredientsAdapter(
         holder.bind(postModel,currentUser,selectedOption,presenter,activity)
     }
 
-    class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(
             foodModel: FoodMasterModel,
             currentUser: UserMasterModel,
@@ -63,12 +63,22 @@ class IngredientsAdapter(
                         val itemPresenter = presenter as ItemFragmentPresenter
                         itemPresenter.doRemoveItemBasket(foodModel)
                     }
+                    itemView.mIngredientCounter.setOnClickListener {
+                        showNumberDialog(
+                            activity,
+                            presenter,
+                            foodModel,
+                            currentUser,
+                            selectedOption
+                        )
+                    }
                 }
                 "cupboard" -> {
                     itemView.mSelectedIngredient.setImageResource(R.drawable.baseline_remove_black_36)
                     for (cupboard in currentUser.user.cupboard) {
                         if (cupboard.cupboardoid == foodModel.food.oid) {
-                            itemView.mIngredientCounter.text = cupboard.foodPurchasedCounter.toString()
+                            itemView.mIngredientCounter.text =
+                                cupboard.foodPurchasedCounter.toString()
                         }
                     }
                     itemView.mSelectedIngredient.setOnClickListener {
@@ -77,7 +87,13 @@ class IngredientsAdapter(
                     }
 
                     itemView.mIngredientCounter.setOnClickListener {
-                        showNumberDialog(activity,presenter,foodModel,currentUser,selectedOption)
+                        showNumberDialog(
+                            activity,
+                            presenter,
+                            foodModel,
+                            currentUser,
+                            selectedOption
+                        )
                     }
                 }
                 "post" -> {
@@ -107,35 +123,38 @@ class IngredientsAdapter(
             numberDialog.show()
             numberDialog.setCanceledOnTouchOutside(false)
             numberDialog.mConfirm.setOnClickListener {
-                if(selectedOption == "cupboard") {
-                    for (cupboard in currentUser.user.cupboard) {
-                        if (cupboard.cupboardoid == foodModel.food.oid) {
-                            val number = numberDialog.mDialogSearch.text.toString().toInt()
-                            cupboard.foodPurchasedCounter = number
-                            val itemPresenter = presenter as ItemFragmentPresenter
-                            itemPresenter.doUpdateItemCounterCupboard(number, foodModel)
-                            itemView.mIngredientCounter.text =
-                                cupboard.foodPurchasedCounter.toString()
+                if (selectedOption == "cupboard") {
+                    val itemPresenter = presenter as ItemFragmentPresenter
+                    for (cupboard in itemPresenter.doFindCupboard()) {
+                        if (cupboard.food.oid == foodModel.food.oid) {
+                            for (userCupboard in currentUser.user.cupboard) {
+                                val number = numberDialog.mDialogSearch.text.toString().toInt()
+                                userCupboard.foodPurchasedCounter = number
+                                cupboard.food.itemsCounter = number
+                                itemPresenter.doUpdateItemCounterCupboard(number, foodModel)
+                                itemView.mIngredientCounter.text =
+                                    userCupboard.foodPurchasedCounter.toString()
+                            }
                         }
                     }
-                }else{
-                    for (basket in currentUser.user.basket) {
-                        if (basket.basketoid == foodModel.food.oid) {
-                            val number = numberDialog.mDialogSearch.text.toString().toInt()
-                            basket.counter = number
-                            val itemPresenter = presenter as ItemFragmentPresenter
-                            itemPresenter.doUpdateItemCounterBasket(number, foodModel)
-                            itemView.mIngredientCounter.text = basket.counter.toString()
+                } else {
+                    val itemPresenter = presenter as ItemFragmentPresenter
+                    for (basket in itemPresenter.doFindBasket()) {
+                        if (basket.food.oid == foodModel.food.oid) {
+                            for (userBasket in currentUser.user.basket) {
+                                if (userBasket.basketoid == foodModel.food.oid) {
+                                    val number = numberDialog.mDialogSearch.text.toString().toInt()
+                                    userBasket.counter = number
+                                    basket.food.itemsCounter = number
+                                    itemPresenter.doUpdateItemCounterBasket(number, foodModel)
+                                    itemView.mIngredientCounter.text = userBasket.counter.toString()
+                                }
+                            }
                         }
                     }
+                    numberDialog.cancel()
                 }
-                numberDialog.cancel()
-            }
-            numberDialog.mRetakeShop.setOnClickListener {
-                numberDialog.cancel()
             }
         }
     }
-
-
 }

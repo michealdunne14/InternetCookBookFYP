@@ -425,6 +425,7 @@ class CameraFragmentView : BaseView(), LifecycleOwner,AnkoLogger {
 
     override fun resetInformation(){
         storedFood.clear()
+        validFoodItems.clear()
         cameraView.mListItems.visibility = View.GONE
         cameraView.mButtonFindText.visibility = View.INVISIBLE
         cameraView.mCameraShow.visibility = View.VISIBLE

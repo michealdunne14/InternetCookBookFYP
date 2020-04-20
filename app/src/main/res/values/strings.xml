@@ -49,6 +49,8 @@
     <string name="easy">Easy</string>
     <string name="hard">Hard</string>
     <string name="follow">Follow</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string-array name="fragment_titles">
         <item>@string/first_fragment</item>
