@@ -33,21 +33,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/mDialogSearch"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
+        android:background="@drawable/greybutton"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="1dp"
         android:text="Confirm" />
-
-    <Button
-        android:id="@+id/mRetakeShop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mDialogSearch"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="1dp"
-        android:text="Retake Picture" />
 
 </RelativeLayout>
